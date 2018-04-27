@@ -1,7 +1,7 @@
-//var ExtractTextPlugin = require('extract-text-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
+    mode: 'development',
     entry: {
         'main': './src/tests/demo/scripts/main.ts',
         'styles': './src/tests/demo/styles/style.styl'
