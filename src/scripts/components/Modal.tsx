@@ -1,0 +1,104 @@
+import * as React from 'react';
+
+import { ITemplate } from './ITemplate';
+import Button from './Button';
+import BodyScroll from '../util/BodyScroll';
+
+export interface IModalProps {
+    className?: string;
+    id?: string;
+    open: boolean;
+    onclose: (event: React.MouseEvent<HTMLElement>) => void;
+    title?: ITemplate;
+    footer?: ITemplate;
+    animation?: 'center' | 'top' | 'right' | 'bottom' | 'left';
+    lockable?: boolean;
+    locked?: boolean;
+    lockScroll?: boolean;
+}
+
+export default class Modal extends React.Component<IModalProps, any> {
+
+    preventClick(event: React.MouseEvent<HTMLElement>) {
+        event.stopPropagation();
+    }
+
+    close = (event: React.MouseEvent<HTMLElement>) => {
+        // TODO: Create a prop for preventing mask clicks.
+        if (this.props.onclose) {
+            this.props.onclose(event);
+        }
+    }
+
+    render() {
+        let {
+            open,
+            animation,
+            lockScroll
+        } = this.props;
+
+        let classNames = this.props.className ? [this.props.className] : [];
+        classNames.push('modal');
+        if (open) {
+            classNames.push(' modal-open');
+        }
+
+        if (lockScroll) {
+            BodyScroll.lock(open);
+        }
+
+        if (animation) {
+            classNames.push('modal-animate-' + animation.trim());
+        }
+
+        if (this.props.title) {
+            var title;
+            if (typeof this.props.title === 'function') {
+                title = this.props.title();
+            } else {
+                title = this.props.title;
+            }
+        }
+
+        if (this.props.footer) {
+            var footer;
+            if (typeof this.props.footer === 'function') {
+                footer = this.props.footer();
+            } else {
+                footer = this.props.footer;
+            }
+        }
+
+        let modalContentClassNames = [];
+        if (this.props.lockable) {
+            modalContentClassNames.push('lock-contents');
+            if (this.props.locked) {
+                modalContentClassNames.push('locked');
+            }
+        }
+        let modalContentClassName = modalContentClassNames.join(' ');
+        return (
+            <div className={classNames.join(' ')} id={this.props.id} onClick={this.close}>
+                {title || footer ?
+                    <div className="modal-content" onClick={this.preventClick}>
+                        {title ?
+                            <div className="modal-header">
+                                <h1 className="modal-title">{title}</h1>
+                                <div className="modal-controls">
+                                    <Button onClick={this.props.onclose}>Close</Button>
+                                </div>
+                            </div>
+                            : undefined}
+                        <div className={'modal-body ' + modalContentClassName}>{this.props.children}</div>
+                        {footer ?
+                            <div className="modal-footer">{footer}</div>
+                            : undefined}
+                    </div> :
+                    <div className={'modal-content ' + modalContentClassName} onClick={this.preventClick}>
+                        {this.props.children}
+                    </div>
+                }
+            </div>
+        );
+    }
+}
