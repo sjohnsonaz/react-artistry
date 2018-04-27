@@ -12,7 +12,7 @@ export default class Code extends React.Component<ICodeProps, any> {
             <pre className={classNames.join(' ')} {...this.props as any}>
                 {this.props.children instanceof Array ?
                     this.props.children.map(child => <code>{child}</code>)
-                    : <code>this.props.children</code>}
+                    : <code>{this.props.children}</code>}
             </pre>
         );
     }
