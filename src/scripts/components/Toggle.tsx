@@ -13,7 +13,7 @@ export default class Toggle extends React.Component<IToggleProps, any> {
                 <label>
                     <div className="toggle-box">
                         <input type="checkbox" {...this.props} />
-                        <div className="toggle-button">&nbsp;</div>
+                        <div className="toggle-button"> </div>
                     </div>
                 </label>
             </div>
