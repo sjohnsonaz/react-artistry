@@ -1,8 +1,8 @@
 {
-  "name": "react-artistry",
+  "name": "artistry-react",
   "version": "0.0.0",
   "description": "A powerful component library for React",
-  "repository": "https://www.github.com/sjohnsonaz/react-artistry.git",
+  "repository": "https://www.github.com/sjohnsonaz/artistry-react.git",
   "license": "MIT",
   "author": "Sean Johnson <sjohnson@sjohnsonaz.com>",
   "main": "dist/scripts/modules/ReactArtistry.js",
