@@ -16,6 +16,9 @@ export interface ISectionState {
 }
 
 export default class Section extends React.Component<ISectionProps, ISectionState> {
+    root: React.RefObject<HTMLElement> = React.createRef();
+    innerDiv: React.RefObject<HTMLDivElement> = React.createRef();
+
     constructor(props?: ISectionProps) {
         super(props);
         this.state = {
@@ -35,41 +38,48 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
         }
     }
 
-    afterRender(node: HTMLElement, updating: boolean) {
-        if (updating) {
-            // Get closed value
-            let closed = typeof this.props.closed !== 'undefined' ?
-                this.props.closed :
-                (this.state.closed || false);
+    componentDidMount() {
+        let innerDiv = this.innerDiv.current;
+        if (this.props.locked) {
+            innerDiv.classList.add('locked');
+        }
+    }
 
-            // Clear toggleTimeout
-            let toggleTimeout: number = (node as any).toggleTimeout;
-            if (typeof toggleTimeout === 'number') {
-                window.clearTimeout(toggleTimeout);
-                (node as any).toggleTimeout = undefined;
-            }
+    componentDidUpdate(prevProps: ISectionProps, prevState: any) {
+        let innerDiv = this.innerDiv.current;
+        let node = this.root.current;
+        // Get closed value
+        let closed = typeof this.props.closed !== 'undefined' ?
+            this.props.closed :
+            (this.state.closed || false);
 
-            let header = node.childNodes[0] as HTMLElement;
-            let content = node.childNodes[1] as HTMLElement;
-            node.classList.add('section-run');
-            if (closed) {
-                node.style.height = node.offsetHeight + 'px';
-                node.style.height = header.offsetHeight + 'px';
-                node.classList.add('section-closed');
-                (node as any).toggleTimeout = window.setTimeout(function () {
-                    node.style.height = 'auto';
-                    node.classList.remove('section-run');
-                }, 220);
-            } else {
-                var sectionBorder = node.offsetHeight - node.clientHeight;
-                node.style.height = sectionBorder / 2 + header.offsetHeight + content.offsetHeight + 'px';
-                node.classList.remove('section-closed');
-                node.style.height = sectionBorder / 2 + header.offsetHeight + content.offsetHeight + 'px';
-                (node as any).toggleTimeout = window.setTimeout(function () {
-                    node.style.height = 'auto';
-                    node.classList.remove('section-run');
-                }, 220);
-            }
+        // Clear toggleTimeout
+        let toggleTimeout: number = (node as any).toggleTimeout;
+        if (typeof toggleTimeout === 'number') {
+            window.clearTimeout(toggleTimeout);
+            (node as any).toggleTimeout = undefined;
+        }
+
+        let header = node.childNodes[0] as HTMLElement;
+        let content = node.childNodes[1] as HTMLElement;
+        node.classList.add('section-run');
+        if (closed) {
+            node.style.height = node.offsetHeight + 'px';
+            node.style.height = header.offsetHeight + 'px';
+            node.classList.add('section-closed');
+            (node as any).toggleTimeout = window.setTimeout(function () {
+                node.style.height = 'auto';
+                node.classList.remove('section-run');
+            }, 220);
+        } else {
+            var sectionBorder = node.offsetHeight - node.clientHeight;
+            node.style.height = sectionBorder / 2 + header.offsetHeight + content.offsetHeight + 'px';
+            node.classList.remove('section-closed');
+            node.style.height = sectionBorder / 2 + header.offsetHeight + content.offsetHeight + 'px';
+            (node as any).toggleTimeout = window.setTimeout(function () {
+                node.style.height = 'auto';
+                node.classList.remove('section-run');
+            }, 220);
         }
     }
 
@@ -86,21 +96,18 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
         if (this.props.lockable) {
             innerClassNames.push('lock-contents');
         }
-        if (this.props.locked) {
-            innerClassNames.push('locked');
-        }
 
         let className = classNames.join(' ');
         let innerClassName = innerClassNames.join(' ');
         return (
-            <section className={className} {...this.props}>
+            <section className={className} {...this.props} ref={this.root}>
                 <header>
                     {this.props.title}
                     {this.props.closeable ?
                         <Button className="section-toggle" onClick={this.close}>-</Button>
                         : undefined}
                 </header>
-                <div className={innerClassName}>{this.props.children}</div>
+                <div className={innerClassName} ref={this.innerDiv}>{this.props.children}</div>
             </section>
         );
     }
