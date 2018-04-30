@@ -12,11 +12,21 @@ export interface ICarouselProps {
 }
 
 export default class Carousel extends React.Component<ICarouselProps, any> {
-    container: HTMLElement;
-    child: HTMLElement;
+    container: React.RefObject<HTMLDivElement> = React.createRef();
 
-    async afterRender(node: HTMLElement, updating: boolean) {
+    componentDidMount() {
+        let node = this.container.current;
+        let child = node.children[this.props.activeIndex];
+        if (child) {
+            child.className = 'carousel-selected';
+        }
+    }
+
+    async componentDidUpdate(prevProps: ICarouselProps, prevState: any) {
         let { activeIndex } = this.props;
+        let { activeIndex: oldActiveIndex } = prevProps;
+        let node = this.container.current;
+
         activeIndex = activeIndex || 0;
         let children = node.children;
         activeIndex %= children.length;
@@ -39,8 +49,7 @@ export default class Carousel extends React.Component<ICarouselProps, any> {
             });
         }
 
-        if (updating && node['activeIndex'] !== activeIndex) {
-            node['activeIndex'] = activeIndex;
+        if (oldActiveIndex !== activeIndex) {
             let computedStyle = window.getComputedStyle(node, null);
             let paddingHeight =
                 parseFloat(computedStyle.getPropertyValue('border-top')) +
@@ -56,7 +65,8 @@ export default class Carousel extends React.Component<ICarouselProps, any> {
             await wait(30);
             if (runCount === node['runCount']) {
 
-                let oldChild: Element;
+                let oldChild: Element = children[oldActiveIndex];
+                /*
                 for (var index = 0, length = children.length; index < length; index++) {
                     let child = children[index];
                     if (child.classList.contains('carousel-selected')) {
@@ -64,6 +74,7 @@ export default class Carousel extends React.Component<ICarouselProps, any> {
                         break;
                     }
                 }
+                */
                 let activeChild = children[activeIndex];
 
                 oldChild.classList.remove('carousel-selected');
@@ -76,16 +87,6 @@ export default class Carousel extends React.Component<ICarouselProps, any> {
                 }
 
                 node.style.height = height;
-            }
-        } else {
-            node['activeIndex'] = activeIndex;
-            for (var index = 0, length = children.length; index < length; index++) {
-                var child = children[index];
-                if (index === activeIndex) {
-                    child.className = 'carousel-selected';
-                } else {
-                    child.className = '';
-                }
             }
         }
     }
@@ -115,10 +116,10 @@ export default class Carousel extends React.Component<ICarouselProps, any> {
         }
 
         return (
-            <div className={classNames.join(' ')} id={this.props.id} style={{ height: "auto" }}>
+            <div className={classNames.join(' ')} id={this.props.id} style={{ height: "auto" }} ref={this.container}>
                 {this.props.children instanceof Array ? this.props.children.map((child, index) => {
-                    return <div>{child}</div>
-                }) : <div>this.props.children</div>}
+                    return <div key={index}>{child}</div>
+                }) : <div key={0}>{this.props.children}</div>}
             </div>
         );
     }

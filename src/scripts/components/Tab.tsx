@@ -45,7 +45,7 @@ export default class Tab extends React.Component<ITabProps, ITabState> {
                 <ul className="tab-header">
                     {this.props.titles ? this.props.titles.map((title, index) => {
                         let className = activeIndex === index ? 'tab-title tab-active' : 'tab-title';
-                        return <li className={className}>
+                        return <li className={className} key={index}>
                             <a onClick={this.selectPanel.bind(this, index)}>{title}</a>
                         </li>
                     }) : undefined}
@@ -57,8 +57,8 @@ export default class Tab extends React.Component<ITabProps, ITabState> {
                     : <div className="tab-body">
                         {this.props.children instanceof Array ? this.props.children.map((child, index) => {
                             let className = activeIndex === index ? 'tab-panel tab-active' : 'tab-panel';
-                            return <div className={className}>{child}</div>
-                        }) : undefined}
+                            return <div key={index} className={className}>{child}</div>
+                        }) : <div key={0} className="tab-panel tab-active">{this.props.children}</div>}
                     </div>
                 }
             </div>
