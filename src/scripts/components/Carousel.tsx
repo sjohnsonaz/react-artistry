@@ -31,31 +31,37 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
         runCount: 0
     };
 
-    componentDidMount() {
+    transitionEnd = (event: React.TransitionEvent<HTMLElement>) => {
         let node = this.container.current;
-        node.addEventListener('transitionend', (event) => {
-            if (event.target === node) {
-                this.setState({
-                    animating: false,
-                    height: 'auto',
-                    previousActiveIndex: this.state.activeIndex
-                });
-            }
-        });
+        if (event.target === node) {
+            this.setState({
+                animating: false,
+                height: 'auto',
+                previousActiveIndex: this.state.activeIndex
+            });
+        }
     }
 
     componentWillReceiveProps(nextProps?: ICarouselProps) {
         let { activeIndex } = nextProps;
         let { activeIndex: previousActiveIndex } = this.props;
+
         activeIndex = activeIndex || 0;
+        previousActiveIndex = previousActiveIndex || 0;
         let children = this.props.children;
         if (children instanceof Array) {
             activeIndex %= children.length;
+            previousActiveIndex %= children.length;
             if (activeIndex < 0) {
                 activeIndex += children.length;
                 activeIndex %= children.length;
             }
+            if (previousActiveIndex < 0) {
+                previousActiveIndex += children.length;
+                previousActiveIndex %= children.length;
+            }
         }
+
         if (activeIndex !== this.state.activeIndex) {
             let node = this.container.current;
 
@@ -157,6 +163,7 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
                 className={classNames.join(' ')}
                 id={this.props.id}
                 style={{ height: this.state.height }}
+                onTransitionEnd={this.transitionEnd}
                 ref={this.container}
             >
                 {children}
