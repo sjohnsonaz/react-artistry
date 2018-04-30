@@ -21,7 +21,7 @@ export default class List<T> extends React.Component<IListProps<T>, any> {
 
         return (
             <ul className={classNames.join(' ')} id={id}>
-                {data ? data.map(item => <li>
+                {data ? data.map((item, index) => <li key={index}>
                     {template ? template(item) : item}
                 </li>) : undefined}
             </ul>

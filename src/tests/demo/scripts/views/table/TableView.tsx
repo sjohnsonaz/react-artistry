@@ -47,7 +47,7 @@ export default class TableView extends React.Component<ITableViewProps, any> {
                     }, {
                         header: 'Quantity',
                         property: 'quantity',
-                        template: item => <strong>{item.quantity}</strong>
+                        template: item => <th><strong>{item.quantity}</strong></th>
                     }, {
                         header: 'Unit',
                         property: 'unit'

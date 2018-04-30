@@ -11,89 +11,87 @@ export interface ICarouselProps {
     safe?: boolean;
 }
 
-export default class Carousel extends React.Component<ICarouselProps, any> {
+export interface ICarouselState {
+    height: string;
+    activeIndex: number;
+    previousActiveIndex: number;
+    animating: boolean;
+    selected: boolean;
+    runCount: number;
+}
+
+export default class Carousel extends React.Component<ICarouselProps, ICarouselState> {
     container: React.RefObject<HTMLDivElement> = React.createRef();
+    state = {
+        height: 'auto',
+        activeIndex: 0,
+        previousActiveIndex: 0,
+        animating: false,
+        selected: true,
+        runCount: 0
+    };
 
     componentDidMount() {
         let node = this.container.current;
-        let child = node.children[this.props.activeIndex];
-        if (child) {
-            child.className = 'carousel-selected';
-        }
+        node.addEventListener('transitionend', (event) => {
+            if (event.target === node) {
+                this.setState({
+                    animating: false,
+                    height: 'auto',
+                    previousActiveIndex: this.state.activeIndex
+                });
+            }
+        });
     }
 
-    async componentDidUpdate(prevProps: ICarouselProps, prevState: any) {
-        let { activeIndex } = this.props;
-        let { activeIndex: oldActiveIndex } = prevProps;
-        let node = this.container.current;
-
+    componentWillReceiveProps(nextProps?: ICarouselProps) {
+        let { activeIndex } = nextProps;
+        let { activeIndex: previousActiveIndex } = this.props;
         activeIndex = activeIndex || 0;
-        let children = node.children;
-        activeIndex %= children.length;
-        if (activeIndex < 0) {
-            activeIndex += children.length;
+        let children = this.props.children;
+        if (children instanceof Array) {
             activeIndex %= children.length;
-        }
-
-        // increment runCount
-        node['runCount'] = (node['runCount'] || 0) + 1;
-        let runCount = node['runCount'];
-
-        if (runCount === 1) {
-            // Listen for transitionend
-            node.addEventListener('transitionend', (event) => {
-                if (event.target === node) {
-                    node.classList.remove('carousel-run');
-                    node.style.height = 'auto';
-                }
-            });
-        }
-
-        if (oldActiveIndex !== activeIndex) {
-            let computedStyle = window.getComputedStyle(node, null);
-            let paddingHeight =
-                parseFloat(computedStyle.getPropertyValue('border-top')) +
-                parseFloat(computedStyle.getPropertyValue('border-bottom')) +
-                parseFloat(computedStyle.getPropertyValue('padding-top')) +
-                parseFloat(computedStyle.getPropertyValue('padding-bottom'));
-            let height = node.offsetHeight + 'px'
-
-            node.style.height = height;
-            node.classList.add('carousel-run');
-
-            // Wait for the carousel-run class to be added
-            await wait(30);
-            if (runCount === node['runCount']) {
-
-                let oldChild: Element = children[oldActiveIndex];
-                /*
-                for (var index = 0, length = children.length; index < length; index++) {
-                    let child = children[index];
-                    if (child.classList.contains('carousel-selected')) {
-                        oldChild = child;
-                        break;
-                    }
-                }
-                */
-                let activeChild = children[activeIndex];
-
-                oldChild.classList.remove('carousel-selected');
-
-                if (activeChild) {
-                    activeChild.classList.add('carousel-selected');
-                    height = paddingHeight + activeChild.clientHeight + 'px';
-                } else {
-                    height = 'auto';
-                }
-
-                node.style.height = height;
+            if (activeIndex < 0) {
+                activeIndex += children.length;
+                activeIndex %= children.length;
             }
+        }
+        if (activeIndex !== this.state.activeIndex) {
+            let node = this.container.current;
+
+            this.setState({ height: node.offsetHeight + 'px' }, () => {
+                this.setState({ animating: true }, () => {
+                    this.setState({
+                        activeIndex: activeIndex,
+                        previousActiveIndex: previousActiveIndex,
+                        selected: false
+                    }, async () => {
+                        await wait(30);
+                        this.setState({ selected: true }, () => {
+                            let computedStyle = window.getComputedStyle(node, null);
+                            let paddingHeight =
+                                parseFloat(computedStyle.getPropertyValue('border-top')) +
+                                parseFloat(computedStyle.getPropertyValue('border-bottom')) +
+                                parseFloat(computedStyle.getPropertyValue('padding-top')) +
+                                parseFloat(computedStyle.getPropertyValue('padding-bottom'));
+                            let activeChild = node.querySelector('.carousel-selected');
+                            if (activeChild) {
+                                this.setState({ height: paddingHeight + activeChild.clientHeight + 'px' });
+                            }
+                        });
+                    });
+                });
+            });
         }
     }
 
     render() {
         let classNames = this.props.className ? [this.props.className] : [];
         classNames.push('carousel');
+
+        if (this.state.animating) {
+            classNames.push('carousel-run');
+        }
 
         switch (this.props.animation) {
             case 'slide':
@@ -115,11 +113,53 @@ export default class Carousel extends React.Component<ICarouselProps, any> {
             classNames.push('carousel-safe');
         }
 
+        let children;
+
+        if (this.props.children instanceof Array) {
+            if (this.state.activeIndex !== this.state.previousActiveIndex) {
+                if (this.state.activeIndex < this.state.previousActiveIndex) {
+                    children = <>
+                        <div
+                            key={this.state.activeIndex}
+                            className={this.state.selected ? "carousel-selected" : ""}
+                        >{this.props.children[this.state.activeIndex]}</div>
+                        <div
+                            key={this.state.previousActiveIndex}
+                            className={this.state.selected ? "" : "carousel-selected"}
+                        >{this.props.children[this.state.previousActiveIndex]}</div>
+                    </>
+                } else {
+                    children = <>
+                        <div
+                            key={this.state.previousActiveIndex}
+                            className={this.state.selected ? "" : "carousel-selected"}
+                        >{this.props.children[this.state.previousActiveIndex]}</div>
+                        <div
+                            key={this.state.activeIndex}
+                            className={this.state.selected ? "carousel-selected" : ""}
+                        >{this.props.children[this.state.activeIndex]}</div>
+                    </>
+                }
+            } else {
+                children = <>
+                    <div key={this.state.activeIndex} className={this.state.selected ? "carousel-selected" : ""}>{this.props.children[this.state.activeIndex]}</div>
+                </>
+            }
+        } else {
+            children = <>
+                <div key={this.state.activeIndex} className={this.state.selected ? "carousel-selected" : ""}>{this.props.children}</div>
+            </>
+        }
+
+
         return (
-            <div className={classNames.join(' ')} id={this.props.id} style={{ height: "auto" }} ref={this.container}>
-                {this.props.children instanceof Array ? this.props.children.map((child, index) => {
-                    return <div key={index}>{child}</div>
-                }) : <div key={0}>{this.props.children}</div>}
+            <div
+                className={classNames.join(' ')}
+                id={this.props.id}
+                style={{ height: this.state.height }}
+                ref={this.container}
+            >
+                {children}
             </div>
         );
     }

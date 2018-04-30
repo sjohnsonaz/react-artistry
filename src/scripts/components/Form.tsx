@@ -18,11 +18,18 @@ export default class Form extends React.Component<IFormProps, any> {
     }
 
     render() {
-        let classNames = this.props.className ? [this.props.className] : [];
+        let {
+            id,
+            className,
+            onEnter,
+            onEscape,
+            ...props
+        } = this.props;
+        let classNames = className ? [className] : [];
         classNames.push('form');
-        let onKeyDown = (this.props.onEnter || this.props.onEscape) ? this.onKeyDown.bind(this) : undefined;
+        let onKeyDown = (onEnter || onEscape) ? this.onKeyDown.bind(this) : undefined;
         return (
-            <form className={classNames.join(' ')} onKeyDown={onKeyDown} {...this.props}>{this.props.children}</form>
+            <form className={classNames.join(' ')} onKeyDown={onKeyDown} {...props}>{this.props.children}</form>
         );
     }
 }

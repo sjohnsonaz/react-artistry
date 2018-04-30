@@ -84,7 +84,17 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
     }
 
     render() {
-        let classNames = this.props.className ? [this.props.className] : [];
+        let {
+            id,
+            className,
+            title,
+            closeable,
+            closed,
+            lockable,
+            locked,
+            ...props
+        } = this.props;
+        let classNames = className ? [className] : [];
         classNames.push('section');
 
         /*
@@ -93,21 +103,19 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
         }
         */
         let innerClassNames = ['section-content'];
-        if (this.props.lockable) {
+        if (lockable) {
             innerClassNames.push('lock-contents');
         }
 
-        let className = classNames.join(' ');
-        let innerClassName = innerClassNames.join(' ');
         return (
-            <section className={className} {...this.props} ref={this.root}>
+            <section className={classNames.join(' ')} id={id} {...props} ref={this.root}>
                 <header>
-                    {this.props.title}
-                    {this.props.closeable ?
+                    {title}
+                    {closeable ?
                         <Button className="section-toggle" onClick={this.close}>-</Button>
                         : undefined}
                 </header>
-                <div className={innerClassName} ref={this.innerDiv}>{this.props.children}</div>
+                <div className={innerClassNames.join(' ')} ref={this.innerDiv}>{this.props.children}</div>
             </section>
         );
     }
