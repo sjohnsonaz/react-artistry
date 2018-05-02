@@ -76,8 +76,8 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
                         this.setState({ selected: true }, () => {
                             let computedStyle = window.getComputedStyle(node, null);
                             let paddingHeight =
-                                parseFloat(computedStyle.getPropertyValue('border-top')) +
-                                parseFloat(computedStyle.getPropertyValue('border-bottom')) +
+                                parseFloat(computedStyle.getPropertyValue('border-top-width')) +
+                                parseFloat(computedStyle.getPropertyValue('border-bottom-width')) +
                                 parseFloat(computedStyle.getPropertyValue('padding-top')) +
                                 parseFloat(computedStyle.getPropertyValue('padding-bottom'));
                             let activeChild = node.querySelector('.carousel-selected');
