@@ -30,16 +30,46 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
         selected: true,
         runCount: 0
     };
-
-    transitionEnd = (event: React.TransitionEvent<HTMLElement>) => {
-        let node = this.container.current;
-        if (event.target === node) {
-            this.setState({
-                animating: false,
-                height: 'auto',
-                previousActiveIndex: this.state.activeIndex
-            });
+    observer = new MutationObserver((mutationList, observer) => {
+        for (var mutation of mutationList) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                let target: HTMLElement = mutation.target as any;
+                if (target.classList.contains('carousel-run')) {
+                    this.setState({ selected: true }, () => {
+                        let computedStyle = window.getComputedStyle(target, null);
+                        let paddingHeight =
+                            parseFloat(computedStyle.getPropertyValue('border-top-width')) +
+                            parseFloat(computedStyle.getPropertyValue('border-bottom-width')) +
+                            parseFloat(computedStyle.getPropertyValue('padding-top')) +
+                            parseFloat(computedStyle.getPropertyValue('padding-bottom'));
+                        let activeChild = target.querySelector('.carousel-selected');
+                        if (activeChild) {
+                            this.setState({ height: paddingHeight + activeChild.clientHeight + 'px' });
+                        }
+                    });
+                } else {
+                    this.setState({
+                        animating: false,
+                        height: 'auto',
+                        previousActiveIndex: this.state.activeIndex
+                    });
+                }
+            }
         }
+    });
+
+    componentDidMount() {
+        let node = this.container.current;
+        this.observer.observe(node, {
+            attributes: true
+        });
+    }
+
+    componentWillUnmount() {
+        this.observer.disconnect();
+    }
+
+    async startAnimation(): Promise<void> {
     }
 
     componentWillReceiveProps(nextProps?: ICarouselProps) {
@@ -71,20 +101,6 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
                         activeIndex: activeIndex,
                         previousActiveIndex: previousActiveIndex,
                         selected: false
-                    }, async () => {
-                        await wait(30);
-                        this.setState({ selected: true }, () => {
-                            let computedStyle = window.getComputedStyle(node, null);
-                            let paddingHeight =
-                                parseFloat(computedStyle.getPropertyValue('border-top-width')) +
-                                parseFloat(computedStyle.getPropertyValue('border-bottom-width')) +
-                                parseFloat(computedStyle.getPropertyValue('padding-top')) +
-                                parseFloat(computedStyle.getPropertyValue('padding-bottom'));
-                            let activeChild = node.querySelector('.carousel-selected');
-                            if (activeChild) {
-                                this.setState({ height: paddingHeight + activeChild.clientHeight + 'px' });
-                            }
-                        });
                     });
                 });
             });
@@ -163,7 +179,6 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
                 className={classNames.join(' ')}
                 id={this.props.id}
                 style={{ height: this.state.height }}
-                onTransitionEnd={this.transitionEnd}
                 ref={this.container}
             >
                 {children}
