@@ -36,7 +36,6 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
     transitionEnd = async (event: React.TransitionEvent<HTMLElement>) => {
         if (event.propertyName === 'height') {
             let running = this.state.running;
-            console.log('running', running);
             if (!running) {
                 this.setState({
                     animating: false,
