@@ -38,13 +38,6 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
         }
     }
 
-    componentDidMount() {
-        let innerDiv = this.innerDiv.current;
-        if (this.props.locked) {
-            innerDiv.classList.add('locked');
-        }
-    }
-
     componentDidUpdate(prevProps: ISectionProps, prevState: any) {
         let innerDiv = this.innerDiv.current;
         let node = this.root.current;
@@ -105,6 +98,10 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
         let innerClassNames = ['section-content'];
         if (lockable) {
             innerClassNames.push('lock-contents');
+        }
+
+        if (this.props.locked) {
+            innerClassNames.push('locked');
         }
 
         return (
