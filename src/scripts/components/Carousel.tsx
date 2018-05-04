@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import ClassNames from '../util/ClassNames';
-import { wait } from '../util/PromiseUtil';
+import { setState, waitAnimation } from '../util/PromiseUtil';
 
 export interface ICarouselProps {
     className?: string;
@@ -15,6 +15,7 @@ export interface ICarouselState {
     height: string;
     activeIndex: number;
     previousActiveIndex: number;
+    running: boolean;
     animating: boolean;
     selected: boolean;
     runCount: number;
@@ -26,53 +27,37 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
         height: 'auto',
         activeIndex: 0,
         previousActiveIndex: 0,
+        running: false,
         animating: false,
         selected: true,
         runCount: 0
     };
-    observer = new MutationObserver((mutationList, observer) => {
-        for (var mutation of mutationList) {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                let target: HTMLElement = mutation.target as any;
-                if (target.classList.contains('carousel-run')) {
-                    this.setState({ selected: true }, () => {
-                        let computedStyle = window.getComputedStyle(target, null);
-                        let paddingHeight =
-                            parseFloat(computedStyle.getPropertyValue('border-top-width')) +
-                            parseFloat(computedStyle.getPropertyValue('border-bottom-width')) +
-                            parseFloat(computedStyle.getPropertyValue('padding-top')) +
-                            parseFloat(computedStyle.getPropertyValue('padding-bottom'));
-                        let activeChild = target.querySelector('.carousel-selected');
-                        if (activeChild) {
-                            this.setState({ height: paddingHeight + activeChild.clientHeight + 'px' });
-                        }
-                    });
-                } else {
-                    this.setState({
-                        animating: false,
-                        height: 'auto',
-                        previousActiveIndex: this.state.activeIndex
-                    });
-                }
+
+    transitionEnd = async (event: React.TransitionEvent<HTMLElement>) => {
+        if (event.propertyName === 'height') {
+            let running = this.state.running;
+            console.log('running', running);
+            if (!running) {
+                this.setState({
+                    animating: false,
+                    height: 'auto',
+                    previousActiveIndex: this.state.activeIndex
+                });
             }
         }
-    });
-
-    componentDidMount() {
-        let node = this.container.current;
-        this.observer.observe(node, {
-            attributes: true
-        });
     }
 
-    componentWillUnmount() {
-        this.observer.disconnect();
+    async startRun() {
+        await setState({ running: true }, this);
     }
 
-    async startAnimation(): Promise<void> {
+    async stopRun() {
+        if (this.state.running) {
+            await setState({ running: false }, this);
+        }
     }
 
-    componentWillReceiveProps(nextProps?: ICarouselProps) {
+    async componentWillReceiveProps(nextProps?: ICarouselProps) {
         let { activeIndex } = nextProps;
         let { activeIndex: previousActiveIndex } = this.props;
 
@@ -92,18 +77,68 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
             }
         }
 
-        if (activeIndex !== this.state.activeIndex) {
-            let node = this.container.current;
+        // Only run if we are changing indexes
+        if (activeIndex !== previousActiveIndex) {
 
-            this.setState({ height: node.offsetHeight + 'px' }, () => {
-                this.setState({ animating: true }, () => {
-                    this.setState({
-                        activeIndex: activeIndex,
-                        previousActiveIndex: previousActiveIndex,
-                        selected: false
-                    });
-                });
-            });
+            // Store runCount in closure
+            let runCount = this.state.runCount + 1;
+
+            // Start run
+            await setState({ runCount: runCount }, this);
+            await this.startRun();
+            if (runCount !== this.state.runCount) {
+                return;
+            }
+
+            // Store current height
+            let node = this.container.current;
+            await setState({ height: node.offsetHeight + 'px' }, this);
+            if (runCount !== this.state.runCount) {
+                return;
+            }
+
+            // Start animating
+            await setState({ animating: true }, this);
+            if (runCount !== this.state.runCount) {
+                return;
+            }
+
+            // Update indexes
+            await setState({
+                activeIndex: activeIndex,
+                previousActiveIndex: previousActiveIndex,
+                selected: false
+            }, this);
+
+            // Wait for animationFrame
+            await waitAnimation(1);
+            if (runCount !== this.state.runCount) {
+                return;
+            }
+
+            // Update selected
+            await setState({ selected: true }, this);
+            if (runCount !== this.state.runCount) {
+                return;
+            }
+
+            // Update height
+            let computedStyle = window.getComputedStyle(node, null);
+            let paddingHeight =
+                parseFloat(computedStyle.getPropertyValue('border-top-width')) +
+                parseFloat(computedStyle.getPropertyValue('border-bottom-width')) +
+                parseFloat(computedStyle.getPropertyValue('padding-top')) +
+                parseFloat(computedStyle.getPropertyValue('padding-bottom'));
+            let activeChild = node.querySelector('.carousel-selected');
+            if (activeChild) {
+                await setState({ height: paddingHeight + activeChild.clientHeight + 'px' }, this);
+            }
+            if (runCount !== this.state.runCount) {
+                return;
+            }
+
+            // Stop run
+            await this.stopRun();
         }
     }
 
@@ -179,23 +214,11 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
                 className={classNames.join(' ')}
                 id={this.props.id}
                 style={{ height: this.state.height }}
+                onTransitionEnd={this.transitionEnd}
                 ref={this.container}
             >
                 {children}
             </div>
         );
     }
-}
-
-function clearTimeoutBinding(container: any, property: string) {
-    let timeout: number = container[property];
-    if (typeof timeout === 'number') {
-        window.clearTimeout(timeout);
-        container[property] = undefined;
-    }
-}
-
-function setTimeoutBinding(container: any, property: string, callback: Function, time?: number) {
-    container[property] = window.setTimeout(callback, time);
-    return container[property];
 }
