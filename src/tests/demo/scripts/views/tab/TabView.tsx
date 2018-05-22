@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Tab, Section } from '../../../../../scripts/modules/ReactArtistry';
+import { Tab, Section } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface ITabViewProps {
 

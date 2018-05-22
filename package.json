@@ -5,8 +5,8 @@
   "repository": "https://www.github.com/sjohnsonaz/artistry-react.git",
   "license": "MIT",
   "author": "Sean Johnson <sjohnson@sjohnsonaz.com>",
-  "main": "dist/scripts/modules/ReactArtistry.js",
-  "typings": "dist/scripts/modules/ReactArtistry.d.ts",
+  "main": "dist/scripts/modules/ArtistryReact.js",
+  "typings": "dist/scripts/modules/ArtistryReact.d.ts",
   "scripts": {
     "start": "node ./dist/main.js",
     "build": "tsc",

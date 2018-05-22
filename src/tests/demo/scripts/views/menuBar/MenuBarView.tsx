@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, MenuBar, MenuBarLink, Popover, Section, UserThumbnail } from '../../../../../scripts/modules/ReactArtistry';
+import { Button, MenuBar, MenuBarLink, Popover, Section, UserThumbnail } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface IMenuBarViewProps {
 

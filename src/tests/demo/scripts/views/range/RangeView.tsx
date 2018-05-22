@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Range, Section } from '../../../../../scripts/modules/ReactArtistry';
+import { Range, Section } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface IRangeViewProps {
 

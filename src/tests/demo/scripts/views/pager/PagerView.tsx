@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Pager, Section } from '../../../../../scripts/modules/ReactArtistry';
+import { Pager, Section } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface IPagerViewProps {
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Form, FormAction, FormContainer, Drawer, Section } from '../../../../../scripts/modules/ReactArtistry';
+import { Button, Form, FormAction, FormContainer, Drawer, Section } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface IDrawerViewProps {
 

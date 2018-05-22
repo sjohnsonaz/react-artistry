@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
     mode:'production',
     entry: {
-        'ReactArtistry': './src/scripts/modules/ReactArtistry.ts'
+        'ArtistryReact': './src/scripts/modules/ArtistryReact.ts'
     },
     output: {
         filename: './bundle/[name].min.js',

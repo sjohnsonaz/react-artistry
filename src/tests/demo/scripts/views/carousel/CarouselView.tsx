@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Carousel, Section } from '../../../../../scripts/modules/ReactArtistry';
+import { Button, Carousel, Section } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface ICarouselViewProps {
 
