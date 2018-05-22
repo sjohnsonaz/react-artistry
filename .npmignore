@@ -10,8 +10,8 @@ dist/mocha/
 react-*
 .gitignore
 .npmignore
+postcss.config.js
 tsconfig.json
-typings.json
 webpack.config.js
 webpack.dev.config.js
 styleconfig.json
