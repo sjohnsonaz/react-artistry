@@ -40,6 +40,7 @@ export default class MenuBarView extends React.Component<IMenuBarViewProps, IMen
                 />
                 <li className="menu-spacer"></li>
                 <MenuBarLink
+                    noLink
                     title={
                         <UserThumbnail
                             src="https://placebear.com/50/50"
@@ -52,6 +53,7 @@ export default class MenuBarView extends React.Component<IMenuBarViewProps, IMen
                     }
                 />
                 <MenuBarLink
+                    noLink
                     title={
                         <UserThumbnail
                             src=""

@@ -51,9 +51,9 @@ export default class Table<T> extends React.Component<ITableProps<T>, any> {
                         if (column.template) {
                             return column.template(item);
                         } else if (column.property) {
-                            return <td key={index}>{item[column.property]}</td>
+                            return <td key={'td-' + index}>{item[column.property]}</td>
                         } else {
-                            return <td key={index}></td>
+                            return <td key={'td-' + index}></td>
                         }
                     })}
                 </tr>

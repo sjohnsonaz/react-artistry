@@ -6,6 +6,7 @@ export interface IMenuBarLinkProps {
     title?: any;
     href?: string;
     active?: boolean;
+    noLink?: boolean;
 }
 
 export default class MenuBarLink extends React.Component<IMenuBarLinkProps, any> {
@@ -17,7 +18,9 @@ export default class MenuBarLink extends React.Component<IMenuBarLinkProps, any>
         }
         return (
             <li className={classNames.join(' ')} id={this.props.id}>
-                <a href={this.props.href || ''}>{this.props.title}</a>
+                {!this.props.noLink ?
+                    <a href={this.props.href || ''}>{this.props.title}</a> :
+                    <span>{this.props.title}</span>}
             </li>
         );
     }
