@@ -7,7 +7,7 @@ module.exports = {
         'styles': './src/tests/demo/styles/style.styl'
     },
     output: {
-        filename: './dist/bundle/[name].js',
+        filename: './bundle/[name].js',
         libraryTarget: 'var',
         library: '[name]'
     },
@@ -42,8 +42,8 @@ module.exports = {
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
-            filename: "[name].css",
-            chunkFilename: "[id].css"
+            filename: "bundle/[name].css",
+            chunkFilename: "bundle/[id].css"
         })
     ]
 };

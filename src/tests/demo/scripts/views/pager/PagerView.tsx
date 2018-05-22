@@ -41,7 +41,7 @@ export default class PagerView extends React.Component<IPagerViewProps, any> {
     }
     render() {
         return (
-            <Section title="Pager">
+            <Section header="Pager" space>
                 <Pager
                     count={20}
                     index={this.state.index}

@@ -9,7 +9,7 @@ export interface IRangeViewProps {
 export default class RangeView extends React.Component<IRangeViewProps, any> {
     render() {
         return (
-            <Section title="Range">
+            <Section header="Range" space>
                 <Range />
             </Section>
         );

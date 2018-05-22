@@ -37,7 +37,7 @@ export default class ButtonView extends React.Component<IButtonViewProps, IButto
 
     render() {
         return (
-            <Section title="Buttons">
+            <Section header="Buttons" space>
                 <h3>Individual Buttons</h3>
                 <div>
                     <Button>Edit</Button>{' '}

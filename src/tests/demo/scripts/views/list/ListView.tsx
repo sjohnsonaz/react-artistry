@@ -37,7 +37,7 @@ let data: IListData[] = [{
 export default class TableView extends React.Component<ITableViewProps, any> {
     render() {
         return (
-            <Section title="List">
+            <Section header="List">
                 <List
                     data={data}
                     template={item => item.ingredient}

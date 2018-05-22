@@ -9,7 +9,7 @@ export interface ICalendarViewProps {
 export default class CalendarView extends React.Component<ICalendarViewProps, any> {
     render() {
         return (
-            <Section title="Calendar">
+            <Section header="Calendar">
                 <DatePicker date={new Date(Date.now())} onSelect={() => { }} />
             </Section>
         );

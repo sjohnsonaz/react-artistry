@@ -7,7 +7,7 @@ module.exports = {
         'ReactArtistry': './src/scripts/modules/ReactArtistry.ts'
     },
     output: {
-        filename: './dist/bundle/[name].min.js',
+        filename: './bundle/[name].min.js',
         libraryTarget: 'var',
         library: '[name]'
     },
@@ -41,8 +41,8 @@ module.exports = {
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
-            filename: "[name].css",
-            chunkFilename: "[id].css"
+            filename: "bundle/[name].css",
+            chunkFilename: "bundle/[id].css"
         })
     ]
 };

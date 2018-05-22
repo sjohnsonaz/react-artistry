@@ -1,14 +1,14 @@
 import * as React from 'react';
 
-export interface IFormActionsProps {
+export interface IFormActionProps {
     className?: string;
     id?: string;
 }
 
-export default class FormActions extends React.Component<IFormActionsProps, any>{
+export default class FormAction extends React.Component<IFormActionProps, any>{
     render() {
         let classNames = this.props.className ? [this.props.className] : [];
-        classNames.push('form-actions');
+        classNames.push('form-action');
         return <div className={classNames.join(' ')} id={this.props.id}>{this.props.children}</div>
     }
 }

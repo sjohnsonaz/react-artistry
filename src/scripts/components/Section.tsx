@@ -3,11 +3,14 @@ import * as React from 'react';
 import Button from './Button';
 
 export interface ISectionProps extends React.HTMLProps<HTMLElement> {
-    title: any;
+    header: any;
+    footer?: any;
     lockable?: boolean;
     locked?: boolean;
     closeable?: boolean;
     closed?: boolean;
+    space?: boolean;
+    relative?: boolean;
     onClose?: (closed: boolean) => void;
 }
 
@@ -80,11 +83,14 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
         let {
             id,
             className,
-            title,
+            header,
+            footer,
             closeable,
             closed,
             lockable,
             locked,
+            space,
+            relative,
             ...props
         } = this.props;
         let classNames = className ? [className] : [];
@@ -100,19 +106,30 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
             innerClassNames.push('lock-contents');
         }
 
-        if (this.props.locked) {
+        if (locked) {
             innerClassNames.push('locked');
+        }
+
+        if (space) {
+            innerClassNames.push('section-content-space');
+        }
+
+        if (relative) {
+            innerClassNames.push('section-content-relative');
         }
 
         return (
             <section className={classNames.join(' ')} id={id} {...props} ref={this.root}>
                 <header>
-                    {title}
+                    {header}
                     {closeable ?
                         <Button className="section-toggle" onClick={this.close}>-</Button>
                         : undefined}
                 </header>
                 <div className={innerClassNames.join(' ')} ref={this.innerDiv}>{this.props.children}</div>
+                {footer ?
+                    <footer>{footer}</footer> :
+                    null}
             </section>
         );
     }
