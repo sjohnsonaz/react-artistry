@@ -1,6 +1,7 @@
 ﻿import * as React from 'react';
 
 import Button from './Button';
+import ButtonGroup from './ButtonGroup';
 
 type Month = 'January' | 'February' | 'March' | 'April' | 'May' | 'June' | 'July' | 'August' | 'September' | 'October' | 'November' | 'December';
 
@@ -90,16 +91,20 @@ export default class Calendar extends React.Component<ICalendarProps, any> {
         return (
             <div className="calendar">
                 <div className="calendar-title">
-                    <div className="calendar-year-title">
-                        <Button className="calendar-year-down" onClick={this.decreaseYear} />
-                        <strong className="calendar-year-name">{this.state.year}</strong>
-                        <Button className="calendar-year-up" onClick={this.increaseYear} />
-                    </div>
-                    <div className="calendar-month-title">
-                        <Button className="calendar-month-down" onClick={this.decreaseMonth} />
-                        <strong className="calendar-month-name">{monthNames[this.state.month]}</strong>
-                        <Button className="calendar-month-up" onClick={this.increaseMonth} />
-                    </div>
+                    <ButtonGroup>
+                        <Button onClick={this.decreaseYear}>-</Button>
+                        <select className="select" style={{ flexGrow: 1 }}>
+                            <option value="2018">2018</option>
+                        </select>
+                        <Button onClick={this.increaseYear}>+</Button>
+                    </ButtonGroup>
+                    <ButtonGroup>
+                        <Button onClick={this.decreaseMonth}>-</Button>
+                        <select className="select" style={{ flexGrow: 1 }}>
+                            <option value="February">February</option>
+                        </select>
+                        <Button onClick={this.increaseMonth}>+</Button>
+                    </ButtonGroup>
                 </div>
                 <table>
                     <thead>

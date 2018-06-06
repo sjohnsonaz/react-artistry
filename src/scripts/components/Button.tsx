@@ -13,15 +13,30 @@ export interface IButtonProps extends React.HTMLProps<HTMLButtonElement> {
     popover?: ITemplate;
     popoverDirection?: 'top' | 'right' | 'bottom' | 'left';
     popoverAlign?: 'top' | 'right' | 'bottom' | 'left' | 'center';
-    popoverOpen?: boolean;
     popoverMenu?: boolean;
+    popoverOpen?: boolean;
+    popoverFill?: boolean;
     onPopoverClose?: (event: Event) => boolean | void;
     lockContent?: any;
     locked?: boolean;
     down?: boolean;
+    link?: boolean;
+    noTrigger?: boolean;
+}
+
+
+export interface IButtonState {
+    open?: boolean;
 }
 
 export default class Button extends React.Component<IButtonProps, any> {
+    constructor(props?: IButtonState) {
+        super(props);
+        this.state = {
+            open: this.props.open || false
+        };
+    }
+
     onPopoverClose(event: Event) {
         event.stopPropagation();
         if (this.props.onPopoverClose) {
@@ -44,7 +59,10 @@ export default class Button extends React.Component<IButtonProps, any> {
             popoverDirection,
             popoverMenu,
             popoverOpen,
+            popoverFill,
             onPopoverClose,
+            link,
+            noTrigger,
             ...props
         } = this.props;
 
@@ -89,7 +107,9 @@ export default class Button extends React.Component<IButtonProps, any> {
         let popOver;
         let popOverMask;
         if (typeof popover !== 'undefined') {
-            classNames.push('popover-trigger');
+            if (!noTrigger) {
+                classNames.push('popover-trigger');
+            }
             if (popoverMenu) {
                 if (popoverOpen) {
                     classNames.push('popover-open');
@@ -108,6 +128,7 @@ export default class Button extends React.Component<IButtonProps, any> {
                     align={popoverAlign}
                     direction={popoverDirection}
                     open={!popoverMenu ? popoverOpen : undefined}
+                    fill={popoverFill}
                 >
                     {typeof popover === 'function' ?
                         popover() :
@@ -130,7 +151,7 @@ export default class Button extends React.Component<IButtonProps, any> {
             injectedProps['disabled'] = true;
         }
 
-        return !popoverMenu ?
+        return !(popoverMenu || link) ?
             (
                 <button {...props as any} className={classNames.join(' ')} id={id} {...injectedProps}>
                     {popOverMask}
