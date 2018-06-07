@@ -1,6 +1,6 @@
 # react-artistry
 
-[![Build Status](https://travis-ci.org/sjohnsonaz/react-artistry.svg?branch=master)](https://travis-ci.org/sjohnsonaz/react-artistry) [![npm version](https://badge.fury.io/js/react-artistry.svg)](https://badge.fury.io/js/react-artistry)
+[![Build Status](https://travis-ci.org/sjohnsonaz/artistry-react.svg?branch=master)](https://travis-ci.org/sjohnsonaz/artistry-react) [![npm version](https://badge.fury.io/js/%40artistry%2Freact.svg)](https://badge.fury.io/js/%40artistry%2Freact)
 
 A powerful component library for React.  All components have been designed with React in mind, reducing re-renders and other JavaScript activity.
 

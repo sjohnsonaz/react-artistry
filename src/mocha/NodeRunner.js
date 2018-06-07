@@ -1,8 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 
-var ReflectMetadata = require('reflect-metadata');
-
 var Mocha = require('mocha');
 
 var DomIntegration = require('./DomIntegration');
