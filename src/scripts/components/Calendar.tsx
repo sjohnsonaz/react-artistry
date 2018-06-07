@@ -88,20 +88,52 @@ export default class Calendar extends React.Component<ICalendarProps, any> {
 
     render() {
         var weeks = this.getWeeks(this.state.year, this.state.month);
+        let years = [];
+        let year = this.state.year;
+        for (let index = -100, length = 200; index <= length; index++) {
+            years.push(year + index);
+        }
         return (
             <div className="calendar">
                 <div className="calendar-title">
                     <ButtonGroup>
                         <Button onClick={this.decreaseYear}>-</Button>
-                        <select className="select" style={{ flexGrow: 1 }}>
-                            <option value="2018">2018</option>
+                        <select
+                            className="select"
+                            style={{ flexGrow: 1 }}
+                            value={this.state.year}
+                            onChange={(event) => {
+                                this.setState({
+                                    year: parseInt((event.target as any).value)
+                                });
+                            }}>
+                            {years.map(year => <option value={year} key={year}>{year}</option>)}
                         </select>
                         <Button onClick={this.increaseYear}>+</Button>
                     </ButtonGroup>
                     <ButtonGroup>
                         <Button onClick={this.decreaseMonth}>-</Button>
-                        <select className="select" style={{ flexGrow: 1 }}>
-                            <option value="February">February</option>
+                        <select
+                            className="select"
+                            style={{ flexGrow: 1 }}
+                            value={this.state.month}
+                            onChange={(event) => {
+                                this.setState({
+                                    month: parseInt((event.target as any).value)
+                                });
+                            }}>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
                         </select>
                         <Button onClick={this.increaseMonth}>+</Button>
                     </ButtonGroup>

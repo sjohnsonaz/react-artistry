@@ -33,12 +33,15 @@ export default class DatePicker extends React.Component<IDatePickerProps, any>{
                     onChange={() => { }}
                 />
                 <Button
+                    link
+                    noTrigger
                     popoverDirection="bottom"
                     popoverAlign="right"
                     popoverFill
-                    popover={<Calendar date={date} onSelect={this.onSelect} />}
-                    link
-                    noTrigger
+                    popover={<Calendar
+                        date={date}
+                        onSelect={this.onSelect}
+                    />}
                 >Calendar</Button>
             </ButtonGroup>
         );
