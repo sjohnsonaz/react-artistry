@@ -16,6 +16,7 @@ export interface IModalProps {
     locked?: boolean;
     lockScroll?: boolean;
     space?: boolean;
+    background?: boolean;
 }
 
 export default class Modal extends React.Component<IModalProps, any> {
@@ -35,13 +36,18 @@ export default class Modal extends React.Component<IModalProps, any> {
         let {
             open,
             animation,
-            lockScroll
+            lockScroll,
+            background
         } = this.props;
 
         let classNames = this.props.className ? [this.props.className] : [];
         classNames.push('modal');
         if (open) {
-            classNames.push(' modal-open');
+            classNames.push('modal-open');
+        }
+
+        if (background) {
+            classNames.push('modal-background');
         }
 
         if (lockScroll) {
