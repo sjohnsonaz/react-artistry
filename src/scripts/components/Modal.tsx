@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { ITemplate } from './ITemplate';
 import Button from './Button';
+import { GridSize, gridConfig } from './Grid';
 import BodyScroll from '../util/BodyScroll';
 
 export interface IModalProps {
@@ -17,6 +18,9 @@ export interface IModalProps {
     lockScroll?: boolean;
     space?: boolean;
     background?: boolean;
+    grid?: boolean;
+    gridColumns?: number;
+    gridSize?: GridSize;
 }
 
 export default class Modal extends React.Component<IModalProps, any> {
@@ -90,7 +94,13 @@ export default class Modal extends React.Component<IModalProps, any> {
                 modalContentClassNames.push('modal-content-space');
             }
         }
+
+        if (this.props.grid) {
+            gridConfig(modalContentClassNames, this.props.gridColumns, this.props.gridSize);
+        }
+
         let modalContentClassName = modalContentClassNames.join(' ');
+
         return (
             <div className={classNames.join(' ')} id={this.props.id} onClick={this.close}>
                 {title || footer ?

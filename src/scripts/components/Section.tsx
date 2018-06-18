@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import Button from './Button';
+import { GridSize, gridConfig } from './Grid';
 
 export interface ISectionProps extends React.HTMLProps<HTMLElement> {
     header: any;
@@ -11,6 +12,9 @@ export interface ISectionProps extends React.HTMLProps<HTMLElement> {
     closed?: boolean;
     space?: boolean;
     relative?: boolean;
+    grid?: boolean;
+    gridColumns?: number;
+    gridSize?: GridSize;
     onClose?: (closed: boolean) => void;
 }
 
@@ -91,6 +95,9 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
             locked,
             space,
             relative,
+            grid,
+            gridColumns,
+            gridSize,
             ...props
         } = this.props;
         let classNames = className ? [className] : [];
@@ -116,6 +123,10 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
 
         if (relative) {
             innerClassNames.push('section-content-relative');
+        }
+
+        if (grid) {
+            gridConfig(innerClassNames, gridColumns, gridSize);
         }
 
         return (

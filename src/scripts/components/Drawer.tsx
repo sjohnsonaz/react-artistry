@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Draggable from './Draggable';
+import { GridSize, gridConfig } from './Grid';
 import BodyScroll from '../util/BodyScroll';
 
 export interface IDrawerProps {
@@ -12,6 +12,9 @@ export interface IDrawerProps {
     onClose: (event: React.MouseEvent<HTMLDivElement>) => void;
     lockScroll?: boolean;
     background?: boolean;
+    grid?: boolean;
+    gridColumns?: number;
+    gridSize?: GridSize;
 }
 
 export default class Drawer extends React.Component<IDrawerProps, any> {
@@ -60,9 +63,14 @@ export default class Drawer extends React.Component<IDrawerProps, any> {
             BodyScroll.lock(open);
         }
 
+        let innerClassNames = ['drawer-content'];
+        if (this.props.grid) {
+            gridConfig(innerClassNames, this.props.gridColumns, this.props.gridSize);
+        }
+
         return (
             <div className={classNames.join(' ')} id={id} onClick={this.close}>
-                <div className="drawer-content" onClick={this.preventClick}>
+                <div className={innerClassNames.join(' ')} onClick={this.preventClick}>
                     {this.props.children}
                 </div>
             </div>
