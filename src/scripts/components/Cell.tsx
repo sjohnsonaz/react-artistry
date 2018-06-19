@@ -5,6 +5,7 @@ export interface ICellProps {
     id?: string;
     columns?: number;
     offset?: number;
+    align?: 'left' | 'right' | 'start' | 'end';
 }
 
 export default class Cell extends React.Component<ICellProps, any> {
@@ -17,6 +18,22 @@ export default class Cell extends React.Component<ICellProps, any> {
         }
         if (this.props.offset) {
             classNames.push('offset-' + this.props.offset);
+        }
+        if (this.props.align) {
+            switch (this.props.align) {
+                case 'left':
+                    classNames.push('align-left');
+                    break;
+                case 'right':
+                    classNames.push('align-right');
+                    break;
+                case 'start':
+                    classNames.push('align-start');
+                    break;
+                case 'end':
+                    classNames.push('align-end');
+                    break;
+            }
         }
         let className = classNames.join(' ');
         return <div className={className} id={this.props.id}>{this.props.children}</div>

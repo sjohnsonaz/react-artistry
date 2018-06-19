@@ -8,6 +8,7 @@ export interface ICardProps {
     closed?: boolean;
     header?: any;
     footer?: any;
+    space?: boolean;
     nav?: any;
     navAlign?: 'start' | 'end';
     grid?: boolean;
@@ -23,6 +24,7 @@ export default class Card extends React.Component<ICardProps, any> {
             closed,
             header,
             footer,
+            space,
             nav,
             navAlign,
             grid,
@@ -33,6 +35,9 @@ export default class Card extends React.Component<ICardProps, any> {
         classNames.push('card');
 
         let innerClassNames = ['card-content'];
+        if (space) {
+            innerClassNames.push('card-content-space');
+        }
         if (grid) {
             gridConfig(innerClassNames, gridColumns, gridSize);
         }

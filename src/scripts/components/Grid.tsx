@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export type GridSize = 'default' | 'small' | 'medium' | 'large';
+export type GridSize = 'default' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
 
 export interface IGridProps {
     className?: string;
@@ -21,6 +21,9 @@ export default class Grid extends React.Component<IGridProps, any> {
 export function gridConfig(classNames: string[], columns: number, size?: GridSize) {
     columns = columns || 12;
     switch (size) {
+        case 'x-small':
+            classNames.push('grid-xs-' + columns);
+            break;
         case 'small':
             classNames.push('grid-sm-' + columns);
             break;
@@ -29,6 +32,9 @@ export function gridConfig(classNames: string[], columns: number, size?: GridSiz
             break;
         case 'large':
             classNames.push('grid-lg-' + columns);
+            break;
+        case 'x-large':
+            classNames.push('grid-xl-' + columns);
             break;
         default:
             classNames.push('grid-' + columns);
