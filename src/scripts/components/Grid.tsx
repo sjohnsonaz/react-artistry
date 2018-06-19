@@ -7,18 +7,19 @@ export interface IGridProps {
     id?: string;
     columns?: number;
     size?: GridSize;
+    space?: boolean;
 }
 
 export default class Grid extends React.Component<IGridProps, any> {
     render() {
         let classNames = this.props.className ? [this.props.className] : [];
-        gridConfig(classNames, this.props.columns, this.props.size);
+        grid(classNames, this.props.columns, this.props.size, this.props.space);
         let className = classNames.join(' ');
         return <div className={className} id={this.props.id}>{this.props.children}</div>
     }
 }
 
-export function gridConfig(classNames: string[], columns: number, size?: GridSize) {
+function grid(classNames: string[], columns: number, size?: GridSize, space?: boolean) {
     columns = columns || 12;
     switch (size) {
         case 'x-small':
@@ -40,5 +41,15 @@ export function gridConfig(classNames: string[], columns: number, size?: GridSiz
             classNames.push('grid-' + columns);
             break;
     }
-    return classNames;
+}
+
+export interface IGridExternalProps {
+    grid?: boolean;
+    gridColumns?: number;
+    gridSize?: GridSize;
+    gridSpace?: boolean;
+}
+
+export function gridConfig(classNames: string[], props: IGridExternalProps) {
+    grid(classNames, props.gridColumns, props.gridSize, props.gridSpace);
 }

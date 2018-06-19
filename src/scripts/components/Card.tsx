@@ -1,8 +1,8 @@
 ﻿import * as React from 'react';
 
-import { GridSize, gridConfig } from './Grid';
+import { IGridExternalProps, gridConfig } from './Grid';
 
-export interface ICardProps {
+export interface ICardProps extends IGridExternalProps {
     id?: string;
     className?: string;
     closed?: boolean;
@@ -11,9 +11,6 @@ export interface ICardProps {
     space?: boolean;
     nav?: any;
     navAlign?: 'start' | 'end';
-    grid?: boolean;
-    gridColumns?: number;
-    gridSize?: GridSize;
 }
 
 export default class Card extends React.Component<ICardProps, any> {
@@ -27,9 +24,7 @@ export default class Card extends React.Component<ICardProps, any> {
             space,
             nav,
             navAlign,
-            grid,
-            gridColumns,
-            gridSize,
+            grid
         } = this.props;
         let classNames = className ? [className] : [];
         classNames.push('card');
@@ -39,7 +34,7 @@ export default class Card extends React.Component<ICardProps, any> {
             innerClassNames.push('card-content-space');
         }
         if (grid) {
-            gridConfig(innerClassNames, gridColumns, gridSize);
+            gridConfig(innerClassNames, this.props);
         }
 
         return (

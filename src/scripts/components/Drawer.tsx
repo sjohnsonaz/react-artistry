@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { GridSize, gridConfig } from './Grid';
+import { IGridExternalProps, gridConfig } from './Grid';
 import BodyScroll from '../util/BodyScroll';
 
-export interface IDrawerProps {
+export interface IDrawerProps extends IGridExternalProps {
     className?: string;
     id?: string;
     direction?: 'top' | 'right' | 'bottom' | 'left';
@@ -12,9 +12,6 @@ export interface IDrawerProps {
     onClose: (event: React.MouseEvent<HTMLDivElement>) => void;
     lockScroll?: boolean;
     background?: boolean;
-    grid?: boolean;
-    gridColumns?: number;
-    gridSize?: GridSize;
 }
 
 export default class Drawer extends React.Component<IDrawerProps, any> {
@@ -65,7 +62,7 @@ export default class Drawer extends React.Component<IDrawerProps, any> {
 
         let innerClassNames = ['drawer-content'];
         if (this.props.grid) {
-            gridConfig(innerClassNames, this.props.gridColumns, this.props.gridSize);
+            gridConfig(innerClassNames, this.props);
         }
 
         return (

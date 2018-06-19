@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import Button from './Button';
-import { GridSize, gridConfig } from './Grid';
+import { IGridExternalProps, gridConfig } from './Grid';
 
-export interface ISectionProps extends React.HTMLProps<HTMLElement> {
+export interface ISectionProps extends React.HTMLProps<HTMLElement>, IGridExternalProps {
     header: any;
     footer?: any;
     lockable?: boolean;
@@ -13,8 +13,6 @@ export interface ISectionProps extends React.HTMLProps<HTMLElement> {
     space?: boolean;
     relative?: boolean;
     grid?: boolean;
-    gridColumns?: number;
-    gridSize?: GridSize;
     onClose?: (closed: boolean) => void;
 }
 
@@ -126,7 +124,7 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
         }
 
         if (grid) {
-            gridConfig(innerClassNames, gridColumns, gridSize);
+            gridConfig(innerClassNames, this.props);
         }
 
         return (

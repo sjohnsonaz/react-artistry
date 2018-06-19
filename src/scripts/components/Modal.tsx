@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import { ITemplate } from './ITemplate';
 import Button from './Button';
-import { GridSize, gridConfig } from './Grid';
+import { IGridExternalProps, gridConfig } from './Grid';
 import BodyScroll from '../util/BodyScroll';
 
-export interface IModalProps {
+export interface IModalProps extends IGridExternalProps {
     className?: string;
     id?: string;
     open: boolean;
@@ -18,9 +18,6 @@ export interface IModalProps {
     lockScroll?: boolean;
     space?: boolean;
     background?: boolean;
-    grid?: boolean;
-    gridColumns?: number;
-    gridSize?: GridSize;
 }
 
 export default class Modal extends React.Component<IModalProps, any> {
@@ -96,7 +93,7 @@ export default class Modal extends React.Component<IModalProps, any> {
         }
 
         if (this.props.grid) {
-            gridConfig(modalContentClassNames, this.props.gridColumns, this.props.gridSize);
+            gridConfig(modalContentClassNames, this.props);
         }
 
         let modalContentClassName = modalContentClassNames.join(' ');
