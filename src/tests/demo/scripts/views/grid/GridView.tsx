@@ -11,7 +11,7 @@ export default class GridView extends React.Component<IGridViewProps, any> {
         return (
             <Section header="Grid">
                 <h3>Grid</h3>
-                <Grid size="small">
+                <Grid size="small" space>
                     <Row>
                         <Cell>Item 1</Cell>
                         <Cell>Item 2</Cell>

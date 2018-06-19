@@ -41,6 +41,10 @@ function grid(classNames: string[], columns: number, size?: GridSize, space?: bo
             classNames.push('grid-' + columns);
             break;
     }
+
+    if (space) {
+        classNames.push('grid-space');
+    }
 }
 
 export interface IGridExternalProps {
