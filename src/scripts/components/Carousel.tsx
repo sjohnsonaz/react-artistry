@@ -63,7 +63,6 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
                 }, this);
             } else {
                 await setState({ running: false }, this);
-
             }
         }
     }

@@ -96,6 +96,7 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
             grid,
             gridColumns,
             gridSize,
+            gridSpace,
             ...props
         } = this.props;
         let classNames = className ? [className] : [];
