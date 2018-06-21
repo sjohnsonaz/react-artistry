@@ -11,6 +11,7 @@ export interface ITabProps {
     animated?: boolean;
     fade?: boolean;
     safe?: boolean;
+    space?: boolean;
     staticHeight?: boolean;
     fillHeight?: boolean;
 }
@@ -41,7 +42,11 @@ export default class Tab extends React.Component<ITabProps, ITabState> {
         let activeIndex = typeof this.props.activeIndex !== 'undefined' ?
             this.props.activeIndex :
             (this.state.activeIndex || 0);
-        
+
+        if (this.props.space) {
+            classNames.push('tab-space');
+        }
+
         if (this.props.fillHeight) {
             classNames.push('fill-height');
         }
