@@ -22,6 +22,7 @@ import FormView from './views/form/FormView';
 import CodeView from './views/code/CodeView';
 import DrawerView from './views/drawer/DrawerView';
 import GridView from './views/grid/GridView';
+import CardView from './views/card/CardView';
 
 export default class Application {
     static run() {
@@ -45,6 +46,7 @@ export default class Application {
                 <FormView />
                 <CodeView />
                 <GridView />
+                <CardView />
             </Container>,
             document.getElementById('root'),
         );
