@@ -22,7 +22,7 @@ export default class Closeable extends React.Component<ICloseableProps, ICloseab
     constructor(props: ICloseableProps) {
         super(props);
         this.state = {
-            closed: false,
+            closed: props.closed,
             running: false,
             animating: false,
             height: undefined,
