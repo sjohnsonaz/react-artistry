@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { setState, waitAnimation } from '../util/PromiseUtil';
+import { setState } from '../util/PromiseUtil';
 
 export interface ICloseableProps {
     id?: string;

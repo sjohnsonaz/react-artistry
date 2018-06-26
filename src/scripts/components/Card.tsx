@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 
-import Closeable, { } from './Closeable';
+import Closeable from './Closeable';
 import { IGridExternalProps, gridConfig } from './Grid';
 
 export interface ICardProps extends IGridExternalProps {
