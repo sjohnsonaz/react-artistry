@@ -49,7 +49,7 @@ export default class ModalView extends React.Component<IModalViewProps, IModalVi
         return (
             <Section header="Modal" space>
                 <Button onClick={this.openModal}>Open Modal</Button>
-                <Modal open={this.state.modalOpen} onclose={this.closeModal} title="Modal" animation="top" lockable locked={this.state.modalLock} lockScroll space>
+                <Modal open={this.state.modalOpen} onclose={this.closeModal} title="Modal" animation="top" lockable locked={this.state.modalLock} space>
                     <div>test</div>
                     <ButtonBar>
                         <Button onClick={this.openInnerModal}>Open Inner Modal</Button>

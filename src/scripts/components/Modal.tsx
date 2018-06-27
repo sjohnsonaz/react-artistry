@@ -1,9 +1,12 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 import { ITemplate } from './ITemplate';
 import Button from './Button';
 import { IGridExternalProps, gridConfig } from './Grid';
 import BodyScroll from '../util/BodyScroll';
+import { waitAnimation } from '../util/PromiseUtil';
+import Portal from '../util/Portal';
 
 export interface IModalProps extends IGridExternalProps {
     className?: string;
@@ -15,12 +18,24 @@ export interface IModalProps extends IGridExternalProps {
     animation?: 'center' | 'top' | 'right' | 'bottom' | 'left';
     lockable?: boolean;
     locked?: boolean;
-    lockScroll?: boolean;
     space?: boolean;
     background?: boolean;
 }
 
-export default class Modal extends React.Component<IModalProps, any> {
+export interface IModalState {
+    open?: boolean;
+}
+
+export default class Modal extends React.Component<IModalProps, IModalState> {
+    element: HTMLDivElement;
+
+    constructor(props: IModalProps) {
+        super(props);
+        this.state = {
+            open: props.open
+        };
+        this.element = document.createElement('div');
+    }
 
     preventClick(event: React.MouseEvent<HTMLElement>) {
         event.stopPropagation();
@@ -33,26 +48,53 @@ export default class Modal extends React.Component<IModalProps, any> {
         }
     }
 
+    async componentWillReceiveProps(nextProps?: IModalProps) {
+        if (this.props.open != nextProps.open) {
+            if (nextProps.open) {
+                BodyScroll.lock();
+                let modalRoot = Portal.getElement('modal-root');
+                modalRoot.appendChild(this.element);
+                await waitAnimation();
+                this.setState({
+                    open: nextProps.open
+                });
+            } else {
+                BodyScroll.unlock();
+                this.setState({
+                    open: nextProps.open
+                });
+            }
+        }
+    }
+
+    componentDidMount() {
+        let modalRoot = Portal.getElement('modal-root');
+        modalRoot.appendChild(this.element);
+    }
+
+    componentWillUnmount() {
+        // If we were locked, unlock
+        if (this.state.open) {
+            BodyScroll.unlock();
+        }
+        let modalRoot = Portal.getElement('modal-root');
+        modalRoot.removeChild(this.element);
+    }
+
     render() {
         let {
-            open,
             animation,
-            lockScroll,
             background
         } = this.props;
 
         let classNames = this.props.className ? [this.props.className] : [];
         classNames.push('modal');
-        if (open) {
+        if (this.state.open) {
             classNames.push('modal-open');
         }
 
         if (background) {
             classNames.push('modal-background');
-        }
-
-        if (lockScroll) {
-            BodyScroll.lock(open);
         }
 
         if (animation) {
@@ -98,7 +140,7 @@ export default class Modal extends React.Component<IModalProps, any> {
 
         let modalContentClassName = modalContentClassNames.join(' ');
 
-        return (
+        return ReactDOM.createPortal((
             <div className={classNames.join(' ')} id={this.props.id} onClick={this.close}>
                 {title || footer ?
                     <div className="modal-content" onClick={this.preventClick}>
@@ -120,6 +162,6 @@ export default class Modal extends React.Component<IModalProps, any> {
                     </div>
                 }
             </div>
-        );
+        ), this.element);
     }
 }

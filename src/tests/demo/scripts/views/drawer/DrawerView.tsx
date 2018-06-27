@@ -30,7 +30,7 @@ export default class DrawerView extends React.Component<IDrawerViewProps, IDrawe
         return (
             <Section header="Drawer" space>
                 <Button onClick={this.openDrawer}>Open Drawer</Button>
-                <Drawer open={this.state.drawerOpen} onClose={this.closeDrawer} lockScroll>
+                <Drawer open={this.state.drawerOpen} onClose={this.closeDrawer}>
                     <Button onClick={this.closeDrawer} className="pull-right">Close</Button>
                     <p>Drawer Content</p>
                     <br />

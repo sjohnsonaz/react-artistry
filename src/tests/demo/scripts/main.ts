@@ -1,5 +1,5 @@
 import Application from './Application';
 
-window.onload = function() {
+window.onload = function () {
     Application.run();
 };

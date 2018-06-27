@@ -1,7 +1,10 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 import { IGridExternalProps, gridConfig } from './Grid';
 import BodyScroll from '../util/BodyScroll';
+import { waitAnimation } from '../util/PromiseUtil';
+import Portal from '../util/Portal';
 
 export interface IDrawerProps extends IGridExternalProps {
     className?: string;
@@ -10,11 +13,24 @@ export interface IDrawerProps extends IGridExternalProps {
     open: boolean;
     full?: boolean;
     onClose: (event: React.MouseEvent<HTMLDivElement>) => void;
-    lockScroll?: boolean;
     background?: boolean;
 }
 
-export default class Drawer extends React.Component<IDrawerProps, any> {
+export interface IDrawerState {
+    open?: boolean;
+}
+
+export default class Drawer extends React.Component<IDrawerProps, IDrawerState> {
+    element: HTMLDivElement;
+
+    constructor(props: IDrawerProps) {
+        super(props);
+        this.state = {
+            open: props.open
+        };
+        this.element = document.createElement('div');
+    }
+
     preventClick(event: React.MouseEvent<HTMLDivElement>) {
         event.stopPropagation();
     }
@@ -26,15 +42,46 @@ export default class Drawer extends React.Component<IDrawerProps, any> {
         }
     }
 
+    async componentWillReceiveProps(nextProps?: IDrawerProps) {
+        if (this.props.open != nextProps.open) {
+            if (nextProps.open) {
+                BodyScroll.lock();
+                let modalRoot = Portal.getElement('modal-root');
+                modalRoot.appendChild(this.element);
+                await waitAnimation();
+                this.setState({
+                    open: nextProps.open
+                });
+            } else {
+                BodyScroll.unlock();
+                this.setState({
+                    open: nextProps.open
+                });
+            }
+        }
+    }
+
+    componentDidMount() {
+        let modalRoot = Portal.getElement('modal-root');
+        modalRoot.appendChild(this.element);
+    }
+
+    componentWillUnmount() {
+        // If we were locked, unlock
+        if (this.state.open) {
+            BodyScroll.unlock();
+        }
+        let modalRoot = Portal.getElement('modal-root');
+        modalRoot.removeChild(this.element);
+    }
+
     render() {
         let {
             className,
             id,
             direction,
-            open,
             full,
             onClose,
-            lockScroll,
             background
         } = this.props;
 
@@ -44,7 +91,7 @@ export default class Drawer extends React.Component<IDrawerProps, any> {
         direction = direction || 'bottom';
         classNames.push('drawer-' + direction);
 
-        if (open) {
+        if (this.state.open) {
             classNames.push('drawer-open');
         }
 
@@ -56,21 +103,17 @@ export default class Drawer extends React.Component<IDrawerProps, any> {
             classNames.push('drawer-full');
         }
 
-        if (lockScroll) {
-            BodyScroll.lock(open);
-        }
-
         let innerClassNames = ['drawer-content'];
         if (this.props.grid) {
             gridConfig(innerClassNames, this.props);
         }
 
-        return (
+        return ReactDOM.createPortal((
             <div className={classNames.join(' ')} id={id} onClick={this.close}>
                 <div className={innerClassNames.join(' ')} onClick={this.preventClick}>
                     {this.props.children}
                 </div>
             </div>
-        );
+        ), this.element);
     }
 }
