@@ -58,7 +58,6 @@ export default class Closeable extends React.Component<ICloseableProps, ICloseab
                 running: true,
                 animating: true,
             }, this);
-
             if (runCount !== this.state.runCount) {
                 return;
             }

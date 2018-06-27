@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Card, Cell, Closeable, Grid, Row, Section } from '../../../../../scripts/modules/ArtistryReact';
+import { Button, Card, Cell, Closeable, Fillable, Grid, Row, Section } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface ICardViewProps {
 
@@ -8,6 +8,7 @@ export interface ICardViewProps {
 
 export interface ICardViewState {
     closed?: boolean;
+    filled?: boolean;
 }
 
 export default class CardView extends React.Component<ICardViewProps, any> {
@@ -18,9 +19,15 @@ export default class CardView extends React.Component<ICardViewProps, any> {
         };
     }
 
-    toggle = () => {
+    toggleClosed = () => {
         this.setState({
             closed: !this.state.closed
+        });
+    }
+
+    toggleFilled = () => {
+        this.setState({
+            filled: !this.state.filled
         });
     }
 
@@ -28,25 +35,28 @@ export default class CardView extends React.Component<ICardViewProps, any> {
         return (
             <Section header="Card" space>
                 <h3>Card</h3>
-                <Card grid space>
-                    <Row>
-                        <Cell>
-                            Card Content
+                <Fillable filled={this.state.filled}>
+                    <Card grid space fill>
+                        <Row>
+                            <Cell>
+                                Card Content
                         </Cell>
-                        <Cell>
-                            <Button onClick={this.toggle}>Expand</Button>
-                        </Cell>
-                    </Row>
-                    <Closeable closed={this.state.closed}>
-                        <Grid>
-                            <Row>
-                                <Cell>
-                                    Card Content
+                            <Cell>
+                                <Button onClick={this.toggleClosed}>Expand</Button>
+                                <Button onClick={this.toggleFilled}>Fill</Button>
+                            </Cell>
+                        </Row>
+                        <Closeable closed={this.state.closed}>
+                            <Grid>
+                                <Row>
+                                    <Cell>
+                                        Card Content
                                 </Cell>
-                            </Row>
-                        </Grid>
-                    </Closeable>
-                </Card>
+                                </Row>
+                            </Grid>
+                        </Closeable>
+                    </Card>
+                </Fillable>
             </Section>
         );
     }
