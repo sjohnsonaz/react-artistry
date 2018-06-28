@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { setState, waitAnimation } from '../util/PromiseUtil';
+import BodyScroll from '../util/BodyScroll';
 
 export interface IFillableProps {
     id?: string;
@@ -16,9 +17,10 @@ export interface IFillableState {
     right?: string;
     bottom?: string;
     left?: string;
+    runCount?: number;
 }
 
-export default class Fillable extends React.Component<IFillableProps, any> {
+export default class Fillable extends React.Component<IFillableProps, IFillableState> {
     root: React.RefObject<HTMLDivElement> = React.createRef();
 
     constructor(props?: IFillableProps) {
@@ -26,6 +28,9 @@ export default class Fillable extends React.Component<IFillableProps, any> {
         this.state = {
             filled: props.filled
         };
+        if (props.filled) {
+            BodyScroll.lock();
+        }
     }
 
     async componentWillReceiveProps(nextProps: IFillableState) {
@@ -33,7 +38,7 @@ export default class Fillable extends React.Component<IFillableProps, any> {
             let node = this.root.current;
             let runCount = this.state.runCount;
 
-            if (this.props.filled) {
+            if (!nextProps.filled) {
                 let rect = node.getBoundingClientRect();
                 await setState({
                     top: rect.top + 'px',
@@ -59,6 +64,11 @@ export default class Fillable extends React.Component<IFillableProps, any> {
                     left: undefined,
                     filled: false
                 }, this);
+                if (runCount !== this.state.runCount) {
+                    return;
+                }
+
+                BodyScroll.unlock();
             } else {
                 let rect = node.getBoundingClientRect();
                 await setState({
@@ -85,7 +95,19 @@ export default class Fillable extends React.Component<IFillableProps, any> {
                     bottom: 0 + 'px',
                     left: 0 + 'px'
                 }, this);
+                if (runCount !== this.state.runCount) {
+                    return;
+                }
+
+                BodyScroll.lock();
             }
+        }
+    }
+
+    componentWillUnmount() {
+        // If we were locked, unlock
+        if (this.state.filled) {
+            BodyScroll.unlock();
         }
     }
 
