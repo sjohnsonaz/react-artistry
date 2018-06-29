@@ -29,6 +29,9 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
             open: props.open
         };
         this.element = document.createElement('div');
+        if (props.open) {
+            BodyScroll.lock();
+        }
     }
 
     preventClick(event: React.MouseEvent<HTMLDivElement>) {

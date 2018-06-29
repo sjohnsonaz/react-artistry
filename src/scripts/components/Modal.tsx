@@ -35,6 +35,9 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             open: props.open
         };
         this.element = document.createElement('div');
+        if (props.open) {
+            BodyScroll.lock();
+        }
     }
 
     preventClick(event: React.MouseEvent<HTMLElement>) {
