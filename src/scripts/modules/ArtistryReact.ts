@@ -1,4 +1,5 @@
 export { default as BodyScroll } from '../util/BodyScroll';
+export { default as DepthQueue } from '../util/DepthQueue';
 export { default as Portal } from '../util/Portal';
 export { default as Button, IButtonProps } from '../components/Button';
 export { default as ButtonGroup, IButtonGroupProps } from '../components/ButtonGroup';
