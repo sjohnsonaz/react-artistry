@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 export default class Portal {
     static elements: {
         [index: string]: HTMLElement;
