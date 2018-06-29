@@ -48,7 +48,6 @@ export default class Closeable extends React.Component<ICloseableProps, ICloseab
         }
     }
 
-
     async componentWillReceiveProps(nextProps: ICloseableProps) {
         if (this.props.closed !== nextProps.closed) {
             let node = this.root.current;

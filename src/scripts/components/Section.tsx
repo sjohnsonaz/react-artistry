@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Button from './Button';
 import { IGridExternalProps, gridConfig } from './Grid';
+import { setState } from '../util/PromiseUtil';
 
 export interface ISectionProps extends React.HTMLProps<HTMLElement>, IGridExternalProps {
     header: any;
@@ -17,17 +18,26 @@ export interface ISectionProps extends React.HTMLProps<HTMLElement>, IGridExtern
 }
 
 export interface ISectionState {
-    closed: boolean;
+    closed?: boolean;
+    running?: boolean;
+    animating?: boolean;
+    height?: string;
+    runCount?: number;
 }
 
 export default class Section extends React.Component<ISectionProps, ISectionState> {
     root: React.RefObject<HTMLElement> = React.createRef();
-    innerDiv: React.RefObject<HTMLDivElement> = React.createRef();
+    header: React.RefObject<HTMLElement> = React.createRef();
+    content: React.RefObject<HTMLDivElement> = React.createRef();
 
     constructor(props?: ISectionProps) {
         super(props);
         this.state = {
-            closed: false
+            closed: props.closed,
+            running: false,
+            animating: false,
+            height: undefined,
+            runCount: 0
         };
     }
 
@@ -43,41 +53,86 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
         }
     }
 
-    componentDidUpdate(prevProps: ISectionProps, prevState: any) {
-        let innerDiv = this.innerDiv.current;
-        let node = this.root.current;
-        // Get closed value
-        let closed = typeof this.props.closed !== 'undefined' ?
-            this.props.closed :
-            (this.state.closed || false);
-
-        // Clear toggleTimeout
-        let toggleTimeout: number = (node as any).toggleTimeout;
-        if (typeof toggleTimeout === 'number') {
-            window.clearTimeout(toggleTimeout);
-            (node as any).toggleTimeout = undefined;
+    transitionEnd = async (event: React.TransitionEvent<HTMLDivElement>) => {
+        if (event.propertyName === 'height') {
+            let animating = this.state.animating;
+            if (!animating) {
+                if (this.state.closed) {
+                    await setState({
+                        running: false
+                    }, this);
+                } else {
+                    await setState({
+                        height: undefined,
+                        running: false
+                    }, this);
+                }
+            }
         }
+    }
 
-        let header = node.childNodes[0] as HTMLElement;
-        let content = node.childNodes[1] as HTMLElement;
-        node.classList.add('section-run');
-        if (closed) {
-            node.style.height = node.offsetHeight + 'px';
-            node.style.height = header.offsetHeight + 'px';
-            node.classList.add('section-closed');
-            (node as any).toggleTimeout = window.setTimeout(function () {
-                node.style.height = 'auto';
-                node.classList.remove('section-run');
-            }, 220);
-        } else {
-            var sectionBorder = node.offsetHeight - node.clientHeight;
-            node.style.height = sectionBorder / 2 + header.offsetHeight + content.offsetHeight + 'px';
-            node.classList.remove('section-closed');
-            node.style.height = sectionBorder / 2 + header.offsetHeight + content.offsetHeight + 'px';
-            (node as any).toggleTimeout = window.setTimeout(function () {
-                node.style.height = 'auto';
-                node.classList.remove('section-run');
-            }, 220);
+    async componentWillReceiveProps(nextProps: ISectionProps) {
+        if (this.props.closed !== nextProps.closed) {
+            let node = this.root.current;
+            let header = this.header.current;
+            let content = this.content.current;
+
+            let runCount = this.state.runCount;
+
+            await setState({
+                running: true,
+                animating: true,
+            }, this);
+            if (runCount !== this.state.runCount) {
+                return;
+            }
+
+            if (nextProps.closed) {
+                await setState({
+                    height: node.offsetHeight + 'px'
+                }, this);
+                if (runCount !== this.state.runCount) {
+                    return;
+                }
+
+                await setState({
+                    height: header.offsetHeight + 'px',
+                    closed: true,
+                }, this);
+                if (runCount !== this.state.runCount) {
+                    return;
+                }
+
+                await setState({
+                    animating: false
+                }, this);
+            } else {
+                let border = node.offsetHeight - node.clientHeight;
+                await setState({
+                    height: border / 2 + header.offsetHeight + content.offsetHeight + 'px'
+                }, this);
+                if (runCount !== this.state.runCount) {
+                    return;
+                }
+
+                await setState({
+                    closed: false
+                }, this);
+                if (runCount !== this.state.runCount) {
+                    return;
+                }
+
+                await setState({
+                    height: border / 2 + header.offsetHeight + content.offsetHeight + 'px'
+                }, this);
+                if (runCount !== this.state.runCount) {
+                    return;
+                }
+
+                await setState({
+                    animating: false
+                }, this);
+            }
         }
     }
 
@@ -102,11 +157,14 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
         let classNames = className ? [className] : [];
         classNames.push('section');
 
-        /*
-        if (this.props.closed) {
+        if (this.state.closed) {
             classNames.push('section-closed');
         }
-        */
+
+        if (this.state.running) {
+            classNames.push('section-run');
+        }
+
         let innerClassNames = ['section-content'];
         if (lockable) {
             innerClassNames.push('lock-contents');
@@ -129,14 +187,20 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
         }
 
         return (
-            <section className={classNames.join(' ')} id={id} {...props} ref={this.root}>
-                <header>
+            <section
+                className={classNames.join(' ')}
+                id={id}
+                {...props}
+                style={{ height: this.state.height }}
+                ref={this.root}
+            >
+                <header ref={this.header}>
                     {header}
                     {closeable ?
                         <Button className="section-toggle" onClick={this.close}>-</Button>
                         : undefined}
                 </header>
-                <div className={innerClassNames.join(' ')} ref={this.innerDiv}>{this.props.children}</div>
+                <div className={innerClassNames.join(' ')} ref={this.content}>{this.props.children}</div>
                 {footer ?
                     <footer>{footer}</footer> :
                     null}
