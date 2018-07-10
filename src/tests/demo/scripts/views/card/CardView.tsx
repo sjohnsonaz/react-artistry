@@ -35,7 +35,7 @@ export default class CardView extends React.Component<ICardViewProps, any> {
         return (
             <Section header="Card" space>
                 <h3>Card</h3>
-                <Fillable filled={this.state.filled}>
+                <Fillable card filled={this.state.filled}>
                     <Card grid space fill>
                         <Row>
                             <Cell>

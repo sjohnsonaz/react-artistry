@@ -7,6 +7,7 @@ export interface IFillableProps {
     id?: string;
     className?: string;
     filled?: boolean;
+    card?: boolean;
 }
 
 export interface IFillableState {
@@ -114,10 +115,15 @@ export default class Fillable extends React.Component<IFillableProps, IFillableS
     render() {
         let {
             id,
-            className
+            className,
+            card
         } = this.props;
         let classNames = className ? [className] : [];
         classNames.push('fillable');
+
+        if (card) {
+            classNames.push('card-fillable');
+        }
 
         return (
             <div
