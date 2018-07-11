@@ -24,7 +24,7 @@ export default class Tab extends React.Component<ITabProps, ITabState> {
     constructor(props?: ITabProps) {
         super(props);
         this.state = {
-            activeIndex: 0
+            activeIndex: props.activeIndex
         };
     }
     selectPanel(index: number) {
