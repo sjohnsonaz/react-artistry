@@ -27,8 +27,8 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
     container: React.RefObject<HTMLDivElement> = React.createRef();
     state = {
         height: undefined,
-        activeIndex: 0,
-        previousActiveIndex: 0,
+        activeIndex: this.props.activeIndex,
+        previousActiveIndex: this.props.activeIndex,
         running: false,
         animating: false,
         selected: true,
