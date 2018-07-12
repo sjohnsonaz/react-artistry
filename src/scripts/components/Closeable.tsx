@@ -117,6 +117,12 @@ export default class Closeable extends React.Component<ICloseableProps, ICloseab
         }
     }
 
+    componentWillUnmount() {
+        this.setState({
+            runCount: this.state.runCount + 1
+        });
+    }
+
     render() {
         let {
             id,

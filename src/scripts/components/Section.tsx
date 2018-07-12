@@ -136,6 +136,12 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
         }
     }
 
+    componentWillUnmount() {
+        this.setState({
+            runCount: this.state.runCount + 1
+        });
+    }
+
     render() {
         let {
             id,

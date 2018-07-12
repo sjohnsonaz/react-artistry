@@ -110,6 +110,9 @@ export default class Fillable extends React.Component<IFillableProps, IFillableS
         if (this.state.filled) {
             BodyScroll.unlock();
         }
+        this.setState({
+            runCount: this.state.runCount + 1
+        });
     }
 
     render() {

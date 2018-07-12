@@ -157,6 +157,12 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
         }
     }
 
+    componentWillUnmount() {
+        this.setState({
+            runCount: this.state.runCount + 1
+        });
+    }
+
     render() {
         let classNames = this.props.className ? [this.props.className] : [];
         classNames.push('carousel');
