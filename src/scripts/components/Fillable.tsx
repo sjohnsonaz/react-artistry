@@ -18,17 +18,17 @@ export interface IFillableState {
     right?: string;
     bottom?: string;
     left?: string;
-    runCount?: number;
 }
 
 export default class Fillable extends React.Component<IFillableProps, IFillableState> {
     root: React.RefObject<HTMLDivElement> = React.createRef();
+    state: IFillableState = {
+        filled: this.props.filled
+    };
+    runCount: number = 0;
 
     constructor(props?: IFillableProps) {
         super(props);
-        this.state = {
-            filled: props.filled
-        };
         if (props.filled) {
             BodyScroll.lock();
         }
@@ -37,7 +37,8 @@ export default class Fillable extends React.Component<IFillableProps, IFillableS
     async componentWillReceiveProps(nextProps: IFillableState) {
         if (this.props.filled !== nextProps.filled) {
             let node = this.root.current;
-            let runCount = this.state.runCount;
+            this.runCount++;
+            let runCount = this.runCount;
 
             if (!nextProps.filled) {
                 let rect = node.getBoundingClientRect();
@@ -47,12 +48,12 @@ export default class Fillable extends React.Component<IFillableProps, IFillableS
                     left: rect.left + 'px',
                     right: document.body.scrollWidth - rect.left - rect.width + 'px'
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
                 await waitAnimation(220);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
@@ -65,7 +66,7 @@ export default class Fillable extends React.Component<IFillableProps, IFillableS
                     left: undefined,
                     filled: false
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
@@ -81,12 +82,12 @@ export default class Fillable extends React.Component<IFillableProps, IFillableS
                     right: document.body.scrollWidth - rect.left - rect.width + 'px',
                     filled: true
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
                 await waitAnimation(220);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
@@ -96,7 +97,7 @@ export default class Fillable extends React.Component<IFillableProps, IFillableS
                     bottom: 0 + 'px',
                     left: 0 + 'px'
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
@@ -110,9 +111,7 @@ export default class Fillable extends React.Component<IFillableProps, IFillableS
         if (this.state.filled) {
             BodyScroll.unlock();
         }
-        this.setState({
-            runCount: this.state.runCount + 1
-        });
+        this.runCount++;
     }
 
     render() {

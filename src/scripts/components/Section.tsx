@@ -22,24 +22,19 @@ export interface ISectionState {
     running?: boolean;
     animating?: boolean;
     height?: string;
-    runCount?: number;
 }
 
 export default class Section extends React.Component<ISectionProps, ISectionState> {
     root: React.RefObject<HTMLElement> = React.createRef();
     header: React.RefObject<HTMLElement> = React.createRef();
     content: React.RefObject<HTMLDivElement> = React.createRef();
-
-    constructor(props?: ISectionProps) {
-        super(props);
-        this.state = {
-            closed: props.closed,
-            running: false,
-            animating: false,
-            height: undefined,
-            runCount: 0
-        };
-    }
+    state: ISectionState = {
+        closed: this.props.closed,
+        running: false,
+        animating: false,
+        height: undefined
+    };
+    runCount: number = 0;
 
     close = () => {
         if (this.props.onClose) {
@@ -77,13 +72,14 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
             let header = this.header.current;
             let content = this.content.current;
 
-            let runCount = this.state.runCount;
+            this.runCount++;
+            let runCount = this.runCount;
 
             await setState({
                 running: true,
                 animating: true,
             }, this);
-            if (runCount !== this.state.runCount) {
+            if (runCount !== this.runCount) {
                 return;
             }
 
@@ -91,7 +87,7 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
                 await setState({
                     height: node.offsetHeight + 'px'
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
@@ -99,7 +95,7 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
                     height: header.offsetHeight + 'px',
                     closed: true,
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
@@ -111,21 +107,21 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
                 await setState({
                     height: border / 2 + header.offsetHeight + content.offsetHeight + 'px'
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
                 await setState({
                     closed: false
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
                 await setState({
                     height: border / 2 + header.offsetHeight + content.offsetHeight + 'px'
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
@@ -137,9 +133,7 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
     }
 
     componentWillUnmount() {
-        this.setState({
-            runCount: this.state.runCount + 1
-        });
+        this.runCount++;
     }
 
     render() {

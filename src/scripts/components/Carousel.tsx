@@ -20,20 +20,19 @@ export interface ICarouselState {
     running: boolean;
     animating: boolean;
     selected: boolean;
-    runCount: number;
 }
 
 export default class Carousel extends React.Component<ICarouselProps, ICarouselState> {
     container: React.RefObject<HTMLDivElement> = React.createRef();
-    state = {
+    state: ICarouselState = {
         height: undefined,
         activeIndex: this.props.activeIndex,
         previousActiveIndex: this.props.activeIndex,
         running: false,
         animating: false,
-        selected: true,
-        runCount: 0
+        selected: true
     };
+    runCount: number = 0;
 
     transitionEnd = async (event: React.TransitionEvent<HTMLElement>) => {
         if (event.propertyName === 'height') {
@@ -91,12 +90,13 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
         if (activeIndex !== previousActiveIndex) {
 
             // Store runCount in closure
-            let runCount = this.state.runCount + 1;
+            this.runCount++;
+            let runCount = this.runCount;
 
             // Start run
             await setState({ runCount: runCount }, this);
             await this.startRun();
-            if (runCount !== this.state.runCount) {
+            if (runCount !== this.runCount) {
                 return;
             }
 
@@ -105,14 +105,14 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
                 // Store current height
                 node = this.container.current;
                 await setState({ height: node.offsetHeight + 'px' }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
             }
 
             // Start animating
             await setState({ animating: true }, this);
-            if (runCount !== this.state.runCount) {
+            if (runCount !== this.runCount) {
                 return;
             }
 
@@ -125,13 +125,13 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
 
             // Wait for animationFrame
             await waitAnimation(1);
-            if (runCount !== this.state.runCount) {
+            if (runCount !== this.runCount) {
                 return;
             }
 
             // Update selected
             await setState({ selected: true }, this);
-            if (runCount !== this.state.runCount) {
+            if (runCount !== this.runCount) {
                 return;
             }
 
@@ -147,7 +147,7 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
                 if (activeChild) {
                     await setState({ height: paddingHeight + activeChild.clientHeight + 'px' }, this);
                 }
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
             }
@@ -158,9 +158,7 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
     }
 
     componentWillUnmount() {
-        this.setState({
-            runCount: this.state.runCount + 1
-        });
+        this.runCount++;
     }
 
     render() {

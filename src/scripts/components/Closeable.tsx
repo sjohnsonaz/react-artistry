@@ -13,22 +13,17 @@ export interface ICloseableState {
     running: boolean;
     animating: boolean;
     height: string;
-    runCount: number;
 }
 
 export default class Closeable extends React.Component<ICloseableProps, ICloseableState> {
     root: React.RefObject<HTMLDivElement> = React.createRef();
-
-    constructor(props: ICloseableProps) {
-        super(props);
-        this.state = {
-            closed: props.closed,
-            running: false,
-            animating: false,
-            height: undefined,
-            runCount: 0
-        };
-    }
+    state: ICloseableState = {
+        closed: this.props.closed,
+        running: false,
+        animating: false,
+        height: undefined
+    };
+    runCount: number = 0;
 
     transitionEnd = async (event: React.TransitionEvent<HTMLDivElement>) => {
         if (event.propertyName === 'height') {
@@ -51,13 +46,15 @@ export default class Closeable extends React.Component<ICloseableProps, ICloseab
     async componentWillReceiveProps(nextProps: ICloseableProps) {
         if (this.props.closed !== nextProps.closed) {
             let node = this.root.current;
-            let runCount = this.state.runCount;
+
+            this.runCount++;
+            let runCount = this.runCount;
 
             await setState({
                 running: true,
                 animating: true,
             }, this);
-            if (runCount !== this.state.runCount) {
+            if (runCount !== this.runCount) {
                 return;
             }
 
@@ -65,14 +62,14 @@ export default class Closeable extends React.Component<ICloseableProps, ICloseab
                 await setState({
                     height: node.offsetHeight + 'px'
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
                 await setState({
                     closed: true
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
@@ -80,7 +77,7 @@ export default class Closeable extends React.Component<ICloseableProps, ICloseab
                 await setState({
                     height: border / 2 + 'px'
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
@@ -92,21 +89,21 @@ export default class Closeable extends React.Component<ICloseableProps, ICloseab
                 await setState({
                     height: border / 2 + 'px'
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
                 await setState({
                     closed: false
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
                 await setState({
                     height: border / 2 + node.scrollHeight + 'px'
                 }, this);
-                if (runCount !== this.state.runCount) {
+                if (runCount !== this.runCount) {
                     return;
                 }
 
@@ -118,9 +115,7 @@ export default class Closeable extends React.Component<ICloseableProps, ICloseab
     }
 
     componentWillUnmount() {
-        this.setState({
-            runCount: this.state.runCount + 1
-        });
+        this.runCount++;
     }
 
     render() {
