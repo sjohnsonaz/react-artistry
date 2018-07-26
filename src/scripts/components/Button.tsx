@@ -8,6 +8,7 @@ export interface IButtonProps extends React.HTMLProps<HTMLButtonElement> {
     className?: string;
     type?: 'button' | 'submit' | 'reset';
     theme?: 'default' | 'primary' | 'danger';
+    fill?: boolean;
     tooltip?: string;
     tooltipDirection?: 'top' | 'right' | 'bottom' | 'left';
     tooltipOpen?: boolean;
@@ -50,6 +51,7 @@ export default class Button extends React.Component<IButtonProps, any> {
             id,
             type,
             theme,
+            fill,
             down,
             lockContent,
             locked,
@@ -79,6 +81,10 @@ export default class Button extends React.Component<IButtonProps, any> {
             case 'danger':
                 classNames.push('button-danger');
                 break;
+        }
+
+        if (fill) {
+            classNames.push('fill-width');
         }
 
         // Always set button type
