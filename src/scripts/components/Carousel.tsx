@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import ClassNames from '../util/ClassNames';
 import { setState, waitAnimation } from '../util/PromiseUtil';
+import { ScrollableType } from './Scrollable';
 
 export interface ICarouselProps {
     className?: string;
@@ -11,6 +12,7 @@ export interface ICarouselProps {
     safe?: boolean;
     staticHeight?: boolean;
     fillHeight?: boolean;
+    scroll?: ScrollableType;
 }
 
 export interface ICarouselState {
@@ -193,6 +195,10 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
             classNames.push('carousel-safe');
         }
 
+        if (this.props.scroll) {
+            classNames.push('scrollable');
+        }
+
         let children;
 
         if (this.props.children instanceof Array) {
@@ -237,6 +243,7 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
                 className={classNames.join(' ')}
                 id={this.props.id}
                 style={{ height: this.state.height }}
+                data-scroll={this.props.scroll}
                 onTransitionEnd={this.transitionEnd}
                 ref={this.container}
             >

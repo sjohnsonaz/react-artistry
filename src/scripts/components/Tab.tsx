@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import Carousel from './Carousel';
+import { ScrollableType } from './Scrollable';
 
 export interface ITabProps {
     className?: string;
@@ -14,6 +15,7 @@ export interface ITabProps {
     space?: boolean;
     staticHeight?: boolean;
     fillHeight?: boolean;
+    scroll?: ScrollableType;
 }
 
 export interface ITabState {
@@ -68,6 +70,7 @@ export default class Tab extends React.Component<ITabProps, ITabState> {
                         safe={this.props.safe}
                         staticHeight={this.props.staticHeight}
                         fillHeight={this.props.fillHeight}
+                        scroll={this.props.scroll}
                     >
                         {this.props.children}
                     </Carousel>
