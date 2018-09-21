@@ -4,7 +4,7 @@ import Button from './Button';
 export interface IFileUploadProps {
     id?: string;
     className?: string;
-    onUpload: (files: FileList) => Promise<string[]>;
+    onUpload: (files: FileList) => any;
     text?: string;
 }
 
