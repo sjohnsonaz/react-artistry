@@ -3,7 +3,7 @@ declare var window: any;
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 
-import { Container, BodyScroll, DepthQueue, Portal } from '../../../scripts/modules/ArtistryReact';
+import { Container, BodyScroll, DepthStack, Portal } from '../../../scripts/modules/ArtistryReact';
 
 import ButtonView from './views/button/ButtonView';
 import RangeView from './views/range/RangeView';
@@ -28,7 +28,7 @@ import CardView from './views/card/CardView';
 export default class Application {
     static run() {
         BodyScroll.init();
-        DepthQueue.init();
+        DepthStack.init();
         Portal.addElement('modal-root', 'modal-root');
         ReactDom.render(
             <Container menuBarTop>

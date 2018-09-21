@@ -5,6 +5,7 @@ import { IGridExternalProps, gridConfig } from './Grid';
 import BodyScroll from '../util/BodyScroll';
 import { waitAnimation } from '../util/PromiseUtil';
 import Portal from '../util/Portal';
+import DepthStack from '../util/DepthStack';
 
 export interface IDrawerProps extends IGridExternalProps {
     className?: string;
@@ -18,6 +19,7 @@ export interface IDrawerProps extends IGridExternalProps {
 
 export interface IDrawerState {
     open?: boolean;
+    remove?: boolean;
 }
 
 export default class Drawer extends React.Component<IDrawerProps, IDrawerState> {
@@ -26,7 +28,8 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
     constructor(props: IDrawerProps) {
         super(props);
         this.state = {
-            open: props.open
+            open: props.open,
+            remove: !props.open
         };
         this.element = document.createElement('div');
         if (props.open) {
@@ -45,18 +48,35 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
         }
     }
 
+    transitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {
+        if (event.propertyName === 'transform') {
+            DepthStack.remove(this.close);
+            if (!this.props.open) {
+                this.setState({
+                    remove: true
+                });
+            }
+        }
+    }
+
     async componentWillReceiveProps(nextProps?: IDrawerProps) {
         if (this.props.open != nextProps.open) {
             if (nextProps.open) {
-                BodyScroll.lock();
-                let modalRoot = Portal.getElement('modal-root');
-                modalRoot.appendChild(this.element);
-                await waitAnimation();
                 this.setState({
-                    open: nextProps.open
-                });
+                    remove: false
+                }, async () => {
+                    BodyScroll.lock();
+                    let modalRoot = Portal.getElement('modal-root');
+                    modalRoot.appendChild(this.element);
+                    await waitAnimation();
+                    DepthStack.push(this.close);
+                    this.setState({
+                        open: nextProps.open
+                    });
+                })
             } else {
                 BodyScroll.unlock();
+                DepthStack.remove(this.close);
                 this.setState({
                     open: nextProps.open
                 });
@@ -112,7 +132,7 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
         }
 
         return ReactDOM.createPortal((
-            <div className={classNames.join(' ')} id={id} onClick={this.close}>
+            <div className={classNames.join(' ')} id={id} onTransitionEnd={this.transitionEnd}>
                 <div className={innerClassNames.join(' ')} onClick={this.preventClick}>
                     {this.props.children}
                 </div>

@@ -1,5 +1,5 @@
 export interface ICloseHandle {
-    (event: Event): boolean | void;
+    (event: React.SyntheticEvent): boolean | void;
 }
 
 export default class DepthStack {
@@ -9,8 +9,15 @@ export default class DepthStack {
         this.items.push(closeHandle);
     }
 
-    static close(event: Event) {
-        let item = this.items[0];
+    static remove(closeHandle: ICloseHandle) {
+        let index = this.items.indexOf(closeHandle);
+        if (index > -1) {
+            this.items.splice(index, 1);
+        }
+    }
+
+    static close(event: React.SyntheticEvent) {
+        let item = this.items[this.items.length - 1];
         if (item) {
             let result = item(event);
             if (result) {
