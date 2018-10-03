@@ -1,17 +1,44 @@
 import * as React from 'react';
+import FormInput, { IFormInputProps } from './FormInput';
 
-import Button from './Button';
-import ButtonGroup from './ButtonGroup';
-import Calendar from './Calendar';
-import Popover from './Popover';
-
-export interface IDateInputProps<T> extends React.HTMLProps<HTMLInputElement> {
+export interface IMaskedInputProps<T> extends React.HTMLProps<HTMLInputElement> {
+    id?: string;
+    className?: string;
+    mask: string;
     fill?: boolean;
     model?: T;
     modelProp?: keyof T;
+    onChange?: (event: React.FormEvent<HTMLInputElement>) => (void | boolean);
+    value?: any;
 }
 
-export default class DateInput<T> extends React.Component<IDateInputProps<T>, any> {
+export interface IMaskedInputState {
+    value?: string;
+    maskedValue?: string;
+}
+
+export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>, IMaskedInputState> {
+    state = {
+
+    } as IMaskedInputState;
+
+    componentWillReceiveProps(nextProps: IMaskedInputProps<T>, nextContext: any): void {
+        let {
+            model,
+            modelProp
+        } = nextProps;
+        let value: string;
+        if (model && modelProp) {
+            value = '' + model[modelProp];
+        } else {
+            value = '' + nextProps.value;
+        }
+        value += 'abcd';
+        this.setState({
+            value: value
+        });
+    }
+
     onInput = (event?: React.FormEvent<HTMLInputElement>) => {
         let { model, modelProp } = this.props;
         if (model && modelProp) {
