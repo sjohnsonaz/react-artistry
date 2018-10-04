@@ -35,6 +35,10 @@ export default class FileUpload extends React.Component<IFileUploadProps, IFileU
         this.fileInput.current.click();
     }
 
+    clickStop = (event: React.MouseEvent<HTMLInputElement>) => {
+        event.stopPropagation();
+    }
+
     upload = () => {
         let fileInput = this.fileInput.current;
         let files = fileInput.files;
@@ -95,6 +99,7 @@ export default class FileUpload extends React.Component<IFileUploadProps, IFileU
                 <input
                     type="file"
                     onChange={this.upload}
+                    onClick={this.clickStop}
                     multiple
                     ref={this.fileInput}
                 />
