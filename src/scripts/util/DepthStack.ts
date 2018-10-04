@@ -32,14 +32,16 @@ export default class DepthStack {
                 //case 13: // Enter
                 //break;
                 case 27: // Escape
-                    this.close(event);
+                    // TODO: Fix this
+                    this.close(event as any);
                     break;
                 default:
                     break;
             }
         });
         window.addEventListener('click', (event: MouseEvent) => {
-            this.close(event);
+            // TODO: Fix this
+            this.close(event as any);
         });
     }
 }
