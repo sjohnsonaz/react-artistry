@@ -1,6 +1,6 @@
 export { default as BodyScroll } from '../util/BodyScroll';
 export { default as ClassNames } from '../util/ClassNames';
-export { default as DepthQueue } from '../util/DepthQueue';
+export { default as DepthStack } from '../util/DepthStack';
 export { default as Portal } from '../util/Portal';
 export { default as Button, IButtonProps } from '../components/Button';
 export { default as ButtonGroup, IButtonGroupProps } from '../components/ButtonGroup';
@@ -26,6 +26,7 @@ export { default as FormInput, IFormInputProps } from '../components/FormInput';
 export { default as FormText, IFormTextProps } from '../components/FormText';
 export { default as Grid, IGridProps } from '../components/Grid';
 export { default as List, IListProps } from '../components/List';
+export { default as MaskedInput, IMaskedInputProps, IMaskedInputState } from '../components/MaskedInput';
 export { default as MenuBar, IMenuBarProps } from '../components/MenuBar';
 export { default as MenuBarLink, IMenuBarLinkProps } from '../components/MenuBarLink';
 export { default as MenuBarSpacer, IMenuBarSpacerProps } from '../components/MenuBarSpacer';
