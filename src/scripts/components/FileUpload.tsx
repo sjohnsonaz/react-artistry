@@ -4,7 +4,7 @@ import Button from './Button';
 export interface IFileUploadProps {
     id?: string;
     className?: string;
-    onUpload: (files: FileList) => Promise<string[]>;
+    onUpload: (files: FileList) => any;
     text?: string;
 }
 
@@ -33,6 +33,10 @@ export default class FileUpload extends React.Component<IFileUploadProps, IFileU
 
     click = () => {
         this.fileInput.current.click();
+    }
+
+    clickStop = (event: React.MouseEvent<HTMLInputElement>) => {
+        event.stopPropagation();
     }
 
     upload = () => {
@@ -95,6 +99,7 @@ export default class FileUpload extends React.Component<IFileUploadProps, IFileU
                 <input
                     type="file"
                     onChange={this.upload}
+                    onClick={this.clickStop}
                     multiple
                     ref={this.fileInput}
                 />
