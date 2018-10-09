@@ -6,44 +6,34 @@ export interface IMaskedInputProps<T> extends React.HTMLProps<HTMLInputElement> 
     className?: string;
     mask: string;
     fill?: boolean;
-    model?: T;
-    modelProp?: keyof T;
     onChange?: (event: React.FormEvent<HTMLInputElement>) => (void | boolean);
     value?: any;
 }
 
 export interface IMaskedInputState {
     value?: string;
-    maskedValue?: string;
 }
 
 export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>, IMaskedInputState> {
     state = {
-
+        value: this.props.value
     } as IMaskedInputState;
 
     componentWillReceiveProps(nextProps: IMaskedInputProps<T>, nextContext: any): void {
         let {
-            model,
-            modelProp
+            value
         } = nextProps;
-        let value: string;
-        if (model && modelProp) {
-            value = '' + model[modelProp];
-        } else {
-            value = '' + nextProps.value;
-        }
-        value += 'abcd';
+        //value += 'abcd';
         this.setState({
             value: value
         });
     }
 
     onInput = (event?: React.FormEvent<HTMLInputElement>) => {
-        let { model, modelProp } = this.props;
-        if (model && modelProp) {
-            model[modelProp] = (event.target as HTMLInputElement).value as any;
-        }
+        let target = event.target as HTMLInputElement;
+        let value = target.value;
+        value += 'abcd';
+        target.value = value;
     }
 
     render() {
@@ -52,17 +42,9 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
             className,
             value,
             fill,
-            model,
-            modelProp,
             onInput,
             ...props
         } = this.props;
-        let renderedValue: string;
-        if (model && modelProp) {
-            renderedValue = model[modelProp] as any;
-        } else {
-            renderedValue = value as string;
-        }
 
         let classNames = this.props.className ? [this.props.className] : [];
         classNames.push('input');
@@ -75,7 +57,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
             <input
                 id={id}
                 className={classNames.join(' ')}
-                value={renderedValue}
+                value={this.props.value}
                 onInput={onInput || this.onInput}
                 {...props}
             />
