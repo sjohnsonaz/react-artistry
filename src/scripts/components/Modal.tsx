@@ -7,6 +7,7 @@ import { IGridExternalProps, gridConfig } from './Grid';
 import BodyScroll from '../util/BodyScroll';
 import { waitAnimation } from '../util/PromiseUtil';
 import Portal from '../util/Portal';
+import DepthStack from '../util/DepthStack';
 
 export interface IModalProps extends IGridExternalProps {
     className?: string;
@@ -24,6 +25,7 @@ export interface IModalProps extends IGridExternalProps {
 
 export interface IModalState {
     open?: boolean;
+    remove?: boolean;
 }
 
 export default class Modal extends React.Component<IModalProps, IModalState> {
@@ -32,11 +34,13 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
     constructor(props: IModalProps) {
         super(props);
         this.state = {
-            open: props.open
+            open: props.open,
+            remove: !props.open
         };
         this.element = document.createElement('div');
         if (props.open) {
             BodyScroll.lock();
+            DepthStack.push(this.close);
         }
     }
 
@@ -60,11 +64,15 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                 await waitAnimation();
                 this.setState({
                     open: nextProps.open
+                }, () => {
+                    DepthStack.push(this.close);
                 });
             } else {
                 BodyScroll.unlock();
                 this.setState({
                     open: nextProps.open
+                }, () => {
+                    DepthStack.remove(this.close);
                 });
             }
         }
@@ -79,6 +87,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         // If we were locked, unlock
         if (this.state.open) {
             BodyScroll.unlock();
+            DepthStack.remove(this.close);
         }
         let modalRoot = Portal.getElement('modal-root');
         modalRoot.removeChild(this.element);
@@ -143,28 +152,32 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
 
         let modalContentClassName = modalContentClassNames.join(' ');
 
-        return ReactDOM.createPortal((
-            <div className={classNames.join(' ')} id={this.props.id} onClick={this.close}>
-                {title || footer ?
-                    <div className="modal-content" onClick={this.preventClick}>
-                        {title ?
-                            <div className="modal-header">
-                                <h1 className="modal-title">{title}</h1>
-                                <div className="modal-controls">
-                                    <Button onClick={this.props.onclose}>Close</Button>
+        if (this.state.open) {
+            return ReactDOM.createPortal((
+                <div className={classNames.join(' ')} id={this.props.id}>
+                    {title || footer ?
+                        <div className="modal-content" onClick={this.preventClick}>
+                            {title ?
+                                <div className="modal-header">
+                                    <h1 className="modal-title">{title}</h1>
+                                    <div className="modal-controls">
+                                        <Button onClick={this.props.onclose}>Close</Button>
+                                    </div>
                                 </div>
-                            </div>
-                            : undefined}
-                        <div className={'modal-body ' + modalContentClassName}>{this.props.children}</div>
-                        {footer ?
-                            <div className="modal-footer">{footer}</div>
-                            : undefined}
-                    </div> :
-                    <div className={'modal-content ' + modalContentClassName} onClick={this.preventClick}>
-                        {this.props.children}
-                    </div>
-                }
-            </div>
-        ), this.element);
+                                : undefined}
+                            <div className={'modal-body ' + modalContentClassName}>{this.props.children}</div>
+                            {footer ?
+                                <div className="modal-footer">{footer}</div>
+                                : undefined}
+                        </div> :
+                        <div className={'modal-content ' + modalContentClassName} onClick={this.preventClick}>
+                            {this.props.children}
+                        </div>
+                    }
+                </div>
+            ), this.element);
+        } else {
+            return null;
+        }
     }
 }
