@@ -15,6 +15,7 @@ export { default as Closeable, ICloseableProps, ICloseableState } from '../compo
 export { default as Code, ICodeProps } from '../components/Code';
 export { default as Container, IContainerProps } from '../components/Container';
 export { default as DatePicker, IDatePickerProps } from '../components/DatePicker';
+export { default as DepthStackInterceptor, IDepthStackInterceptorProps } from '../components/DepthStackInterceptor';
 export { default as Drawer, IDrawerProps } from '../components/Drawer';
 export { default as FileUpload, IFileUploadProps } from '../components/FileUpload';
 export { default as Fillable, IFillableProps, IFillableState } from '../components/Fillable';
