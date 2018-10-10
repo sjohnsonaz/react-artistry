@@ -1,6 +1,8 @@
 import * as React from 'react';
 import FormInput, { IFormInputProps } from './FormInput';
 
+import Mask from '../util/Mask';
+
 export interface IMaskedInputProps<T> extends React.HTMLProps<HTMLInputElement> {
     id?: string;
     className?: string;
@@ -12,28 +14,116 @@ export interface IMaskedInputProps<T> extends React.HTMLProps<HTMLInputElement> 
 
 export interface IMaskedInputState {
     value?: string;
+    pattern?: string;
+    regex?: RegExp;
+    firstPosition?: number;
+    patternLength?: number;
 }
 
 export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>, IMaskedInputState> {
-    state = {
-        value: this.props.value
-    } as IMaskedInputState;
+    inputRef: React.RefObject<HTMLInputElement> = React.createRef();
+
+    constructor(props: IMaskedInputProps<T>, context?: any) {
+        super(props, context);
+        let {
+            mask,
+            value
+        } = this.props;
+
+        let regex = Mask.createRegexWithWhitespace(mask);
+
+        this.state = {
+            regex: regex,
+            value: Mask.formatPattern(mask, value || ''),
+            pattern: Mask.createRegexText(mask),
+            firstPosition: Mask.getPosition(mask, 0),
+            patternLength: mask.replace(/\W+/g, "").length
+        };
+    }
+
+    componentDidMount() {
+        let input = this.inputRef.current;
+
+        let {
+            mask
+        } = this.props;
+
+        Mask.updateValue(input, mask);
+    }
 
     componentWillReceiveProps(nextProps: IMaskedInputProps<T>, nextContext: any): void {
         let {
+            mask,
             value
         } = nextProps;
-        //value += 'abcd';
-        this.setState({
-            value: value
-        });
+        if (this.props.mask !== mask) {
+            let regex = Mask.createRegexWithWhitespace(mask);
+            this.setState({
+                regex: regex,
+                value: Mask.formatPattern(mask, value || ''),
+                pattern: Mask.createRegexText(mask),
+                firstPosition: Mask.getPosition(mask, 0),
+                patternLength: mask.replace(/\W+/g, "").length
+            });
+        } else {
+            this.setState({
+                value: Mask.formatPattern(mask, value || ''),
+            });
+        }
     }
 
-    onInput = (event?: React.FormEvent<HTMLInputElement>) => {
-        let target = event.target as HTMLInputElement;
-        let value = target.value;
-        value += 'abcd';
-        target.value = value;
+    onFocus = (event?: React.FocusEvent<HTMLInputElement>) => {
+        let input = this.inputRef.current;
+
+        let {
+            mask
+        } = this.props;
+
+        Mask.updateSelection(input, mask);
+    }
+
+    onClick = (event?: React.MouseEvent<HTMLInputElement>) => {
+        let input = this.inputRef.current;
+
+        let {
+            mask
+        } = this.props;
+
+        Mask.updateSelection(input, mask);
+    }
+
+    onChange = (event?: React.FormEvent<HTMLInputElement>) => {
+        let input = this.inputRef.current;
+
+        let {
+            mask
+        } = this.props;
+
+        Mask.updateValue(input, mask);
+        if (this.props.onChange) {
+            this.props.onChange(event);
+        }
+    }
+
+    onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        let input = this.inputRef.current;
+        let value: string;
+        switch (event.keyCode) {
+            case 8: // Backspace
+                event.preventDefault();
+                Mask.deleteCharacter(this.inputRef.current, this.props.mask, false);
+                break;
+            case 35: // End
+            case 36: // Home
+            case 37: // Left
+            case 39: // Right
+                Mask.updateSelection(this.inputRef.current, this.props.mask);
+                break;
+            case 46: // Delete
+                event.preventDefault();
+                Mask.deleteCharacter(this.inputRef.current, this.props.mask, true);
+                break;
+        }
     }
 
     render() {
@@ -42,7 +132,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
             className,
             value,
             fill,
-            onInput,
+            onChange,
             ...props
         } = this.props;
 
@@ -55,10 +145,13 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
         return (
             <input
+                ref={this.inputRef}
                 id={id}
                 className={classNames.join(' ')}
-                value={this.props.value}
-                onInput={onInput || this.onInput}
+                onFocus={this.onFocus}
+                onClick={this.onClick}
+                onChange={onChange || this.onChange}
+                onKeyDown={this.onKeyDown}
                 {...props}
             />
         );

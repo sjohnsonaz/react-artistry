@@ -24,7 +24,7 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                         <FormInput type="text" fill />
                     </FormContainer>
                     <FormContainer label="Value">
-                        <MaskedInput mask="" />
+                        <MaskedInput mask="(999) 999-9999" fill />
                     </FormContainer>
                     <FormDivider />
                     <FormAction>
