@@ -20,6 +20,9 @@
     "node": "node ./dist/scripts/main.js",
     "open": "opn src/tests/demo/html/index.html"
   },
+  "dependencies": {
+    "@cascade/diff": "0.0.0"
+  },
   "peerDependencies": {
     "artistry": "^0.5.11",
     "react": "16.4.1",

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Form, FormAction, FormContainer, FormDivider, FormInput, Section, MaskedInput } from '../../../../../scripts/modules/ArtistryReact';
+import { Button, Form, FormAction, FormContainer, FormDivider, FormInput, FormText, Section, MaskedInput } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface IFormViewProps {
 
@@ -23,7 +23,22 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                     <FormContainer label="Value">
                         <FormInput type="text" fill />
                     </FormContainer>
-                    <FormContainer label="Value">
+                    <FormText>
+                        <h2>Masked Inputs</h2>
+                    </FormText>
+                    <FormContainer label="99999">
+                        <MaskedInput mask="99999" fill />
+                    </FormContainer>
+                    <FormContainer label="aaaaa">
+                        <MaskedInput mask="aaaaa" fill />
+                    </FormContainer>
+                    <FormContainer label="nnnnn">
+                        <MaskedInput mask="nnnnn" fill />
+                    </FormContainer>
+                    <FormContainer label="00000">
+                        <MaskedInput mask="00000" fill />
+                    </FormContainer>
+                    <FormContainer label="Phone">
                         <MaskedInput mask="(999) 999-9999" fill />
                     </FormContainer>
                     <FormDivider />

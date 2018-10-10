@@ -1,4 +1,6 @@
 import * as React from 'react';
+import Diff, { IDiffItem, DiffOperation } from '@cascade/diff';
+
 //import FormInput, { IFormInputProps } from './FormInput';
 
 export enum KeyboardMovement {
@@ -9,6 +11,13 @@ export enum KeyboardMovement {
     right
 }
 
+export enum ValidCharacter {
+    placeholder = '_',
+    alpha = 'a',
+    number = '9',
+    alphanumeric = 'n',
+    hexadecimal = '0'
+}
 export interface IMaskedInputProps<T> extends React.HTMLProps<HTMLInputElement> {
     id?: string;
     className?: string;
@@ -73,7 +82,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
             });
         } else {
             if (this.props.value !== nextProps.value) {
-                this.inputRef.current.value = MaskedInput.formatValue(mask, value || '');
+                this.inputRef.current.value = MaskedInput.formatClean(mask, value || '');
             }
             this.setState({
                 //value: MaskedInput.formatPattern(mask, value || ''),
@@ -191,7 +200,8 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
     }
 
     static createRegexWithWhitespace(mask: string) {
-        return new RegExp(mask.replace(/([^a-zA-Z0-9 ])|(9)|(a)|(n)|(0)/g, function (match, other, numeric, alpha, alphanumeric, hexadecimal) {
+        let cleanMask = MaskedInput.cleanValue(mask);
+        return new RegExp(cleanMask.replace(/([^a-zA-Z0-9 ])|(9)|(a)|(n)|(0)/g, function (match, other, numeric, alpha, alphanumeric, hexadecimal) {
             if (other) {
                 return '\\' + other;
             }
@@ -230,14 +240,19 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         });
     }
 
-    static formatValue(mask: string, value: string) {
+    static formatClean(mask: string, clean: string, flexible: boolean = true) {
+        //let cleanMask = MaskedInput.cleanValue(mask);
+        //let diff = Diff.compare(clean, cleanMask, compareChars);
+        //clean = createLCS(diff, flexible);
+        //console.log(createDiff(diff, true));
+
         var output = '';
-        var valueIndex = 0;
+        var cleanIndex = 0;
         for (var index = 0, length = mask.length; index < length; index++) {
             var character = mask[index];
-            if (character == '9' || character == 'a' || character == 'n' || character == '0') {
-                output += value[valueIndex] || ' ';
-                valueIndex++;
+            if (MaskedInput.isValidCharacter(character)) {
+                output += clean[cleanIndex] || ' ';
+                cleanIndex++;
             } else {
                 output += character;
             }
@@ -257,7 +272,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
     static getPosition(mask, position) {
         for (var index = position, length = mask.length; index < length; index++) {
             var character = mask[index];
-            if (character == '9' || character == 'a' || character == 'n' || character == '0') {
+            if (MaskedInput.isValidCharacter(character)) {
                 break;
             }
         }
@@ -265,12 +280,30 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
     }
     */
 
+    static isValidCharacter(character: string, placeholder: boolean = false) {
+        switch (character) {
+            case ValidCharacter.number:
+            case ValidCharacter.alpha:
+            case ValidCharacter.alphanumeric:
+            case ValidCharacter.hexadecimal:
+                return true;
+            case ValidCharacter.placeholder:
+                if (placeholder) {
+                    return true;
+                } else {
+                    return false;
+                }
+            default:
+                return false;
+        }
+    }
+
     static getVirtualPosition(mask: string, position: number) {
         position = Math.min(position, mask.length);
         var valuePosition = 0;
         for (var index = 0; index < position; index++) {
             var character = mask[index];
-            if (character == '9' || character == 'a' || character == 'n' || character == '0') {
+            if (MaskedInput.isValidCharacter(character)) {
                 valuePosition++;
             }
         }
@@ -281,7 +314,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         var valueIndex = 0;
         for (var index = 0, length = mask.length; index < length; index++) {
             var character = mask[index];
-            if (character == '9' || character == 'a' || character == 'n' || character == '0') {
+            if (MaskedInput.isValidCharacter(character)) {
                 valueIndex++;
                 if (valueIndex > position) {
                     break;
@@ -315,14 +348,14 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
             let updatedClean = forward ?
                 clean.slice(0, virtualSelection.start) + clean.slice(virtualSelection.end + 1) :
                 clean.slice(0, virtualSelection.start - 1) + clean.slice(virtualSelection.end);
-            let updatedValue = MaskedInput.formatValue(mask, updatedClean);
+            let updatedValue = MaskedInput.formatClean(mask, updatedClean);
 
             element.value = updatedValue;
             let selectionPosition = MaskedInput.getMaskPosition(mask, forward ? virtualSelection.start : (virtualSelection.start - 1));
             element.setSelectionRange(selectionPosition, selectionPosition, 'none');
         } else {
             let updatedClean = clean.slice(0, virtualSelection.start) + clean.slice(virtualSelection.end);
-            let updatedValue = MaskedInput.formatValue(mask, updatedClean);
+            let updatedValue = MaskedInput.formatClean(mask, updatedClean);
 
             element.value = updatedValue;
             let selectionPosition = MaskedInput.getMaskPosition(mask, Math.min(updatedClean.length, virtualSelection.start));
@@ -332,14 +365,14 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
     static initValue(element: HTMLInputElement, mask: string, value: string) {
         let clean = MaskedInput.cleanValue(value);
-        element.value = MaskedInput.formatValue(mask, clean);
+        element.value = MaskedInput.formatClean(mask, clean);
     }
 
     static updateValue(element: HTMLInputElement, mask: string) {
         let clean = MaskedInput.cleanValue(element.value);
         let virtualSelection = MaskedInput.getVirtualSelection(element, mask);
         let selectionPosition = MaskedInput.getMaskPosition(mask, virtualSelection.start);
-        element.value = MaskedInput.formatValue(mask, clean);
+        element.value = MaskedInput.formatClean(mask, clean);
         element.setSelectionRange(selectionPosition, selectionPosition, 'none');
     }
 
@@ -372,4 +405,65 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         }
         element.setSelectionRange(selectionStart, selectionEnd, 'none');
     }
+}
+
+function compareChars(valueChar: string, maskChar: string) {
+    switch (maskChar) {
+        case '9':
+            return !!valueChar.match(/[0-9]/);
+        case 'a':
+            return !!valueChar.match(/[a-zA-Z ]/);
+        case 'n':
+            return !!valueChar.match(/[0-9a-zA-Z ]/);
+        case '0':
+            return !!valueChar.match(/[0-9a-fA-F ]/);
+    }
+}
+
+function createDiff<T>(diff: IDiffItem<T>[], showBlanks: boolean = false) {
+    diff.reverse();
+    var lcs = [];
+    let blank: boolean = false;
+    for (var index = 0, length = diff.length; index < length; index++) {
+        var diffItem = diff[index];
+        switch (diffItem.operation) {
+            case DiffOperation.ADD:
+                lcs.push('(+' + diffItem.item + ')');
+                break;
+            case DiffOperation.NONE:
+                lcs.push(diffItem.item);
+                blank = false;
+                break;
+            case DiffOperation.REMOVE:
+                lcs.push('(-' + diffItem.item + ')');
+                break;
+        }
+    }
+    return lcs.join('');
+}
+
+function createLCS<T>(diff: IDiffItem<T>[], showBlanks: boolean = false) {
+    diff.reverse();
+    var lcs = [];
+    let blank: boolean = false;
+    for (var index = 0, length = diff.length; index < length; index++) {
+        var diffItem = diff[index];
+        switch (diffItem.operation) {
+            case DiffOperation.ADD:
+                break;
+            case DiffOperation.NONE:
+                lcs.push(diffItem.item);
+                blank = false;
+                break;
+            case DiffOperation.REMOVE:
+                if (showBlanks) {
+                    if (!blank) {
+                        lcs.push('_');
+                    }
+                    //blank = true;
+                }
+                break;
+        }
+    }
+    return lcs.join('');
 }
