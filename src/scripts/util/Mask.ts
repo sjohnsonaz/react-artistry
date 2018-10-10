@@ -1,3 +1,11 @@
+export enum KeyboardMovement {
+    none,
+    home,
+    end,
+    left,
+    right
+}
+
 export default class Mask {
     static createRegexWithWhitespace(pattern: string) {
         return new RegExp(pattern.replace(/([^a-zA-Z0-9 ])|(9)|(a)|(n)|(0)/g, function (match, other, numeric, alpha, alphanumeric, hexadecimal) {
@@ -137,6 +145,11 @@ export default class Mask {
         }
     }
 
+    static initValue(element: HTMLInputElement, mask: string, value: string) {
+        let clean = Mask.getCleanValue(value);
+        element.value = Mask.formatPattern(mask, clean);
+    }
+
     static updateValue(element: HTMLInputElement, mask: string) {
         let clean = Mask.getCleanValue(element.value);
         let virtualSelection = Mask.getVirtualSelection(element, mask);
@@ -145,11 +158,33 @@ export default class Mask {
         element.setSelectionRange(selectionPosition, selectionPosition, 'none');
     }
 
-    static updateSelection(element: HTMLInputElement, mask: string) {
+    static updateSelection(element: HTMLInputElement, mask: string, keyboardMovement: KeyboardMovement = KeyboardMovement.none) {
         let clean = Mask.getCleanValue(element.value);
         let virtualSelection = Mask.getVirtualSelection(element, mask);
-        let selectionStart = Mask.getMaskPosition(mask, Math.min(clean.length, virtualSelection.start));
-        let selectionEnd = Mask.getMaskPosition(mask, Math.min(clean.length, virtualSelection.end));
+        let selectionStart: number;
+        let selectionEnd: number;
+        switch (keyboardMovement) {
+            case KeyboardMovement.none:
+                selectionStart = Mask.getMaskPosition(mask, Math.min(clean.length, virtualSelection.start));
+                selectionEnd = Mask.getMaskPosition(mask, Math.min(clean.length, virtualSelection.end));
+                break;
+            case KeyboardMovement.home:
+                selectionStart = Mask.getMaskPosition(mask, 0);
+                selectionEnd = selectionStart;
+                break;
+            case KeyboardMovement.end:
+                selectionStart = Mask.getMaskPosition(mask, clean.length);
+                selectionEnd = selectionStart;
+                break;
+            case KeyboardMovement.left:
+                selectionStart = Mask.getMaskPosition(mask, virtualSelection.start - 1);
+                selectionEnd = selectionStart;
+                break;
+            case KeyboardMovement.right:
+                selectionStart = Mask.getMaskPosition(mask, Math.min(clean.length, virtualSelection.start + 1));
+                selectionEnd = selectionStart;
+                break;
+        }
         element.setSelectionRange(selectionStart, selectionEnd, 'none');
     }
 }

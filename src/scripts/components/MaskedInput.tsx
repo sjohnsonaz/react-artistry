@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FormInput, { IFormInputProps } from './FormInput';
 
-import Mask from '../util/Mask';
+import Mask, { KeyboardMovement } from '../util/Mask';
 
 export interface IMaskedInputProps<T> extends React.HTMLProps<HTMLInputElement> {
     id?: string;
@@ -13,7 +13,7 @@ export interface IMaskedInputProps<T> extends React.HTMLProps<HTMLInputElement> 
 }
 
 export interface IMaskedInputState {
-    value?: string;
+    //value?: string;
     pattern?: string;
     regex?: RegExp;
     firstPosition?: number;
@@ -34,7 +34,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
         this.state = {
             regex: regex,
-            value: Mask.formatPattern(mask, value || ''),
+            //value: Mask.formatPattern(mask, value || ''),
             pattern: Mask.createRegexText(mask),
             firstPosition: Mask.getPosition(mask, 0),
             patternLength: mask.replace(/\W+/g, "").length
@@ -60,14 +60,17 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
             let regex = Mask.createRegexWithWhitespace(mask);
             this.setState({
                 regex: regex,
-                value: Mask.formatPattern(mask, value || ''),
+                //value: Mask.formatPattern(mask, value || ''),
                 pattern: Mask.createRegexText(mask),
                 firstPosition: Mask.getPosition(mask, 0),
                 patternLength: mask.replace(/\W+/g, "").length
             });
         } else {
+            if (this.props.value !== nextProps.value) {
+                this.inputRef.current.value = Mask.formatPattern(mask, value || '');
+            }
             this.setState({
-                value: Mask.formatPattern(mask, value || ''),
+                //value: Mask.formatPattern(mask, value || ''),
             });
         }
     }
@@ -114,10 +117,20 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
                 Mask.deleteCharacter(this.inputRef.current, this.props.mask, false);
                 break;
             case 35: // End
+                event.preventDefault();
+                Mask.updateSelection(this.inputRef.current, this.props.mask, KeyboardMovement.end);
+                break;
             case 36: // Home
+                event.preventDefault();
+                Mask.updateSelection(this.inputRef.current, this.props.mask, KeyboardMovement.home);
+                break;
             case 37: // Left
+                event.preventDefault();
+                Mask.updateSelection(this.inputRef.current, this.props.mask, KeyboardMovement.left);
+                break;
             case 39: // Right
-                Mask.updateSelection(this.inputRef.current, this.props.mask);
+                event.preventDefault();
+                Mask.updateSelection(this.inputRef.current, this.props.mask, KeyboardMovement.right);
                 break;
             case 46: // Delete
                 event.preventDefault();
