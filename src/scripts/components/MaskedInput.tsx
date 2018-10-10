@@ -268,18 +268,6 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         }
     }
 
-    /*
-    static getPosition(mask, position) {
-        for (var index = position, length = mask.length; index < length; index++) {
-            var character = mask[index];
-            if (MaskedInput.isValidCharacter(character)) {
-                break;
-            }
-        }
-        return index;
-    }
-    */
-
     static isValidCharacter(character: string, placeholder: boolean = false) {
         switch (character) {
             case ValidCharacter.number:
@@ -340,40 +328,9 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         };
     }
 
-    static deleteCharacter(element: HTMLInputElement, mask: string, forward: boolean) {
-        let clean = MaskedInput.cleanValue(element.value);
-        let virtualSelection = MaskedInput.getVirtualSelection(element, mask);
-
-        if (virtualSelection.start === virtualSelection.end) {
-            let updatedClean = forward ?
-                clean.slice(0, virtualSelection.start) + clean.slice(virtualSelection.end + 1) :
-                clean.slice(0, virtualSelection.start - 1) + clean.slice(virtualSelection.end);
-            let updatedValue = MaskedInput.formatClean(mask, updatedClean);
-
-            element.value = updatedValue;
-            let selectionPosition = MaskedInput.getMaskPosition(mask, forward ? virtualSelection.start : (virtualSelection.start - 1));
-            element.setSelectionRange(selectionPosition, selectionPosition, 'none');
-        } else {
-            let updatedClean = clean.slice(0, virtualSelection.start) + clean.slice(virtualSelection.end);
-            let updatedValue = MaskedInput.formatClean(mask, updatedClean);
-
-            element.value = updatedValue;
-            let selectionPosition = MaskedInput.getMaskPosition(mask, Math.min(updatedClean.length, virtualSelection.start));
-            element.setSelectionRange(selectionPosition, selectionPosition, 'none');
-        }
-    }
-
     static initValue(element: HTMLInputElement, mask: string, value: string) {
         let clean = MaskedInput.cleanValue(value);
         element.value = MaskedInput.formatClean(mask, clean);
-    }
-
-    static updateValue(element: HTMLInputElement, mask: string) {
-        let clean = MaskedInput.cleanValue(element.value);
-        let virtualSelection = MaskedInput.getVirtualSelection(element, mask);
-        let selectionPosition = MaskedInput.getMaskPosition(mask, virtualSelection.start);
-        element.value = MaskedInput.formatClean(mask, clean);
-        element.setSelectionRange(selectionPosition, selectionPosition, 'none');
     }
 
     static updateSelection(element: HTMLInputElement, mask: string, keyboardMovement: KeyboardMovement = KeyboardMovement.none) {
@@ -404,6 +361,37 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
                 break;
         }
         element.setSelectionRange(selectionStart, selectionEnd, 'none');
+    }
+
+    static updateValue(element: HTMLInputElement, mask: string) {
+        let clean = MaskedInput.cleanValue(element.value);
+        let virtualSelection = MaskedInput.getVirtualSelection(element, mask);
+        let selectionPosition = MaskedInput.getMaskPosition(mask, virtualSelection.start);
+        element.value = MaskedInput.formatClean(mask, clean);
+        element.setSelectionRange(selectionPosition, selectionPosition, 'none');
+    }
+
+    static deleteCharacter(element: HTMLInputElement, mask: string, forward: boolean) {
+        let clean = MaskedInput.cleanValue(element.value);
+        let virtualSelection = MaskedInput.getVirtualSelection(element, mask);
+
+        if (virtualSelection.start === virtualSelection.end) {
+            let updatedClean = forward ?
+                clean.slice(0, virtualSelection.start) + clean.slice(virtualSelection.end + 1) :
+                clean.slice(0, virtualSelection.start - 1) + clean.slice(virtualSelection.end);
+            let updatedValue = MaskedInput.formatClean(mask, updatedClean);
+
+            element.value = updatedValue;
+            let selectionPosition = MaskedInput.getMaskPosition(mask, forward ? virtualSelection.start : (virtualSelection.start - 1));
+            element.setSelectionRange(selectionPosition, selectionPosition, 'none');
+        } else {
+            let updatedClean = clean.slice(0, virtualSelection.start) + clean.slice(virtualSelection.end);
+            let updatedValue = MaskedInput.formatClean(mask, updatedClean);
+
+            element.value = updatedValue;
+            let selectionPosition = MaskedInput.getMaskPosition(mask, Math.min(updatedClean.length, virtualSelection.start));
+            element.setSelectionRange(selectionPosition, selectionPosition, 'none');
+        }
     }
 }
 
