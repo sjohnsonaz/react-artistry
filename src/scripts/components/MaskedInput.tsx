@@ -331,8 +331,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         }
         catch (e) {
             // Rollback
-            let diff = Diff.compare(clean, this.cleanValue(this.value));
-            diff.reverse();
+            let diff = Diff.compare(clean.split('').reverse().join(''), this.cleanValue(this.value).split('').reverse().join(''));
             let rollbackPosition = 0;
             for (let index = 0, length = diff.length; index < length; index++) {
                 let diffItem = diff[index];
