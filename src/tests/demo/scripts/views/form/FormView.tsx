@@ -38,6 +38,12 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                     <FormContainer label="00000">
                         <MaskedInput mask="00000" fill />
                     </FormContainer>
+                    <FormContainer label="99aa99aa99aa">
+                        <MaskedInput mask="99aa99aa99aa" fill />
+                    </FormContainer>
+                    <FormContainer label="Time">
+                        <MaskedInput mask="99:99" fill />
+                    </FormContainer>
                     <FormContainer label="Phone">
                         <MaskedInput mask="(999) 999-9999" fill />
                     </FormContainer>
