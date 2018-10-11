@@ -1,7 +1,9 @@
 import * as React from 'react';
+import MaskedInput from './MaskedInput';
 
 export interface IFormInputProps<T> extends React.HTMLProps<HTMLInputElement> {
     fill?: boolean;
+    mask?: string;
     model?: T;
     modelProp?: keyof T;
 }
@@ -20,6 +22,7 @@ export default class FormInput<T> extends React.Component<IFormInputProps<T>, an
             className,
             value,
             fill,
+            mask,
             model,
             modelProp,
             onInput,
@@ -39,14 +42,27 @@ export default class FormInput<T> extends React.Component<IFormInputProps<T>, an
             classNames.push('fill-width');
         }
 
-        return (
-            <input
-                id={id}
-                className={classNames.join(' ')}
-                value={renderedValue}
-                onInput={onInput || this.onInput}
-                {...props}
-            />
-        );
+        if (mask) {
+            return (
+                <MaskedInput
+                    id={id}
+                    className={classNames.join(' ')}
+                    value={renderedValue}
+                    onInput={onInput || this.onInput}
+                    mask={mask}
+                    {...props as any}
+                />
+            );
+        } else {
+            return (
+                <input
+                    id={id}
+                    className={classNames.join(' ')}
+                    value={renderedValue}
+                    onInput={onInput || this.onInput}
+                    {...props}
+                />
+            );
+        }
     }
 }
