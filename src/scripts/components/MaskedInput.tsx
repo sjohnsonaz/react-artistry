@@ -181,7 +181,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
             case 91: // Command Left
             case 93: // Command Right
             case 224: // Command - Firefox
-                this.command = true;
+                this.command = false;
                 break;
         }
     }
@@ -213,6 +213,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
                 onSelect={this.onSelect}
                 onChange={onChange || this.onChange}
                 onKeyDown={this.onKeyDown}
+                onKeyUp={this.onKeyUp}
                 {...props}
             />
         );
@@ -286,24 +287,27 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         }
     }
 
+    cleanValueWithSpaces(value: string) {
+        if (typeof value === 'string') {
+            let clean = value.replace(/[\W]+/g, "");
+            let length = clean.replace(/[_]/g, ' ').trim().length;
+            return clean.substring(0, length);
+        } else {
+            return '';
+        }
+    }
+
     formatClean(mask: string, clean: string, allowLessValid: boolean = false) {
         let cleanMask = this.cleanValue(mask);
 
         let diff = Diff.compare(cleanMask.split('').reverse().join(''), clean.split('').reverse().join(''), compareChars);
 
-        /*
-        let cleanOldValue = this.cleanValue(this.value);
-        // Get underscore replaced clean
-        let diffValue = Diff.compare(cleanOldValue, clean);
-        diffValue.reverse();
-        */
-
-        let cleanSpaces = createSpaces(diff);
-
         let lcs = createLCS(diff);
         if (!allowLessValid && lcs.length < clean.length) {
             throw 'Invalid Value';
         }
+
+        let cleanSpaces = createSpaces(diff);
 
         var output = '';
         var cleanIndex = 0;
@@ -320,7 +324,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
     }
 
     updateSelection(mask: string, value: string, keyboardMovement: KeyboardMovement = KeyboardMovement.none) {
-        let clean = this.cleanValue(value);
+        let clean = this.cleanValueWithSpaces(value);
         let virtualSelection = this.getVirtualSelection(mask);
         let selectionStart: number;
         let selectionEnd: number;
@@ -356,8 +360,26 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         let clean = this.cleanValue(value);
         try {
             let value = this.formatClean(mask, clean);
-            let virtualSelection = this.getVirtualSelection(mask);
-            let selectionPosition = this.getMaskPosition(mask, virtualSelection.start);
+
+            let diff = Diff.compare(this.state.value, value);
+            diff.reverse();
+            let position = 0;
+            for (let index = 0, length = diff.length; index < length; index++) {
+                let diffItem = diff[index];
+                if (diffItem.operation === -1) {
+
+                }
+                if (diffItem.operation === 0) {
+                    position++;
+                }
+                if (diffItem.operation === 1) {
+                    position++;
+                    break;
+                }
+            }
+
+            let virtualPosition = this.getVirtualPosition(mask, position);
+            let selectionPosition = this.getMaskPosition(mask, virtualPosition);
             this.setState({
                 value: value,
                 selectionStart: selectionPosition,
@@ -366,19 +388,10 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         }
         catch (e) {
             // Rollback
-            let diff = Diff.compare(clean.split('').reverse().join(''), this.cleanValue(this.state.value).split('').reverse().join(''));
-            let rollbackPosition = 0;
-            for (let index = 0, length = diff.length; index < length; index++) {
-                let diffItem = diff[index];
-                if (diffItem.operation !== DiffOperation.NONE) {
-                    rollbackPosition = index;
-                    break;
-                }
-            }
-            let selectionPosition = this.getMaskPosition(mask, rollbackPosition);
             this.setState({
-                selectionStart: selectionPosition,
-                selectionEnd: selectionPosition
+                value: this.state.value,
+                selectionStart: this.state.selectionStart,
+                selectionEnd: this.state.selectionEnd
             });
         }
     }
