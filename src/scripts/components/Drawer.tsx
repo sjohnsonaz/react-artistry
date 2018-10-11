@@ -24,6 +24,7 @@ export interface IDrawerState {
 
 export default class Drawer extends React.Component<IDrawerProps, IDrawerState> {
     element: HTMLDivElement;
+    runCount: number = 0;
 
     constructor(props: IDrawerProps) {
         super(props);
@@ -34,6 +35,7 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
         this.element = document.createElement('div');
         if (props.open) {
             BodyScroll.lock();
+            DepthStack.push(this.close);
         }
     }
 
@@ -48,13 +50,13 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
         }
     }
 
-    transitionEnd = (event: React.TransitionEvent<HTMLDivElement>) => {
+    transitionEnd = async (event: React.TransitionEvent<HTMLDivElement>) => {
         if (event.propertyName === 'transform') {
-            DepthStack.remove(this.close);
             if (!this.props.open) {
-                this.setState({
+                await this.setState({
                     remove: true
                 });
+                this.updateModalRoot();
             }
         }
     }
@@ -62,40 +64,54 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
     async componentWillReceiveProps(nextProps?: IDrawerProps) {
         if (this.props.open != nextProps.open) {
             if (nextProps.open) {
-                this.setState({
+                let runCount = this.runCount;
+                await this.setState({
                     remove: false
-                }, async () => {
-                    BodyScroll.lock();
-                    let modalRoot = Portal.getElement('modal-root');
-                    modalRoot.appendChild(this.element);
-                    await waitAnimation();
-                    DepthStack.push(this.close);
-                    this.setState({
-                        open: nextProps.open
-                    });
-                })
-            } else {
-                BodyScroll.unlock();
-                DepthStack.remove(this.close);
+                });
+                if (runCount !== this.runCount) {
+                    return;
+                }
+                this.updateModalRoot();
+                BodyScroll.lock();
+                await waitAnimation();
                 this.setState({
                     open: nextProps.open
                 });
+                DepthStack.push(this.close);
+            } else {
+                BodyScroll.unlock();
+                this.setState({
+                    open: nextProps.open
+                });
+                DepthStack.remove(this.close);
             }
         }
     }
 
-    componentDidMount() {
+    updateModalRoot() {
         let modalRoot = Portal.getElement('modal-root');
-        modalRoot.appendChild(this.element);
+
+        if (!modalRoot.contains(this.element)) {
+            if (!this.state.remove) {
+                modalRoot.appendChild(this.element);
+            }
+        } else {
+            if (this.state.remove) {
+                modalRoot.removeChild(this.element);
+            }
+        }
     }
 
     componentWillUnmount() {
         // If we were locked, unlock
         if (this.state.open) {
             BodyScroll.unlock();
+            DepthStack.remove(this.close);
         }
         let modalRoot = Portal.getElement('modal-root');
-        modalRoot.removeChild(this.element);
+        if (modalRoot.contains(this.element)) {
+            modalRoot.removeChild(this.element);
+        }
     }
 
     render() {

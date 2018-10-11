@@ -30,6 +30,7 @@ export interface IModalState {
 
 export default class Modal extends React.Component<IModalProps, IModalState> {
     element: HTMLDivElement;
+    runCount: number = 0;
 
     constructor(props: IModalProps) {
         super(props);
@@ -55,32 +56,56 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         }
     }
 
-    async componentWillReceiveProps(nextProps?: IModalProps) {
-        if (this.props.open != nextProps.open) {
-            if (nextProps.open) {
-                BodyScroll.lock();
-                let modalRoot = Portal.getElement('modal-root');
-                modalRoot.appendChild(this.element);
-                await waitAnimation();
-                this.setState({
-                    open: nextProps.open
-                }, () => {
-                    DepthStack.push(this.close);
+    transitionEnd = async (event: React.TransitionEvent<HTMLDivElement>) => {
+        if (event.propertyName === 'transform') {
+            if (!this.props.open) {
+                await this.setState({
+                    remove: true
                 });
-            } else {
-                BodyScroll.unlock();
-                this.setState({
-                    open: nextProps.open
-                }, () => {
-                    DepthStack.remove(this.close);
-                });
+                this.updateModalRoot();
             }
         }
     }
 
-    componentDidMount() {
+    async componentWillReceiveProps(nextProps?: IModalProps) {
+        if (this.props.open != nextProps.open) {
+            if (nextProps.open) {
+                let runCount = this.runCount;
+                await this.setState({
+                    remove: false
+                });
+                if (runCount !== this.runCount) {
+                    return;
+                }
+                this.updateModalRoot();
+                BodyScroll.lock();
+                await waitAnimation();
+                this.setState({
+                    open: nextProps.open
+                });
+                DepthStack.push(this.close);
+            } else {
+                BodyScroll.unlock();
+                this.setState({
+                    open: nextProps.open
+                });
+                DepthStack.remove(this.close);
+            }
+        }
+    }
+
+    updateModalRoot() {
         let modalRoot = Portal.getElement('modal-root');
-        modalRoot.appendChild(this.element);
+
+        if (!modalRoot.contains(this.element)) {
+            if (!this.state.remove) {
+                modalRoot.appendChild(this.element);
+            }
+        } else {
+            if (this.state.remove) {
+                modalRoot.removeChild(this.element);
+            }
+        }
     }
 
     componentWillUnmount() {
@@ -90,7 +115,9 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             DepthStack.remove(this.close);
         }
         let modalRoot = Portal.getElement('modal-root');
-        modalRoot.removeChild(this.element);
+        if (modalRoot.contains(this.element)) {
+            modalRoot.removeChild(this.element);
+        }
     }
 
     render() {
@@ -152,32 +179,28 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
 
         let modalContentClassName = modalContentClassNames.join(' ');
 
-        if (this.state.open) {
-            return ReactDOM.createPortal((
-                <div className={classNames.join(' ')} id={this.props.id}>
-                    {title || footer ?
-                        <div className="modal-content" onClick={this.preventClick}>
-                            {title ?
-                                <div className="modal-header">
-                                    <h1 className="modal-title">{title}</h1>
-                                    <div className="modal-controls">
-                                        <Button onClick={this.props.onclose}>Close</Button>
-                                    </div>
+        return ReactDOM.createPortal((
+            <div className={classNames.join(' ')} id={this.props.id} onTransitionEnd={this.transitionEnd}>
+                {title || footer ?
+                    <div className="modal-content" onClick={this.preventClick}>
+                        {title ?
+                            <div className="modal-header">
+                                <h1 className="modal-title">{title}</h1>
+                                <div className="modal-controls">
+                                    <Button onClick={this.props.onclose}>Close</Button>
                                 </div>
-                                : undefined}
-                            <div className={'modal-body ' + modalContentClassName}>{this.props.children}</div>
-                            {footer ?
-                                <div className="modal-footer">{footer}</div>
-                                : undefined}
-                        </div> :
-                        <div className={'modal-content ' + modalContentClassName} onClick={this.preventClick}>
-                            {this.props.children}
-                        </div>
-                    }
-                </div>
-            ), this.element);
-        } else {
-            return null;
-        }
+                            </div>
+                            : undefined}
+                        <div className={'modal-body ' + modalContentClassName}>{this.props.children}</div>
+                        {footer ?
+                            <div className="modal-footer">{footer}</div>
+                            : undefined}
+                    </div> :
+                    <div className={'modal-content ' + modalContentClassName} onClick={this.preventClick}>
+                        {this.props.children}
+                    </div>
+                }
+            </div>
+        ), this.element);
     }
 }
