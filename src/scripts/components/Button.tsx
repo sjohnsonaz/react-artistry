@@ -69,7 +69,7 @@ export default class Button extends React.Component<IButtonProps, any> {
     }
 
     // TODO: Fix leak when popover status changes
-    componentWillReceiveProps(nextProps?: IButtonProps) {
+    componentWillReceiveProps(nextProps: IButtonProps) {
         if (nextProps.popover) {
             if (!this.closeHandle) {
                 this.closeHandle = this.close.bind(this);

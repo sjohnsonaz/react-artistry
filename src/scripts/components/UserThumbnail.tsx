@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import DepthStack from '../util/DepthStack';
+
 import { ITemplate } from './ITemplate';
 import Popover from './Popover';
 
@@ -16,16 +18,72 @@ export interface IUserThumbnailProps {
     popoverMenu?: boolean;
     menuBarTop?: boolean;
     onPopoverClose?: (event: React.MouseEvent<HTMLElement>) => boolean | void;
-    onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => boolean | void;
+    onClick?: (event: React.MouseEvent<HTMLElement>) => boolean | void;
 }
 
 export default class UserThumbnail extends React.Component<IUserThumbnailProps, any> {
-    onPopoverClose(event: React.MouseEvent<HTMLElement>) {
-        event.stopPropagation();
+    private closeHandle: (event: React.MouseEvent<HTMLElement>) => void;
+
+    close(event: React.MouseEvent<HTMLElement>) {
         if (this.props.onPopoverClose) {
             this.props.onPopoverClose(event);
         }
     }
+
+    componentWillMount() {
+        if (this.props.popover) {
+            if (!this.closeHandle) {
+                this.closeHandle = this.close.bind(this);
+            }
+            if (this.props.popoverOpen) {
+                DepthStack.push(this.closeHandle);
+            }
+        }
+    }
+
+    componentWillReceiveProps(nextProps: IUserThumbnailProps) {
+        if (nextProps.popover) {
+            if (!this.closeHandle) {
+                this.closeHandle = this.close.bind(this);
+            }
+            // We did not have a popover
+            if (!this.props.popover) {
+                if (nextProps.popoverOpen) {
+                    DepthStack.push(this.closeHandle);
+                }
+            } else {
+                // We are changing popoverOpen
+                if (nextProps.popoverOpen !== this.props.popoverOpen) {
+                    if (nextProps.popoverOpen) {
+                        DepthStack.push(this.closeHandle);
+                    } else {
+                        DepthStack.remove(this.closeHandle);
+                    }
+                }
+            }
+        } else {
+            // We are no longer open
+            if (this.props.popover && this.props.popoverOpen) {
+                DepthStack.remove(this.closeHandle);
+            }
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.props.popoverOpen) {
+            DepthStack.remove(this.closeHandle);
+        }
+    }
+
+    onClick = (event: React.MouseEvent<HTMLElement>) => {
+        if (this.props.onClick) {
+            if (this.props.popover) {
+                event.stopPropagation();
+            }
+            this.props.onClick(event);
+        }
+    }
+
     render() {
         let classNames = this.props.className ? [this.props.className] : [];
         classNames.push('thumbnail');
@@ -56,6 +114,7 @@ export default class UserThumbnail extends React.Component<IUserThumbnailProps, 
                     align={this.props.popoverAlign}
                     direction={this.props.popoverDirection}
                     open={!this.props.popoverMenu ? this.props.popoverOpen : undefined}
+                    preventClick
                 >
                     {typeof this.props.popover === 'function' ?
                         this.props.popover() :
@@ -64,7 +123,7 @@ export default class UserThumbnail extends React.Component<IUserThumbnailProps, 
                 </Popover>
             );
             if (this.props.popoverMenu) {
-                let triggerClassNames = ['popover-trigger']
+                let triggerClassNames = ['clickable', 'popover-trigger']
                 if (this.props.popoverOpen) {
                     triggerClassNames.push('popover-open');
                 } else {
@@ -73,22 +132,18 @@ export default class UserThumbnail extends React.Component<IUserThumbnailProps, 
                 if (this.props.menuBarTop) {
                     triggerClassNames.push('popover-menu-bar-top');
                 }
-                let popOverMask = (
-                    <div className="popover-mask" onClick={this.onPopoverClose.bind(this)}></div>
-                );
                 return (
-                    <a href="#" className={triggerClassNames.join(' ')} id={this.props.id}
-                        onClick={this.props.onClick}
+                    <span role="button" className={triggerClassNames.join(' ')} id={this.props.id}
+                        onClick={this.onClick}
                     >
                         {thumbnail}
-                        {popOverMask}
                         {popover}
-                    </a>
+                    </span>
                 )
             } else {
                 return (
                     <span className="popover-trigger" id={this.props.id}
-                        onClick={this.props.onClick} >
+                        onClick={this.onClick} >
                         {thumbnail}
                         {popover}
                     </span>
