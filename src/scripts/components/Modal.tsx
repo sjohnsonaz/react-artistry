@@ -46,7 +46,11 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
     }
 
     preventClick(event: React.MouseEvent<HTMLElement>) {
-        event.stopPropagation();
+        // This will let us close Modals inside Modals.
+        let target = event.target as HTMLElement;
+        if (!target.classList || !(target.classList.contains('modal') || target.classList.contains('drawer'))) {
+            event.stopPropagation();
+        }
     }
 
     close = (event: React.MouseEvent<HTMLElement>) => {

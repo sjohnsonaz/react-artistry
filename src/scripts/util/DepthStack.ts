@@ -21,7 +21,8 @@ export default class DepthStack {
         if (item) {
             let result = item(event);
             if (result !== false) {
-                this.items.pop();
+                // Use remove instead of pop in case already removed.
+                DepthStack.remove(item);
             }
         }
     }
