@@ -9,13 +9,7 @@ export interface IMaskedInputProps<T> extends React.HTMLProps<HTMLInputElement> 
     value?: any;
 }
 
-export interface IMaskedInputState {
-    //value?: string;
-    //selectionStart?: number;
-    //selectionEnd?: number;
-}
-
-export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>, IMaskedInputState> {
+export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>, any> {
     inputRef: React.RefObject<HTMLInputElement> = React.createRef();
     command: boolean = false;
     mask: Mask;

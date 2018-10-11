@@ -27,7 +27,7 @@ export { default as FormInput, IFormInputProps } from '../components/FormInput';
 export { default as FormText, IFormTextProps } from '../components/FormText';
 export { default as Grid, IGridProps } from '../components/Grid';
 export { default as List, IListProps } from '../components/List';
-export { default as MaskedInput, IMaskedInputProps, IMaskedInputState } from '../components/MaskedInput';
+export { default as MaskedInput, IMaskedInputProps } from '../components/MaskedInput';
 export { default as MenuBar, IMenuBarProps } from '../components/MenuBar';
 export { default as MenuBarLink, IMenuBarLinkProps } from '../components/MenuBarLink';
 export { default as MenuBarSpacer, IMenuBarSpacerProps } from '../components/MenuBarSpacer';

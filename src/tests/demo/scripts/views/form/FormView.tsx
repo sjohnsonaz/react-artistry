@@ -62,6 +62,7 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                     </FormText>
                     <FormContainer label="Time">
                         <TimeInput
+                            fill
                             value={(new Date(Date.now())).toUTCString()}
                             onChange={(event, date?: Date) => {
                                 if (date) {
@@ -72,6 +73,7 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                     </FormContainer>
                     <FormContainer label="Time with Seconds">
                         <TimeInput
+                            fill
                             seconds
                             value={(new Date(Date.now())).toUTCString()}
                             onChange={(event, date?: Date) => {

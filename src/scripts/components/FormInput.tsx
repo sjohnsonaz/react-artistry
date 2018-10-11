@@ -1,15 +1,15 @@
 import * as React from 'react';
 import MaskedInput from './MaskedInput';
 
-export interface IFormInputProps<T> extends React.HTMLProps<HTMLInputElement> {
+export interface IFormInputProps<T = any> extends React.HTMLProps<HTMLInputElement> {
     fill?: boolean;
     mask?: string;
     model?: T;
     modelProp?: keyof T;
 }
 
-export default class FormInput<T> extends React.Component<IFormInputProps<T>, any> {
-    onInput = (event?: React.FormEvent<HTMLInputElement>) => {
+export default class FormInput<T = any> extends React.Component<IFormInputProps<T>, any> {
+    onChange = (event?: React.FormEvent<HTMLInputElement>) => {
         let { model, modelProp } = this.props;
         if (model && modelProp) {
             model[modelProp] = (event.target as HTMLInputElement).value as any;
@@ -25,7 +25,7 @@ export default class FormInput<T> extends React.Component<IFormInputProps<T>, an
             mask,
             model,
             modelProp,
-            onInput,
+            onChange,
             ...props
         } = this.props;
         let renderedValue: string;
@@ -48,7 +48,7 @@ export default class FormInput<T> extends React.Component<IFormInputProps<T>, an
                     id={id}
                     className={classNames.join(' ')}
                     value={renderedValue}
-                    onInput={onInput || this.onInput}
+                    onChange={onChange || this.onChange}
                     mask={mask}
                     {...props as any}
                 />
@@ -59,7 +59,7 @@ export default class FormInput<T> extends React.Component<IFormInputProps<T>, an
                     id={id}
                     className={classNames.join(' ')}
                     value={renderedValue}
-                    onInput={onInput || this.onInput}
+                    onChange={onChange || this.onChange}
                     {...props}
                 />
             );
