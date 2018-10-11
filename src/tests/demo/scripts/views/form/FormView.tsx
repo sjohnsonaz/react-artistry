@@ -61,10 +61,25 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                         <h3>Advanced Input</h3>
                     </FormText>
                     <FormContainer label="Time">
-                        <TimeInput value="Thu, 11 Oct 2018 11:32:37 GMT" onChange={(event) => {
-                            let date = new Date((event.target as any).value);
-                            console.log(date);
-                        }} />
+                        <TimeInput
+                            value={(new Date(Date.now())).toUTCString()}
+                            onChange={(event, date?: Date) => {
+                                if (date) {
+                                    console.log(date);
+                                }
+                            }}
+                        />
+                    </FormContainer>
+                    <FormContainer label="Time with Seconds">
+                        <TimeInput
+                            seconds
+                            value={(new Date(Date.now())).toUTCString()}
+                            onChange={(event, date?: Date) => {
+                                if (date) {
+                                    console.log(date);
+                                }
+                            }}
+                        />
                     </FormContainer>
                     <FormDivider />
                     <FormAction>

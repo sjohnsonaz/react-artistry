@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Mask, { ISelection, KeyboardMovement } from '../util/Mask';
+import Mask, { ISelection, KeyboardMovement, IMaskUpdate } from '../util/Mask';
 
 export interface IMaskedInputProps<T> extends React.HTMLProps<HTMLInputElement> {
     id?: string;
@@ -10,15 +10,19 @@ export interface IMaskedInputProps<T> extends React.HTMLProps<HTMLInputElement> 
 }
 
 export interface IMaskedInputState {
-    value?: string;
-    selectionStart?: number;
-    selectionEnd?: number;
+    //value?: string;
+    //selectionStart?: number;
+    //selectionEnd?: number;
 }
 
 export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>, IMaskedInputState> {
     inputRef: React.RefObject<HTMLInputElement> = React.createRef();
     command: boolean = false;
     mask: Mask;
+
+    value?: string;
+    selectionStart?: number;
+    selectionEnd?: number;
 
     constructor(props: IMaskedInputProps<T>, context?: any) {
         super(props, context);
@@ -28,38 +32,39 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
         this.mask = new Mask(this.props.mask);
 
-        this.state = {
-            value: value,
-            selectionStart: 0,
-            selectionEnd: 0
-        };
+        this.value = this.mask.formatValue(value, true);
+        this.selectionStart = 0;
+        this.selectionEnd = 0;
     }
 
     componentDidMount() {
-        let {
-            value
-        } = this.props;
-
-        this.setState({
-            value: this.mask.formatValue(value, true)
+        this.updateElement({
+            value: this.value
         });
     }
 
-    componentDidUpdate() {
+    updateElement(maskUpdate: IMaskUpdate) {
         let input = this.inputRef.current;
-        input.value = this.state.value;
-        input.setSelectionRange(this.state.selectionStart, this.state.selectionEnd, 'none');
+        if (typeof maskUpdate.value !== 'undefined') {
+            input.value = maskUpdate.value;
+            this.value = maskUpdate.value;
+        }
+        if (typeof maskUpdate.selectionEnd !== 'undefined' && typeof maskUpdate.selectionEnd !== 'undefined') {
+            input.setSelectionRange(maskUpdate.selectionStart, maskUpdate.selectionEnd, 'none');
+            this.selectionStart = maskUpdate.selectionStart;
+            this.selectionEnd = maskUpdate.selectionEnd;
+        }
     }
 
-    componentWillReceiveProps(nextProps: IMaskedInputProps<T>, nextContext: any): void {
+    componentWillReceiveProps(nextProps: IMaskedInputProps<T>): void {
         let {
             value
         } = nextProps;
         if (this.props.value !== value) {
             try {
-                this.setState(this.mask.updateValue(
+                this.updateElement(this.mask.updateValue(
                     value,
-                    this.state.value
+                    this.value
                 ));
             }
             catch (e) {
@@ -70,7 +75,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
     onFocus = (event?: React.FocusEvent<HTMLInputElement>) => {
         event.preventDefault();
-        this.setState(this.mask.updateSelection(
+        this.updateElement(this.mask.updateSelection(
             event.target.value,
             this.getSelection()
         ));
@@ -82,7 +87,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
     onClick = (event?: React.MouseEvent<HTMLInputElement>) => {
         event.preventDefault();
-        this.setState(this.mask.updateSelection(
+        this.updateElement(this.mask.updateSelection(
             (event.target as HTMLInputElement).value,
             this.getSelection()
         ));
@@ -90,41 +95,25 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
     onSelect = (event?: React.MouseEvent<HTMLInputElement>) => {
         event.preventDefault();
-        this.setState(this.mask.updateSelection(
+        this.updateElement(this.mask.updateSelection(
             (event.target as HTMLInputElement).value,
             this.getSelection()
         ));
     }
 
-    onInput = (event?: React.FormEvent<HTMLInputElement>) => {
+    onChange = (event?: React.FormEvent<HTMLInputElement>) => {
         event.preventDefault();
         try {
-            this.setState(this.mask.updateValue(
+            this.updateElement(this.mask.updateValue(
                 (event.target as HTMLInputElement).value,
-                this.state.value
+                this.value
             ));
+            if (this.props.onChange) {
+                this.props.onChange(event);
+            }
         }
         catch (e) {
             this.rollback();
-        }
-        if (this.props.onInput) {
-            this.props.onInput(event);
-        }
-    }
-
-    onChange = (event?: React.FormEvent<HTMLInputElement>) => {
-        //event.preventDefault();
-        try {
-            this.setState(this.mask.updateValue(
-                (event.target as HTMLInputElement).value,
-                this.state.value
-            ));
-        }
-        catch (e) {
-            this.rollback();
-        }
-        if (this.props.onChange) {
-            this.props.onChange(event);
         }
     }
 
@@ -133,7 +122,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
             case 8: // Backspace
                 event.preventDefault();
                 try {
-                    this.setState(this.mask.deleteCharacter(
+                    this.updateElement(this.mask.deleteCharacter(
                         (event.target as HTMLInputElement).value,
                         this.getSelection(),
                         false
@@ -145,7 +134,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
                 break;
             case 35: // End
                 event.preventDefault();
-                this.setState(this.mask.updateSelection(
+                this.updateElement(this.mask.updateSelection(
                     (event.target as HTMLInputElement).value,
                     this.getSelection(),
                     KeyboardMovement.end
@@ -153,7 +142,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
                 break;
             case 36: // Home
                 event.preventDefault();
-                this.setState(this.mask.updateSelection(
+                this.updateElement(this.mask.updateSelection(
                     (event.target as HTMLInputElement).value,
                     this.getSelection(),
                     KeyboardMovement.home
@@ -161,7 +150,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
                 break;
             case 37: // Left
                 event.preventDefault();
-                this.setState(this.mask.updateSelection(
+                this.updateElement(this.mask.updateSelection(
                     (event.target as HTMLInputElement).value,
                     this.getSelection(),
                     this.command ? KeyboardMovement.home : KeyboardMovement.left
@@ -169,7 +158,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
                 break;
             case 39: // Right
                 event.preventDefault();
-                this.setState(this.mask.updateSelection(
+                this.updateElement(this.mask.updateSelection(
                     (event.target as HTMLInputElement).value,
                     this.getSelection(),
                     this.command ? KeyboardMovement.end : KeyboardMovement.right
@@ -178,7 +167,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
             case 46: // Delete
                 event.preventDefault();
                 try {
-                    this.setState(this.mask.deleteCharacter(
+                    this.updateElement(this.mask.deleteCharacter(
                         (event.target as HTMLInputElement).value,
                         this.getSelection(),
                         true
@@ -216,10 +205,10 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
     }
 
     rollback() {
-        this.setState({
-            value: this.state.value,
-            selectionStart: this.state.selectionStart,
-            selectionEnd: this.state.selectionEnd
+        this.updateElement({
+            value: this.value,
+            selectionStart: this.selectionStart,
+            selectionEnd: this.selectionEnd
         });
     }
 
@@ -243,7 +232,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
                 onFocus={this.onFocus}
                 onClick={this.onClick}
                 onSelect={this.onSelect}
-                onChange={onChange || this.onChange}
+                onChange={this.onChange}
                 onKeyDown={this.onKeyDown}
                 onKeyUp={this.onKeyUp}
                 {...props}
