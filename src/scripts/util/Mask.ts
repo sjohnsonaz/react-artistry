@@ -1,3 +1,5 @@
+import Diff, { IDiffItem, DiffOperation } from '@cascade/diff';
+
 export enum UnitValid {
     valid = 1,
     invalid = 0,
@@ -173,6 +175,89 @@ export default class Mask {
         return true;
     }
 
+    getVirtualPosition(position: number) {
+        position = Math.min(position, this.mask.length);
+        var valuePosition = 0;
+        for (var index = 0; index < position; index++) {
+            var character = this.mask[index];
+            if (Mask.isValidCharacter(character)) {
+                valuePosition++;
+            }
+        }
+        return valuePosition;
+    }
+
+    getMaskPosition(position: number) {
+        var valueIndex = 0;
+        for (var index = 0, length = this.mask.length; index < length; index++) {
+            var character = this.mask[index];
+            if (Mask.isValidCharacter(character)) {
+                valueIndex++;
+                if (valueIndex > position) {
+                    break;
+                }
+            }
+        }
+        return index;
+    }
+
+    getVirtualSelection(selection: ISelection) {
+        return {
+            start: this.getVirtualPosition(selection.start),
+            end: this.getVirtualPosition(selection.end),
+            direction: selection.direction
+        };
+    }
+
+    formatClean(clean: string, allowLessValid: boolean = false) {
+        let cleanMask = Mask.cleanValue(this.mask);
+
+        let diff = Diff.compare(cleanMask.split('').reverse().join(''), clean.split('').reverse().join(''), compareChars);
+
+        let lcs = createLCS(diff);
+        if (!allowLessValid && lcs.length < clean.length) {
+            throw 'Invalid Value';
+        }
+
+        let cleanSpaces = createSpaces(diff);
+
+        this.fill(cleanSpaces);
+        if (!this.isValid()) {
+            throw 'Invalid Value';
+        }
+
+        var output = '';
+        var cleanIndex = 0;
+        for (var index = 0, length = this.mask.length; index < length; index++) {
+            var character = this.mask[index];
+            if (Mask.isValidCharacter(character)) {
+                output += cleanSpaces[cleanIndex] || ' ';
+                cleanIndex++;
+            } else {
+                output += character;
+            }
+        }
+        return output;
+    }
+
+    static cleanValue(value: string) {
+        if (typeof value === 'string') {
+            return value.replace(/[\W_]+/g, "");
+        } else {
+            return '';
+        }
+    }
+
+    static cleanValueWithSpaces(value: string) {
+        if (typeof value === 'string') {
+            let clean = value.replace(/[\W]+/g, "");
+            let length = clean.replace(/[_]/g, ' ').trim().length;
+            return clean.substring(0, length);
+        } else {
+            return '';
+        }
+    }
+
     static isValidCharacter(character: string, placeholder: boolean = false) {
         switch (character) {
             case ValidCharacter.number:
@@ -228,4 +313,58 @@ export enum ValidCharacter {
     number = '9',
     alphanumeric = 'n',
     hexadecimal = '0'
+}
+
+export interface ISelection {
+    start: number;
+    end: number;
+    direction: 'forward' | 'backward' | 'none';
+}
+
+function compareChars(maskChar: string, valueChar: string) {
+    switch (maskChar) {
+        case '9':
+            return !!valueChar.match(/[0-9]/);
+        case 'a':
+            return !!valueChar.match(/[a-zA-Z ]/);
+        case 'n':
+            return !!valueChar.match(/[0-9a-zA-Z ]/);
+        case '0':
+            return !!valueChar.match(/[0-9a-fA-F ]/);
+    }
+}
+
+function createLCS<T>(diff: IDiffItem<T>[]) {
+    var lcs = [];
+    for (var index = 0, length = diff.length; index < length; index++) {
+        var diffItem = diff[index];
+        switch (diffItem.operation) {
+            case DiffOperation.ADD:
+                break;
+            case DiffOperation.NONE:
+                lcs.push(diffItem.item);
+                break;
+            case DiffOperation.REMOVE:
+                break;
+        }
+    }
+    return lcs.join('');
+}
+
+function createSpaces<T>(diff: IDiffItem<T>[]) {
+    var lcs = [];
+    for (var index = 0, length = diff.length; index < length; index++) {
+        var diffItem = diff[index];
+        switch (diffItem.operation) {
+            case DiffOperation.ADD:
+                break;
+            case DiffOperation.NONE:
+                lcs.push(diffItem.itemB);
+                break;
+            case DiffOperation.REMOVE:
+                lcs.push('_');
+                break;
+        }
+    }
+    return lcs.join('');
 }
