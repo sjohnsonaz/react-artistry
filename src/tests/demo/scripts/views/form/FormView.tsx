@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Button, Form, FormAction, FormContainer, FormDivider, FormInput, FormText, Section } from '../../../../../scripts/modules/ArtistryReact';
+import TimeInput from '../../../../../scripts/components/TimeInput';
 
 export interface IFormViewProps {
 
@@ -54,6 +55,16 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                     </FormContainer>
                     <FormContainer label="99aa99aa99aa">
                         <FormInput mask="99aa99aa99aa" fill />
+                    </FormContainer>
+                    <FormDivider />
+                    <FormText>
+                        <h3>Advanced Input</h3>
+                    </FormText>
+                    <FormContainer label="Time">
+                        <TimeInput value="Thu, 11 Oct 2018 11:32:37 GMT" onChange={(event) => {
+                            let date = new Date((event.target as any).value);
+                            console.log(date);
+                        }} />
                     </FormContainer>
                     <FormDivider />
                     <FormAction>
