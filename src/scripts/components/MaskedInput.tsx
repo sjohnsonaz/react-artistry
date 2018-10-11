@@ -253,17 +253,28 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
     cleanValue(value: string) {
         if (typeof value === 'string') {
-            return value.replace(/\W+/g, "");
+            return value.replace(/[\W_]+/g, "");
         } else {
             return '';
         }
     }
 
-    formatClean(mask: string, clean: string, allowLessValid: boolean = true) {
+    formatClean(mask: string, clean: string, allowLessValid: boolean = false) {
         let cleanMask = this.cleanValue(mask);
-        let diff = Diff.compare(clean, cleanMask, compareChars);
-        let lcs = createLCS(diff, false);
-        if (lcs.length < clean.length) {
+
+        let diff = Diff.compare(cleanMask.split('').reverse().join(''), clean.split('').reverse().join(''), compareChars);
+
+        /*
+        let cleanOldValue = this.cleanValue(this.value);
+        // Get underscore replaced clean
+        let diffValue = Diff.compare(cleanOldValue, clean);
+        diffValue.reverse();
+        */
+
+        let cleanSpaces = createSpaces(diff);
+
+        let lcs = createLCS(diff);
+        if (!allowLessValid && lcs.length < clean.length) {
             throw 'Invalid Value';
         }
 
@@ -272,7 +283,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         for (var index = 0, length = mask.length; index < length; index++) {
             var character = mask[index];
             if (this.isValidCharacter(character)) {
-                output += clean[cleanIndex] || ' ';
+                output += cleanSpaces[cleanIndex] || ' ';
                 cleanIndex++;
             } else {
                 output += character;
@@ -373,7 +384,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
     }
 }
 
-function compareChars(valueChar: string, maskChar: string) {
+function compareChars(maskChar: string, valueChar: string) {
     switch (maskChar) {
         case '9':
             return !!valueChar.match(/[0-9]/);
@@ -408,10 +419,8 @@ function createDiff<T>(diff: IDiffItem<T>[], showBlanks: boolean = false) {
     return lcs.join('');
 }
 
-function createLCS<T>(diff: IDiffItem<T>[], showBlanks: boolean = false) {
-    diff.reverse();
+function createLCS<T>(diff: IDiffItem<T>[]) {
     var lcs = [];
-    let blank: boolean = false;
     for (var index = 0, length = diff.length; index < length; index++) {
         var diffItem = diff[index];
         switch (diffItem.operation) {
@@ -419,15 +428,26 @@ function createLCS<T>(diff: IDiffItem<T>[], showBlanks: boolean = false) {
                 break;
             case DiffOperation.NONE:
                 lcs.push(diffItem.item);
-                blank = false;
                 break;
             case DiffOperation.REMOVE:
-                if (showBlanks) {
-                    if (!blank) {
-                        lcs.push('_');
-                    }
-                    //blank = true;
-                }
+                break;
+        }
+    }
+    return lcs.join('');
+}
+
+function createSpaces<T>(diff: IDiffItem<T>[]) {
+    var lcs = [];
+    for (var index = 0, length = diff.length; index < length; index++) {
+        var diffItem = diff[index];
+        switch (diffItem.operation) {
+            case DiffOperation.ADD:
+                break;
+            case DiffOperation.NONE:
+                lcs.push(diffItem.itemB);
+                break;
+            case DiffOperation.REMOVE:
+                lcs.push('_');
                 break;
         }
     }
