@@ -240,6 +240,102 @@ export default class Mask {
         return output;
     }
 
+    formatValue(value: string, allowLessValid: boolean = false) {
+        let clean = Mask.cleanValue(value);
+        return this.formatClean(clean, allowLessValid);
+    }
+
+    updateSelection(value: string, selection: ISelection, keyboardMovement: KeyboardMovement = KeyboardMovement.none): IMaskUpdate {
+        let clean = Mask.cleanValueWithSpaces(value);
+        let virtualSelection = this.getVirtualSelection(selection);
+        let selectionStart: number;
+        let selectionEnd: number;
+        switch (keyboardMovement) {
+            case KeyboardMovement.none:
+                selectionStart = this.getMaskPosition(Math.min(clean.length, virtualSelection.start));
+                selectionEnd = this.getMaskPosition(Math.min(clean.length, virtualSelection.end));
+                break;
+            case KeyboardMovement.home:
+                selectionStart = this.getMaskPosition(0);
+                selectionEnd = selectionStart;
+                break;
+            case KeyboardMovement.end:
+                selectionStart = this.getMaskPosition(clean.length);
+                selectionEnd = selectionStart;
+                break;
+            case KeyboardMovement.left:
+                selectionStart = this.getMaskPosition(virtualSelection.start - 1);
+                selectionEnd = selectionStart;
+                break;
+            case KeyboardMovement.right:
+                selectionStart = this.getMaskPosition(Math.min(clean.length, virtualSelection.start + 1));
+                selectionEnd = selectionStart;
+                break;
+        }
+        return {
+            selectionStart: selectionStart,
+            selectionEnd: selectionEnd
+        };
+    }
+
+    updateValue(value: string, oldValue: string): IMaskUpdate {
+        value = this.formatValue(value);
+
+        let diff = Diff.compare(oldValue, value);
+        diff.reverse();
+        let position = 0;
+        for (let index = 0, length = diff.length; index < length; index++) {
+            let diffItem = diff[index];
+            if (diffItem.operation === -1) {
+
+            }
+            if (diffItem.operation === 0) {
+                position++;
+            }
+            if (diffItem.operation === 1) {
+                position++;
+                break;
+            }
+        }
+
+        let virtualPosition = this.getVirtualPosition(position);
+        let selectionPosition = this.getMaskPosition(virtualPosition);
+        return {
+            value: value,
+            selectionStart: selectionPosition,
+            selectionEnd: selectionPosition
+        };
+    }
+
+    deleteCharacter(value: string, selection: ISelection, forward: boolean) {
+        let clean = Mask.cleanValueWithSpaces(value);
+        let virtualSelection = this.getVirtualSelection(selection);
+
+        if (virtualSelection.start === virtualSelection.end) {
+            let updatedClean = forward ?
+                clean.slice(0, virtualSelection.start) + clean.slice(virtualSelection.end + 1) :
+                clean.slice(0, virtualSelection.start - 1) + clean.slice(virtualSelection.end);
+            let updatedValue = this.formatClean(updatedClean, true);
+
+            let selectionPosition = this.getMaskPosition(forward ? virtualSelection.start : (virtualSelection.start - 1));
+            return {
+                value: updatedValue,
+                selectionStart: selectionPosition,
+                selectionEnd: selectionPosition
+            };
+        } else {
+            let updatedClean = clean.slice(0, virtualSelection.start) + clean.slice(virtualSelection.end);
+            let updatedValue = this.formatClean(updatedClean, true);
+
+            let selectionPosition = this.getMaskPosition(Math.min(updatedClean.length, virtualSelection.start));
+            return {
+                value: updatedValue,
+                selectionStart: selectionPosition,
+                selectionEnd: selectionPosition
+            };
+        }
+    }
+
     static cleanValue(value: string) {
         if (typeof value === 'string') {
             return value.replace(/[\W_]+/g, "");
@@ -319,6 +415,20 @@ export interface ISelection {
     start: number;
     end: number;
     direction: 'forward' | 'backward' | 'none';
+}
+
+export interface IMaskUpdate {
+    value?: string;
+    selectionStart?: number;
+    selectionEnd?: number;
+}
+
+export enum KeyboardMovement {
+    none,
+    home,
+    end,
+    left,
+    right
 }
 
 function compareChars(maskChar: string, valueChar: string) {
