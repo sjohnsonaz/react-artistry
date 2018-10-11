@@ -397,7 +397,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
     }
 
     deleteCharacter(mask: string, value: string, forward: boolean) {
-        let clean = this.cleanValue(value);
+        let clean = this.cleanValueWithSpaces(value);
         let virtualSelection = this.getVirtualSelection(mask);
 
         if (virtualSelection.start === virtualSelection.end) {
