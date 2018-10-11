@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Diff, { IDiffItem, DiffOperation } from '@cascade/diff';
+import Mask, { ValidCharacter } from '../util/Mask';
 
 //import FormInput, { IFormInputProps } from './FormInput';
 
@@ -11,13 +12,6 @@ export enum KeyboardMovement {
     right
 }
 
-export enum ValidCharacter {
-    placeholder = '_',
-    alpha = 'a',
-    number = '9',
-    alphanumeric = 'n',
-    hexadecimal = '0'
-}
 export interface IMaskedInputProps<T> extends React.HTMLProps<HTMLInputElement> {
     id?: string;
     className?: string;
@@ -31,11 +25,13 @@ export interface IMaskedInputState {
     value?: string;
     selectionStart?: number;
     selectionEnd?: number;
+    mask: string;
 }
 
 export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>, IMaskedInputState> {
     inputRef: React.RefObject<HTMLInputElement> = React.createRef();
     command: boolean = false;
+    mask: Mask;
 
     constructor(props: IMaskedInputProps<T>, context?: any) {
         super(props, context);
@@ -43,22 +39,24 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
             value
         } = this.props;
 
+        this.mask = new Mask(this.props.mask);
+
         this.state = {
             value: value,
             selectionStart: 0,
-            selectionEnd: 0
+            selectionEnd: 0,
+            mask: this.mask.mask
         };
     }
 
     componentDidMount() {
         let {
-            mask,
             value
         } = this.props;
 
         let clean = this.cleanValue(value);
         this.setState({
-            value: this.formatClean(mask, clean, true)
+            value: this.formatClean(this.state.mask, clean, true)
         });
     }
 
@@ -70,11 +68,10 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
     componentWillReceiveProps(nextProps: IMaskedInputProps<T>, nextContext: any): void {
         let {
-            mask,
             value
         } = nextProps;
         if (this.props.value !== value) {
-            this.updateValue(mask, value);
+            this.updateValue(this.state.mask, value);
         }
     }
 
@@ -83,7 +80,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
         let {
             mask
-        } = this.props;
+        } = this.state;
 
         this.updateSelection(mask, event.target.value);
     }
@@ -97,7 +94,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
         let {
             mask
-        } = this.props;
+        } = this.state;
 
         this.updateSelection(mask, (event.target as HTMLInputElement).value);
     }
@@ -107,7 +104,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
         let {
             mask
-        } = this.props;
+        } = this.state;
 
         this.updateSelection(mask, (event.target as HTMLInputElement).value);
     }
@@ -117,7 +114,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
         let {
             mask
-        } = this.props;
+        } = this.state;
 
         this.updateValue(mask, (event.target as HTMLInputElement).value);
         if (this.props.onInput) {
@@ -130,7 +127,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
         let {
             mask
-        } = this.props;
+        } = this.state;
 
         this.updateValue(mask, (event.target as HTMLInputElement).value);
         if (this.props.onChange) {
@@ -142,31 +139,31 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         switch (event.keyCode) {
             case 8: // Backspace
                 event.preventDefault();
-                this.deleteCharacter(this.props.mask, (event.target as HTMLInputElement).value, false);
+                this.deleteCharacter(this.state.mask, (event.target as HTMLInputElement).value, false);
                 break;
             case 35: // End
                 event.preventDefault();
-                this.updateSelection(this.props.mask, (event.target as HTMLInputElement).value, KeyboardMovement.end);
+                this.updateSelection(this.state.mask, (event.target as HTMLInputElement).value, KeyboardMovement.end);
                 break;
             case 36: // Home
                 event.preventDefault();
-                this.updateSelection(this.props.mask, (event.target as HTMLInputElement).value, KeyboardMovement.home);
+                this.updateSelection(this.state.mask, (event.target as HTMLInputElement).value, KeyboardMovement.home);
                 break;
             case 37: // Left
                 event.preventDefault();
-                this.updateSelection(this.props.mask,
+                this.updateSelection(this.state.mask,
                     (event.target as HTMLInputElement).value,
                     this.command ? KeyboardMovement.home : KeyboardMovement.left);
                 break;
             case 39: // Right
                 event.preventDefault();
-                this.updateSelection(this.props.mask,
+                this.updateSelection(this.state.mask,
                     (event.target as HTMLInputElement).value,
                     this.command ? KeyboardMovement.end : KeyboardMovement.right);
                 break;
             case 46: // Delete
                 event.preventDefault();
-                this.deleteCharacter(this.props.mask, (event.target as HTMLInputElement).value, true);
+                this.deleteCharacter(this.state.mask, (event.target as HTMLInputElement).value, true);
                 break;
             case 91: // Command Left
             case 93: // Command Right
@@ -219,30 +216,14 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         );
     }
 
-    isValidCharacter(character: string, placeholder: boolean = false) {
-        switch (character) {
-            case ValidCharacter.number:
-            case ValidCharacter.alpha:
-            case ValidCharacter.alphanumeric:
-            case ValidCharacter.hexadecimal:
-                return true;
-            case ValidCharacter.placeholder:
-                if (placeholder) {
-                    return true;
-                } else {
-                    return false;
-                }
-            default:
-                return false;
-        }
-    }
+
 
     getVirtualPosition(mask: string, position: number) {
         position = Math.min(position, mask.length);
         var valuePosition = 0;
         for (var index = 0; index < position; index++) {
             var character = mask[index];
-            if (this.isValidCharacter(character)) {
+            if (Mask.isValidCharacter(character)) {
                 valuePosition++;
             }
         }
@@ -253,7 +234,7 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         var valueIndex = 0;
         for (var index = 0, length = mask.length; index < length; index++) {
             var character = mask[index];
-            if (this.isValidCharacter(character)) {
+            if (Mask.isValidCharacter(character)) {
                 valueIndex++;
                 if (valueIndex > position) {
                     break;
@@ -309,11 +290,16 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
 
         let cleanSpaces = createSpaces(diff);
 
+        this.mask.fill(cleanSpaces);
+        if (!this.mask.isValid()) {
+            throw 'Invalid Value';
+        }
+
         var output = '';
         var cleanIndex = 0;
         for (var index = 0, length = mask.length; index < length; index++) {
             var character = mask[index];
-            if (this.isValidCharacter(character)) {
+            if (Mask.isValidCharacter(character)) {
                 output += cleanSpaces[cleanIndex] || ' ';
                 cleanIndex++;
             } else {
@@ -400,27 +386,37 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
         let clean = this.cleanValueWithSpaces(value);
         let virtualSelection = this.getVirtualSelection(mask);
 
-        if (virtualSelection.start === virtualSelection.end) {
-            let updatedClean = forward ?
-                clean.slice(0, virtualSelection.start) + clean.slice(virtualSelection.end + 1) :
-                clean.slice(0, virtualSelection.start - 1) + clean.slice(virtualSelection.end);
-            let updatedValue = this.formatClean(mask, updatedClean, true);
+        try {
+            if (virtualSelection.start === virtualSelection.end) {
+                let updatedClean = forward ?
+                    clean.slice(0, virtualSelection.start) + clean.slice(virtualSelection.end + 1) :
+                    clean.slice(0, virtualSelection.start - 1) + clean.slice(virtualSelection.end);
+                let updatedValue = this.formatClean(mask, updatedClean, true);
 
-            let selectionPosition = this.getMaskPosition(mask, forward ? virtualSelection.start : (virtualSelection.start - 1));
-            this.setState({
-                value: updatedValue,
-                selectionStart: selectionPosition,
-                selectionEnd: selectionPosition
-            });
-        } else {
-            let updatedClean = clean.slice(0, virtualSelection.start) + clean.slice(virtualSelection.end);
-            let updatedValue = this.formatClean(mask, updatedClean, true);
+                let selectionPosition = this.getMaskPosition(mask, forward ? virtualSelection.start : (virtualSelection.start - 1));
+                this.setState({
+                    value: updatedValue,
+                    selectionStart: selectionPosition,
+                    selectionEnd: selectionPosition
+                });
+            } else {
+                let updatedClean = clean.slice(0, virtualSelection.start) + clean.slice(virtualSelection.end);
+                let updatedValue = this.formatClean(mask, updatedClean, true);
 
-            let selectionPosition = this.getMaskPosition(mask, Math.min(updatedClean.length, virtualSelection.start));
+                let selectionPosition = this.getMaskPosition(mask, Math.min(updatedClean.length, virtualSelection.start));
+                this.setState({
+                    value: updatedValue,
+                    selectionStart: selectionPosition,
+                    selectionEnd: selectionPosition
+                });
+            }
+        }
+        catch (e) {
+            // Rollback
             this.setState({
-                value: updatedValue,
-                selectionStart: selectionPosition,
-                selectionEnd: selectionPosition
+                value: this.state.value,
+                selectionStart: this.state.selectionStart,
+                selectionEnd: this.state.selectionEnd
             });
         }
     }

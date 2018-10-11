@@ -28,7 +28,7 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                         <h2>Masked Inputs</h2>
                     </FormText>
                     <FormContainer label="Time">
-                        <MaskedInput mask="99:99" fill />
+                        <MaskedInput mask="[[0-23]]:[[0-59]]" fill />
                     </FormContainer>
                     <FormContainer label="Phone">
                         <MaskedInput mask="(999) 999-9999" fill />
@@ -49,8 +49,8 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                     <FormContainer label="nnnnn">
                         <MaskedInput mask="nnnnn" fill />
                     </FormContainer>
-                    <FormContainer label="00000">
-                        <MaskedInput mask="00000" fill />
+                    <FormContainer label="[[0-23]]00000">
+                        <MaskedInput mask="[[0-23]]00000" fill />
                     </FormContainer>
                     <FormContainer label="99aa99aa99aa">
                         <MaskedInput mask="99aa99aa99aa" fill />
