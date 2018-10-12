@@ -31,7 +31,7 @@ export { default as MaskedInput, IMaskedInputProps } from '../components/MaskedI
 export { default as MenuBar, IMenuBarProps } from '../components/MenuBar';
 export { default as MenuBarLink, IMenuBarLinkProps } from '../components/MenuBarLink';
 export { default as MenuBarSpacer, IMenuBarSpacerProps } from '../components/MenuBarSpacer';
-export { default as Modal, IModalProps } from '../components/Modal';
+export { default as Modal, IModalProps, IModalState, ModalSize } from '../components/Modal';
 export { default as Pager, IPagerProps } from '../components/Pager';
 export { default as Popover, IPopoverProps } from '../components/Popover';
 export { default as ProgressBar, IProgressBarProps } from '../components/ProgressBar';

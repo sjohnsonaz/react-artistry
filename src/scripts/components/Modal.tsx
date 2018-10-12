@@ -9,6 +9,8 @@ import { waitAnimation } from '../util/PromiseUtil';
 import Portal from '../util/Portal';
 import DepthStack from '../util/DepthStack';
 
+export type ModalSize = 'default' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
+
 export interface IModalProps extends IGridExternalProps {
     className?: string;
     id?: string;
@@ -21,6 +23,7 @@ export interface IModalProps extends IGridExternalProps {
     locked?: boolean;
     space?: boolean;
     background?: boolean;
+    size?: ModalSize;
 }
 
 export interface IModalState {
@@ -127,7 +130,8 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
     render() {
         let {
             animation,
-            background
+            background,
+            size
         } = this.props;
 
         let classNames = this.props.className ? [this.props.className] : [];
@@ -142,6 +146,24 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
 
         if (animation) {
             classNames.push('modal-animate-' + animation.trim());
+        }
+
+        switch (size) {
+            case 'x-small':
+                classNames.push('modal-xs');
+                break;
+            case 'small':
+                classNames.push('modal-sm');
+                break;
+            case 'medium':
+                classNames.push('modal-md');
+                break;
+            case 'large':
+                classNames.push('modal-lg');
+                break;
+            case 'x-large':
+                classNames.push('modal-xl');
+                break;
         }
 
         if (this.props.title) {
