@@ -12,6 +12,7 @@ export default class FormView extends React.Component<IFormViewProps, any> {
         return (
             <Section header="Form">
                 <Form
+                    screenSize="small"
                     onEnter={(event: KeyboardEvent) => {
                         event.preventDefault();
                         console.log('enter')

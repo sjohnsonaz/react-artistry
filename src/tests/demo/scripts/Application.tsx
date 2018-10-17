@@ -31,7 +31,7 @@ export default class Application {
         DepthStack.init();
         Portal.addElement('modal-root', 'modal-root');
         ReactDom.render(
-            <Container menuBarTop>
+            <Container menuBarTop size="all">
                 <MenuBarView />
                 <h2>Components</h2>
                 <ButtonView />
