@@ -13,6 +13,7 @@ export interface ICarouselProps {
     staticHeight?: boolean;
     fillHeight?: boolean;
     scroll?: ScrollableType;
+    space?: boolean;
 }
 
 export interface ICarouselState {
@@ -197,6 +198,10 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
 
         if (this.props.scroll) {
             classNames.push('scrollable');
+        }
+
+        if (this.props.space) {
+            classNames.push('carousel-space');
         }
 
         let children;

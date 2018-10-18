@@ -32,7 +32,7 @@ export default class CarouselView extends React.Component<ICarouselViewProps, an
                 <Button onClick={this.backCarouselSlide}>Back</Button>
                 <Button onClick={this.nextCarouselSlide}>Next</Button>
                 <hr />
-                <Carousel activeIndex={this.state.activeIndex} animation="slide">
+                <Carousel activeIndex={this.state.activeIndex} animation="slide" space>
                     <div style={{ backgroundColor: "red", padding: "10px" }}>
                         Content 0
                     </div>
@@ -47,7 +47,7 @@ export default class CarouselView extends React.Component<ICarouselViewProps, an
                     </div>
                 </Carousel>
                 <hr />
-                <Carousel activeIndex={this.state.activeIndex} animation="flip">
+                <Carousel activeIndex={this.state.activeIndex} animation="flip" space>
                     <div style={{ backgroundColor: "red", padding: "10px" }}>
                         Content 0
                     </div>
