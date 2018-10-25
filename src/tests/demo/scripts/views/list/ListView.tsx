@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { List, Section } from '../../../../../scripts/modules/ArtistryReact';
+import { Cell, Grid, List, Search, Section, Row } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface ITableViewProps {
 
@@ -38,6 +38,17 @@ export default class TableView extends React.Component<ITableViewProps, any> {
     render() {
         return (
             <Section header="List">
+                <Grid space>
+                    <Row>
+                        <Cell>
+                            <Search options={[
+                                'Option 1',
+                                'Option 2',
+                                'Option 3'
+                            ]}></Search>
+                        </Cell>
+                    </Row>
+                </Grid>
                 <List
                     data={data}
                     template={item => item.ingredient}
