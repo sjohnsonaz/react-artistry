@@ -2,8 +2,12 @@ import * as React from 'react';
 
 import { Cell, Grid, List, Search, Section, Row } from '../../../../../scripts/modules/ArtistryReact';
 
-export interface ITableViewProps {
+export interface IListViewProps {
 
+}
+
+export interface IListViewState {
+    searchValue: string;
 }
 
 interface IListData {
@@ -34,18 +38,35 @@ let data: IListData[] = [{
     unit: 'cup'
 }];
 
-export default class TableView extends React.Component<ITableViewProps, any> {
+export default class ListView extends React.Component<IListViewProps, IListViewState> {
+    constructor(props: IListViewProps, context: any) {
+        super(props, context);
+        this.state = {
+            searchValue: ''
+        };
+    }
+
+    onChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({
+            searchValue: event.target.value
+        });
+    }
+
     render() {
         return (
             <Section header="List">
                 <Grid space>
                     <Row>
                         <Cell>
-                            <Search options={[
-                                'Option 1',
-                                'Option 2',
-                                'Option 3'
-                            ]}></Search>
+                            <Search
+                                value={this.state.searchValue}
+                                options={[
+                                    'Option 1',
+                                    'Option 2',
+                                    'Option 3'
+                                ]}
+                                onChange={this.onChangeSearch}
+                            />
                         </Cell>
                     </Row>
                 </Grid>

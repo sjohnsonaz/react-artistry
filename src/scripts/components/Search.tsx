@@ -1,75 +1,123 @@
 import * as React from 'react';
 
 export interface ISearchProps {
+    id?: string;
+    className?: string;
+    value?: string;
     buttonText?: any;
     options?: string[];
-    altAction?: (option: string) => any;
     altActionText?: string;
-    value?: string;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => any;
     onSelectOption?: (event: React.KeyboardEvent<HTMLInputElement>) => any;
+    altAction?: (option: string) => any;
 }
 
 export interface ISearchState {
     activeOption?: number;
     value?: string;
-    baseValue?: string;
+    options?: string[];
 }
 
 export default class Search extends React.Component<ISearchProps, any> {
-    state: ISearchState = {
-        activeOption: -1
+    constructor(props: ISearchProps, context: any) {
+        super(props, context);
+        let {
+            value,
+            options
+        } = this.props;
+
+        if (value && value.trim()) {
+            options = options ? options.slice(0) : [];
+            options.unshift(value);
+        } else {
+            options = [];
+        }
+        this.state = {
+            activeOption: -1,
+            value: value,
+            options: options
+        };
     }
 
     onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        let options = this.props.options || [];
+        let {
+            value,
+            options
+        } = this.state;
         let activeOption: number;
         switch (event.keyCode) {
             case 38: // Up
-                activeOption = this.state.activeOption;
-                activeOption--;
-                if (activeOption < -1) {
+                event.preventDefault();
+                if (!value || !value.trim()) {
                     activeOption = -1;
+                } else {
+                    activeOption = this.state.activeOption;
+                    activeOption--;
+                    if (activeOption < -1) {
+                        activeOption = -1;
+                    }
                 }
-                this.setState({
-                    activeOption: activeOption,
-                    value: options[activeOption]
-                });
+                if (activeOption !== -1) {
+                    this.setState({
+                        activeOption: activeOption,
+                        value: options[activeOption]
+                    });
+                } else {
+                    this.setState({
+                        activeOption: activeOption
+                    });
+                }
                 break;
             case 40: // Down
-                activeOption = this.state.activeOption;
-                activeOption++;
-                if (activeOption >= options.length) {
-                    activeOption = options.length - 1;
+                event.preventDefault();
+                if (!value || !value.trim(0)) {
+                    activeOption = -1;
+                } else {
+                    activeOption = this.state.activeOption;
+                    activeOption++;
+                    if (activeOption >= options.length) {
+                        activeOption = options.length - 1;
+                    }
                 }
-                this.setState({
-                    activeOption: activeOption,
-                    value: options[activeOption]
-                });
+                if (activeOption !== -1) {
+                    this.setState({
+                        activeOption: activeOption,
+                        value: options[activeOption]
+                    });
+                } else {
+                    this.setState({
+                        activeOption: activeOption
+                    });
+                }
                 break;
         }
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({
-            value: (event.target as HTMLInputElement).value
-        });
+        //this.setState({
+        //value: (event.target as HTMLInputElement).value
+        //});
         if (this.props.onChange) {
             this.props.onChange(event);
         }
     }
 
     componentWillReceiveProps(nextProps: ISearchProps) {
-        this.setState({
-            value: nextProps.value
-        });
-        if (nextProps.options) {
-            if (nextProps.options.length > this.state.activeOption) {
-                this.setState({
-                    activeOption: nextProps.options.length - 1
-                });
-            }
+        let {
+            value,
+            options
+        } = nextProps;
+        if (value && value.trim()) {
+            options = options ? options.slice(0) : [];
+            options.unshift(value);
         } else {
+            options = [];
+        }
+        this.setState({
+            value: value,
+            options: options
+        });
+        if (value !== this.props.value) {
             this.setState({
                 activeOption: -1
             });
@@ -78,19 +126,34 @@ export default class Search extends React.Component<ISearchProps, any> {
 
     render() {
         let {
+            id,
+            className,
             buttonText,
-            options,
             altAction,
             altActionText
         } = this.props;
+
+        let {
+            value,
+            options,
+            activeOption
+        } = this.state;
+
+        let classNames = className ? [className] : [];
+        classNames.push('search');
+
+        if (options.length) {
+            classNames.push('search-open');
+        }
+
         return (
-            <div className="search">
+            <div id={id} className={classNames.join(' ')}>
                 <div className="button-group search-button-group">
                     <input
                         className="input search-input fill-width"
                         onKeyDown={this.onKeyDown}
                         onChange={this.onChange}
-                        value={this.state.value}
+                        value={value}
                     />
                     <button className="button search-button">{buttonText || 'Search'}</button>
                 </div>
@@ -98,11 +161,11 @@ export default class Search extends React.Component<ISearchProps, any> {
                     <ul role="listbox" className="search-option-list">
                         {!options ? undefined : options.map((option, index) => {
                             let optionClassName = ['search-option'];
-                            if (index === this.state.activeOption) {
+                            if (index === activeOption) {
                                 optionClassName.push('search-option-active');
                             }
                             return (
-                                <li className={optionClassName.join(' ')} role="presentation" key={option}>
+                                <li className={optionClassName.join(' ')} role="presentation" key={option + '_'}>
                                     <div className="search-option-action" role="option">
                                         <div className="search-option-action-text">
                                             <span><b>{option}</b></span>
