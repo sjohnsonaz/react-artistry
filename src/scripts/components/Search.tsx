@@ -165,7 +165,7 @@ export default class Search extends React.Component<ISearchProps, any> {
                                 optionClassName.push('search-option-active');
                             }
                             return (
-                                <li className={optionClassName.join(' ')} role="presentation" key={option + '_'}>
+                                <li className={optionClassName.join(' ')} role="presentation" key={option + '_' + index}>
                                     <div className="search-option-action" role="option">
                                         <div className="search-option-action-text">
                                             <span><b>{option}</b></span>
