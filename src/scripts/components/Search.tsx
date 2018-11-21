@@ -10,6 +10,7 @@ export interface ISearchProps {
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => any;
     onSelectOption?: (event: React.KeyboardEvent<HTMLInputElement>) => any;
     altAction?: (option: string) => any;
+    onSearch?: (event: React.MouseEvent<HTMLElement>, value?: string) => any;
 }
 
 export interface ISearchState {
@@ -102,6 +103,14 @@ export default class Search extends React.Component<ISearchProps, any> {
         }
     }
 
+    onClickSearch = (event: React.MouseEvent<HTMLButtonElement>) => {
+
+    }
+
+    onClickOption(event: React.MouseEvent<HTMLDivElement>) {
+
+    }
+
     componentWillReceiveProps(nextProps: ISearchProps) {
         let {
             value,
@@ -155,7 +164,7 @@ export default class Search extends React.Component<ISearchProps, any> {
                         onChange={this.onChange}
                         value={value}
                     />
-                    <button className="button search-button">{buttonText || 'Search'}</button>
+                    <button className="button search-button" onClick={this.onClickSearch}>{buttonText || 'Search'}</button>
                 </div>
                 <div className="search-option-box">
                     <ul role="listbox" className="search-option-list">
@@ -166,7 +175,7 @@ export default class Search extends React.Component<ISearchProps, any> {
                             }
                             return (
                                 <li className={optionClassName.join(' ')} role="presentation" key={option + '_' + index}>
-                                    <div className="search-option-action" role="option">
+                                    <div className="search-option-action" role="option" onClick={this.onClickOption.bind(this, option)}>
                                         <div className="search-option-action-text">
                                             <span><b>{option}</b></span>
                                         </div>
