@@ -7,10 +7,12 @@ export interface ISearchProps {
     buttonText?: any;
     options?: string[];
     altActionText?: string;
+    showOptions?: boolean;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => any;
-    onSelectOption?: (event: React.KeyboardEvent<HTMLInputElement>) => any;
+    onSelectOption?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLDivElement>, value?: string) => any;
+    onSearch?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>, value?: string) => any;
+    onClose?: (event: React.SyntheticEvent<HTMLElement>) => any;
     altAction?: (option: string) => any;
-    onSearch?: (event: React.MouseEvent<HTMLElement>, value?: string) => any;
 }
 
 export interface ISearchState {
@@ -47,6 +49,12 @@ export default class Search extends React.Component<ISearchProps, any> {
         } = this.state;
         let activeOption: number;
         switch (event.keyCode) {
+            case 13: // Enter
+                this.onSearch(event);
+                break;
+            case 27: // Esc
+                this.onClose(event);
+                break;
             case 38: // Up
                 event.preventDefault();
                 if (!value || !value.trim()) {
@@ -95,20 +103,31 @@ export default class Search extends React.Component<ISearchProps, any> {
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        //this.setState({
-        //value: (event.target as HTMLInputElement).value
-        //});
         if (this.props.onChange) {
             this.props.onChange(event);
         }
     }
 
-    onClickSearch = (event: React.MouseEvent<HTMLButtonElement>) => {
-
+    onSearch = (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
+        if (this.props.onSearch) {
+            this.props.onSearch(event);
+        }
     }
 
-    onClickOption(event: React.MouseEvent<HTMLDivElement>) {
+    onSelectOption(option: string, index: number, event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLDivElement>) {
+        this.setState({
+            activeOption: index,
+            value: option
+        });
+        if (this.props.onSelectOption) {
+            this.props.onSelectOption(event, option);
+        }
+    }
 
+    onClose = (event: React.SyntheticEvent<HTMLElement>) => {
+        if (this.props.onClose) {
+            this.props.onClose(event);
+        }
     }
 
     componentWillReceiveProps(nextProps: ISearchProps) {
@@ -139,7 +158,8 @@ export default class Search extends React.Component<ISearchProps, any> {
             className,
             buttonText,
             altAction,
-            altActionText
+            altActionText,
+            showOptions
         } = this.props;
 
         let {
@@ -164,32 +184,34 @@ export default class Search extends React.Component<ISearchProps, any> {
                         onChange={this.onChange}
                         value={value}
                     />
-                    <button className="button search-button" onClick={this.onClickSearch}>{buttonText || 'Search'}</button>
+                    <button className="button search-button" onClick={this.onSearch}>{buttonText || 'Search'}</button>
                 </div>
-                <div className="search-option-box">
-                    <ul role="listbox" className="search-option-list">
-                        {!options ? undefined : options.map((option, index) => {
-                            let optionClassName = ['search-option'];
-                            if (index === activeOption) {
-                                optionClassName.push('search-option-active');
-                            }
-                            return (
-                                <li className={optionClassName.join(' ')} role="presentation" key={option + '_' + index}>
-                                    <div className="search-option-action" role="option" onClick={this.onClickOption.bind(this, option)}>
-                                        <div className="search-option-action-text">
-                                            <span><b>{option}</b></span>
+                {showOptions ?
+                    <div className="search-option-box">
+                        <ul role="listbox" className="search-option-list">
+                            {!options ? undefined : options.map((option, index) => {
+                                let optionClassName = ['search-option'];
+                                if (index === activeOption) {
+                                    optionClassName.push('search-option-active');
+                                }
+                                return (
+                                    <li className={optionClassName.join(' ')} role="presentation" key={option + '_' + index}>
+                                        <div className="search-option-action" role="option" onClick={this.onSelectOption.bind(this, option, index)}>
+                                            <div className="search-option-action-text">
+                                                <span><b>{option}</b></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    {altAction && altActionText ?
-                                        <div className="search-option-alt-action" onClick={altAction.bind(this, option)}>
-                                            <div className="search-option-alt-action-text">{altActionText}</div>
-                                        </div> :
-                                        undefined}
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </div>
+                                        {altAction && altActionText ?
+                                            <div className="search-option-alt-action" onClick={altAction.bind(this, option)}>
+                                                <div className="search-option-alt-action-text">{altActionText}</div>
+                                            </div> :
+                                            undefined}
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </div>
+                    : null}
             </div>
         );
     }
