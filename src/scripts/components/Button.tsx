@@ -25,6 +25,7 @@ export interface IButtonProps extends React.HTMLProps<HTMLButtonElement> {
     down?: boolean;
     link?: boolean;
     noTrigger?: boolean;
+    noWrap?: boolean;
 }
 
 
@@ -125,6 +126,7 @@ export default class Button extends React.Component<IButtonProps, any> {
             onPopoverClose,
             link,
             noTrigger,
+            noWrap,
             onClick,
             ...props
         } = this.props;
@@ -144,6 +146,10 @@ export default class Button extends React.Component<IButtonProps, any> {
 
         if (fill) {
             classNames.push('fill-width');
+        }
+
+        if (noWrap) {
+            classNames.push('button-nowrap');
         }
 
         // Always set button type
