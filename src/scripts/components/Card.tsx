@@ -12,9 +12,17 @@ export interface ICardProps extends IGridExternalProps {
     fill?: boolean;
     nav?: any;
     navAlign?: 'start' | 'end';
+    clickable?: boolean;
+    onClick?: (event: React.MouseEvent<HTMLDivElement>) => any;
 }
 
 export default class Card extends React.Component<ICardProps, any> {
+    onClick(event: React.MouseEvent<HTMLDivElement>) {
+        if (this.props.onClick) {
+            this.props.onClick(event);
+        }
+    }
+
     render() {
         let {
             id,
@@ -25,7 +33,8 @@ export default class Card extends React.Component<ICardProps, any> {
             fill,
             nav,
             navAlign,
-            grid
+            grid,
+            clickable
         } = this.props;
         let classNames = className ? [className] : [];
         classNames.push('card');
@@ -40,9 +49,12 @@ export default class Card extends React.Component<ICardProps, any> {
         if (grid) {
             gridConfig(innerClassNames, this.props);
         }
+        if (clickable) {
+            classNames.push('clickable');
+        }
 
         return (
-            <div className={classNames.join(' ')} id={id}>
+            <div className={classNames.join(' ')} id={id} onClick={this.onClick}>
                 {header ? <header>{header}</header> : null}
                 <div className={innerClassNames.join(' ')}>
                     {this.props.children}
