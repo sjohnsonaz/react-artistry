@@ -17,7 +17,7 @@ export interface ICardProps extends IGridExternalProps {
 }
 
 export default class Card extends React.Component<ICardProps, any> {
-    onClick(event: React.MouseEvent<HTMLDivElement>) {
+    onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (this.props.onClick) {
             this.props.onClick(event);
         }
