@@ -76,7 +76,7 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
         activeIndex = activeIndex || 0;
         previousActiveIndex = previousActiveIndex || 0;
         let children = this.props.children;
-        if (children instanceof Array) {
+        if (children instanceof Array && children.length) {
             activeIndex %= children.length;
             previousActiveIndex %= children.length;
             if (activeIndex < 0) {
@@ -87,6 +87,9 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
                 previousActiveIndex += children.length;
                 previousActiveIndex %= children.length;
             }
+        } else {
+            activeIndex = 0;
+            previousActiveIndex = 0;
         }
 
         // Only run if we are changing indexes
