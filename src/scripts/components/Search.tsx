@@ -8,6 +8,10 @@ export interface ISearchProps {
     options?: string[];
     altActionText?: string;
     showOptions?: boolean;
+    disabled?: boolean;
+    disabledButton?: boolean;
+    disabledInput?: boolean;
+    onBlur?: (event: React.MouseEvent<HTMLInputElement>) => any;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => any;
     onSelectOption?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLDivElement>, value?: string) => any;
     onSearch?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>, value?: string) => any;
@@ -29,17 +33,24 @@ export default class Search extends React.Component<ISearchProps, any> {
             options
         } = this.props;
 
-        if (value && value.trim()) {
-            options = options ? options.slice(0) : [];
-            options.unshift(value);
-        } else {
-            options = [];
-        }
+        options = this.cleanOptions(options, value);
+
         this.state = {
             activeOption: -1,
             value: value,
             options: options
         };
+    }
+
+    cleanOptions(options: string[], value: string) {
+        if (value && value.trim) {
+            // Push value to top of array
+            options = options ? options.slice(0) : [];
+            options.unshift(value);
+        } else {
+            options = options || [];
+        }
+        return options;
     }
 
     onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -102,6 +113,12 @@ export default class Search extends React.Component<ISearchProps, any> {
         }
     }
 
+    onBlur = (event: React.MouseEvent<HTMLInputElement>) => {
+        if (this.props.onBlur) {
+            this.props.onBlur(event);
+        }
+    }
+
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (this.props.onChange) {
             this.props.onChange(event);
@@ -135,12 +152,7 @@ export default class Search extends React.Component<ISearchProps, any> {
             value,
             options
         } = nextProps;
-        if (value && value.trim()) {
-            options = options ? options.slice(0) : [];
-            options.unshift(value);
-        } else {
-            options = [];
-        }
+        options = this.cleanOptions(options, value);
         this.setState({
             value: value,
             options: options
@@ -159,7 +171,10 @@ export default class Search extends React.Component<ISearchProps, any> {
             buttonText,
             altAction,
             altActionText,
-            showOptions
+            showOptions,
+            disabled,
+            disabledButton,
+            disabledInput
         } = this.props;
 
         let {
@@ -171,7 +186,7 @@ export default class Search extends React.Component<ISearchProps, any> {
         let classNames = className ? [className] : [];
         classNames.push('search');
 
-        if (options.length) {
+        if (options.length && !disabled && !disabledInput) {
             classNames.push('search-open');
         }
 
@@ -183,8 +198,15 @@ export default class Search extends React.Component<ISearchProps, any> {
                         onKeyDown={this.onKeyDown}
                         onChange={this.onChange}
                         value={value}
+                        disabled={disabled || disabledInput}
                     />
-                    <button className="button search-button" onClick={this.onSearch}>{buttonText || 'Search'}</button>
+                    <button
+                        className="button search-button"
+                        onClick={this.onSearch}
+                        disabled={disabled || disabledButton}
+                    >
+                        {buttonText || 'Search'}
+                    </button>
                 </div>
                 {showOptions ?
                     <div className="search-option-box">
