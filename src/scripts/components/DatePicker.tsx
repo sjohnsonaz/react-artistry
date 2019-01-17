@@ -27,7 +27,10 @@ export default class DatePicker extends React.Component<IDatePickerProps, any>{
             date = this.props.date as Date;
         }
         return (
-            <ButtonGroup fill className="popover-trigger">
+            <ButtonGroup
+                fill={this.props.fill}
+                className="popover-trigger"
+            >
                 <Input
                     value={getDateFormatted(date)}
                     fill={this.props.fill}
