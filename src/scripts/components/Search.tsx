@@ -8,6 +8,7 @@ export interface ISearchProps {
     options?: string[];
     altActionText?: string;
     showOptions?: boolean;
+    fill?: boolean;
     disabled?: boolean;
     disabledButton?: boolean;
     disabledInput?: boolean;
@@ -172,6 +173,7 @@ export default class Search extends React.Component<ISearchProps, any> {
             altAction,
             altActionText,
             showOptions,
+            fill,
             disabled,
             disabledButton,
             disabledInput
@@ -190,11 +192,16 @@ export default class Search extends React.Component<ISearchProps, any> {
             classNames.push('search-open');
         }
 
+        let inputClassNames = ['input', 'search-input'];
+        if (fill) {
+            inputClassNames.push('fill-width');
+        }
+
         return (
             <div id={id} className={classNames.join(' ')}>
                 <div className="button-group search-button-group">
                     <input
-                        className="input search-input fill-width"
+                        className={inputClassNames.join(' ')}
                         onKeyDown={this.onKeyDown}
                         onChange={this.onChange}
                         value={value}
