@@ -4,18 +4,38 @@ import Closeable from './Closeable';
 import { IGridExternalProps, gridConfig } from './Grid';
 
 export interface ICardProps extends IGridExternalProps {
+    /** id of the root element */
     id?: string;
+
+    /** classes to add to the root element */
     className?: string;
+
+    /** JSX to display in the header */
     header?: any;
+
+    /** JSX to display in the footer */
     footer?: any;
+
+    /** determines whether the card should have padding*/
     space?: boolean;
+
+    /** determines whether the card should fill horizontally */
     fill?: boolean;
+
+    /** JSX to display in the nav section */
     nav?: any;
+
+    /** determines the direction the nav section should be aligned */
     navAlign?: 'start' | 'end';
+
+    /** determines whether the card is clickable */
     clickable?: boolean;
+
+    /** the click event handler */
     onClick?: (event: React.MouseEvent<HTMLDivElement>) => any;
 }
 
+/** Displays a Card */
 export default class Card extends React.Component<ICardProps, any> {
     onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (this.props.onClick) {
