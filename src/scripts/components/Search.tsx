@@ -12,7 +12,7 @@ export interface ISearchProps {
     disabled?: boolean;
     disabledButton?: boolean;
     disabledInput?: boolean;
-    onBlur?: (event: React.MouseEvent<HTMLInputElement>) => any;
+    onBlur?: (event: React.FocusEvent<HTMLInputElement>) => any;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => any;
     onSelectOption?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLDivElement>, value?: string) => any;
     onSearch?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>, value?: string) => any;
@@ -114,7 +114,7 @@ export default class Search extends React.Component<ISearchProps, any> {
         }
     }
 
-    onBlur = (event: React.MouseEvent<HTMLInputElement>) => {
+    onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
         if (this.props.onBlur) {
             this.props.onBlur(event);
         }
@@ -204,6 +204,7 @@ export default class Search extends React.Component<ISearchProps, any> {
                         className={inputClassNames.join(' ')}
                         onKeyDown={this.onKeyDown}
                         onChange={this.onChange}
+                        onBlur={this.onBlur}
                         value={value}
                         disabled={disabled || disabledInput}
                     />
