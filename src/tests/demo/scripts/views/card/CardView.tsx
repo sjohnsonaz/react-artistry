@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Card, Cell, Closeable, Fillable, Grid, Row, Section } from '../../../../../scripts/modules/ArtistryReact';
+import { Button, Card, CardContainer, Cell, Closeable, Fillable, Grid, Row, Section } from '../../../../../scripts/modules/ArtistryReact';
 
 import VerticalCard from './VerticalCard';
 
@@ -37,29 +37,31 @@ export default class CardView extends React.Component<ICardViewProps, ICardViewS
         return (
             <Section header="Card" space>
                 <h3>Card</h3>
-                <VerticalCard />
-                <Fillable card filled={this.state.filled}>
-                    <Card grid space fill>
-                        <Row>
-                            <Cell>
-                                Card Content
+                <CardContainer>
+                    <VerticalCard />
+                    <Fillable card filled={this.state.filled}>
+                        <Card grid space fill>
+                            <Row>
+                                <Cell>
+                                    Card Content
                             </Cell>
-                            <Cell>
-                                <Button onClick={this.toggleClosed}>Expand</Button>
-                                <Button onClick={this.toggleFilled}>Fill</Button>
-                            </Cell>
-                        </Row>
-                        <Closeable closed={this.state.closed}>
-                            <Grid>
-                                <Row>
-                                    <Cell>
-                                        Card Content
+                                <Cell>
+                                    <Button onClick={this.toggleClosed}>Expand</Button>
+                                    <Button onClick={this.toggleFilled}>Fill</Button>
                                 </Cell>
-                                </Row>
-                            </Grid>
-                        </Closeable>
-                    </Card>
-                </Fillable>
+                            </Row>
+                            <Closeable closed={this.state.closed}>
+                                <Grid>
+                                    <Row>
+                                        <Cell>
+                                            Card Content
+                                </Cell>
+                                    </Row>
+                                </Grid>
+                            </Closeable>
+                        </Card>
+                    </Fillable>
+                </CardContainer>
             </Section>
         );
     }
