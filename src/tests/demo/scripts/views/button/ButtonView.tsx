@@ -45,6 +45,27 @@ export default class ButtonView extends React.Component<IButtonViewProps, IButto
                     <Button theme="danger">Delete</Button>
                 </div>
 
+                <h3>Text Only Buttons</h3>
+                <div>
+                    <Button display="textonly">Edit</Button>{' '}
+                    <Button display="textonly" theme="primary">Save</Button>{' '}
+                    <Button display="textonly" theme="danger">Delete</Button>
+                </div>
+
+                <h3>Outline Buttons</h3>
+                <div>
+                    <Button display="outline">Edit</Button>{' '}
+                    <Button display="outline" theme="primary">Save</Button>{' '}
+                    <Button display="outline" theme="danger">Delete</Button>
+                </div>
+
+                <h3>Button Sizes</h3>
+                <div>
+                    <Button buttonSize="small">Small</Button>{' '}
+                    <Button>Medium</Button>{' '}
+                    <Button buttonSize="large">Large</Button>
+                </div>
+
                 <h3>Disabled Buttons</h3>
                 <div>
                     <Button disabled>Edit</Button>{' '}
