@@ -23,7 +23,7 @@ export default class CardControl extends React.Component<ICardControlProps, any>
         if (title) {
             content = (
                 <>
-                    <div className="card-label">{title}</div>
+                    <div className="card-title">{title}</div>
                     <div className="card-data">{this.props.children}</div>
                 </>
             );
