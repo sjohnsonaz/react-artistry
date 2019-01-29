@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Card, CardContainer, Cell, Closeable, Fillable, Grid, Row, Section } from '../../../../../scripts/modules/ArtistryReact';
+import { Button, Card, CardContainer, CardControl, CardSection, Cell, Closeable, Fillable, Grid, Row, Section } from '../../../../../scripts/modules/ArtistryReact';
 
 import VerticalCard from './VerticalCard';
 
@@ -62,6 +62,14 @@ export default class CardView extends React.Component<ICardViewProps, ICardViewS
                         </Card>
                     </Fillable>
                 </CardContainer>
+                <Card>
+                    <CardSection multiColumn>
+                        <CardControl title="Title 1">Data 1</CardControl>
+                        <CardControl title="Title 2">Data 2</CardControl>
+                        <CardControl title="Title 3">Data 3</CardControl>
+                        <CardControl title="Title 4">Data 4</CardControl>
+                    </CardSection>
+                </Card>
             </Section>
         );
     }
