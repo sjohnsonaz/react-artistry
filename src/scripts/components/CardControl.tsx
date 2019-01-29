@@ -5,6 +5,7 @@ export interface ICardControlProps {
     className?: string;
     title?: string;
     label?: boolean;
+    width?: number | string;
 }
 
 export default class CardControl extends React.Component<ICardControlProps, any> {
@@ -13,11 +14,16 @@ export default class CardControl extends React.Component<ICardControlProps, any>
             id,
             className,
             title,
-            label
+            label,
+            width
         } = this.props;
 
         let classNames = className ? [className] : [];
         classNames.push('card-control');
+
+        if (width && typeof width === 'number') {
+            width += 'px' as any;
+        }
 
         let content;
         if (title) {
@@ -32,13 +38,21 @@ export default class CardControl extends React.Component<ICardControlProps, any>
         }
         if (label) {
             return (
-                <label className={classNames.join(' ')} id={id}>
+                <label
+                    className={classNames.join(' ')}
+                    id={id}
+                    style={{ '--card-control-min-width': width } as any}
+                >
                     {content}
                 </label>
             );
         } else {
             return (
-                <div className={classNames.join(' ')} id={id}>
+                <div
+                    className={classNames.join(' ')}
+                    id={id}
+                    style={{ '--card-control-min-width': width } as any}
+                >
                     {content}
                 </div>
             );
