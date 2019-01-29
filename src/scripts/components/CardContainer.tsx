@@ -4,6 +4,7 @@ export interface ICardContainerProps {
     id?: string;
     className?: string;
     space?: boolean;
+    width?: number | string;
 }
 
 export default class CardContainer extends React.Component<ICardContainerProps, any> {
@@ -11,7 +12,8 @@ export default class CardContainer extends React.Component<ICardContainerProps, 
         let {
             id,
             className,
-            space
+            space,
+            width
         } = this.props;
 
         let classNames = className ? [className] : [];
@@ -21,8 +23,15 @@ export default class CardContainer extends React.Component<ICardContainerProps, 
             classNames.push('space');
         }
 
+        if (width && typeof width === 'number') {
+            width += 'px' as any;
+        }
+
         return (
-            <div className={classNames.join(' ')} id={id}>
+            <div className={classNames.join(' ')}
+                id={id}
+                style={{ '--card-min-width': width } as any}
+            >
                 {this.props.children}
             </div>
         )
