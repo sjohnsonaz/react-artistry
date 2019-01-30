@@ -25,17 +25,12 @@ export default class CardControl extends React.Component<ICardControlProps, any>
             width += 'px' as any;
         }
 
-        let content;
-        if (title) {
-            content = (
-                <>
-                    <div className="card-title">{title}</div>
-                    <div className="card-data">{this.props.children}</div>
-                </>
-            );
-        } else {
-            content = this.props.children;
-        }
+        let content = (
+            <>
+                <div className="card-control-title">{title}</div>
+                <div className="card-control-data">{this.props.children}</div>
+            </>
+        );
         if (label) {
             return (
                 <label

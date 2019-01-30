@@ -2,6 +2,7 @@ export { default as BodyScroll } from '../util/BodyScroll';
 export { default as ClassNames } from '../util/ClassNames';
 export { default as DepthStack } from '../util/DepthStack';
 export { default as Portal } from '../util/Portal';
+export { default as AlignType } from '../util/Align';
 export { default as Button, IButtonProps } from '../components/Button';
 export { default as ButtonGroup, IButtonGroupProps } from '../components/ButtonGroup';
 export { default as ButtonBar, IButtonBarProps } from '../components/ButtonBar';
@@ -11,9 +12,10 @@ export { default as CardContainer, ICardContainerProps } from '../components/Car
 export { default as CardControl, ICardControlProps } from '../components/CardControl';
 export { default as CardNavigation, ICardNavigationProps } from '../components/CardNavigation';
 export { default as CardSection, ICardSectionProps } from '../components/CardSection';
+export { default as CardRow, ICardRowProps } from '../components/CardRow';
 export { default as CardTitle, ICardTitleProps } from '../components/CardTitle';
 export { default as Carousel, ICarouselProps } from '../components/Carousel';
-export { default as Cell, ICellProps, AlignType } from '../components/Cell';
+export { default as Cell, ICellProps } from '../components/Cell';
 export { default as Closeable, ICloseableProps, ICloseableState } from '../components/Closeable'
 export { default as Code, ICodeProps } from '../components/Code';
 export { default as Container, IContainerProps, ContainerSize } from '../components/Container';
