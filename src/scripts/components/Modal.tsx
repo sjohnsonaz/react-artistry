@@ -16,8 +16,11 @@ export interface IModalProps extends IGridExternalProps {
     id?: string;
     open: boolean;
     onclose: (event: React.MouseEvent<HTMLElement>) => void;
-    title?: ITemplate;
-    footer?: ITemplate;
+    closeable?: boolean;
+    closeButton?: any;
+    title?: any;
+    header?: any;
+    footer?: any;
     animation?: 'center' | 'top' | 'right' | 'bottom' | 'left';
     lockable?: boolean;
     locked?: boolean;
@@ -131,7 +134,12 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         let {
             animation,
             background,
-            size
+            size,
+            closeable,
+            closeButton,
+            title,
+            header,
+            footer
         } = this.props;
 
         let classNames = this.props.className ? [this.props.className] : [];
@@ -172,24 +180,6 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             });
         }
 
-        if (this.props.title) {
-            var title;
-            if (typeof this.props.title === 'function') {
-                title = this.props.title();
-            } else {
-                title = this.props.title;
-            }
-        }
-
-        if (this.props.footer) {
-            var footer;
-            if (typeof this.props.footer === 'function') {
-                footer = this.props.footer();
-            } else {
-                footer = this.props.footer;
-            }
-        }
-
         let modalContentClassNames = [];
         if (this.props.lockable) {
             modalContentClassNames.push('lock-contents');
@@ -199,9 +189,9 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         }
         if (this.props.space) {
             if (title || footer) {
-                modalContentClassNames.push('modal-body-space');
+                modalContentClassNames.push('modal-space');
             } else {
-                modalContentClassNames.push('modal-content-space');
+                modalContentClassNames.push('modal-space');
             }
         }
 
@@ -211,19 +201,26 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
 
         let modalContentClassName = modalContentClassNames.join(' ');
 
+        let headerSection;
+        if (title || header || closeable) {
+            headerSection = (
+                <div className="modal-header">
+                    <div className="modal-title">{title}</div>
+                    <div className="modal-action">
+                        <Button onClick={this.props.onclose}>Close</Button>
+                    </div>
+                    {header}
+                </div>
+            );
+        }
+
+
         return ReactDOM.createPortal((
             <div className={classNames.join(' ')} id={this.props.id} onTransitionEnd={this.transitionEnd}>
                 <div className="modal-background">
-                    {title || footer ?
+                    {headerSection || footer ?
                         <div className="modal-content" onClick={this.preventClick}>
-                            {title ?
-                                <div className="modal-header">
-                                    <h1 className="modal-title">{title}</h1>
-                                    <div className="modal-action">
-                                        <Button onClick={this.props.onclose}>Close</Button>
-                                    </div>
-                                </div>
-                                : undefined}
+                            {headerSection}
                             <div className={'modal-body ' + modalContentClassName}>{this.props.children}</div>
                             {footer ?
                                 <div className="modal-footer">{footer}</div>
