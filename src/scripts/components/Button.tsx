@@ -28,6 +28,7 @@ export interface IButtonProps extends React.HTMLProps<HTMLButtonElement> {
     link?: boolean;
     noTrigger?: boolean;
     noWrap?: boolean;
+    noFocus?: boolean;
 }
 
 
@@ -131,6 +132,7 @@ export default class Button extends React.Component<IButtonProps, any> {
             link,
             noTrigger,
             noWrap,
+            noFocus,
             onClick,
             ...props
         } = this.props;
@@ -172,6 +174,10 @@ export default class Button extends React.Component<IButtonProps, any> {
 
         if (noWrap) {
             classNames.push('button-nowrap');
+        }
+
+        if (noFocus) {
+            classNames.push('button-no-focus');
         }
 
         // Always set button type
