@@ -65,7 +65,13 @@ export default class ModalView extends React.Component<IModalViewProps, IModalVi
                         <Button onClick={this.openInnerModal}>Open Inner Modal</Button>
                         <Button onClick={this.lockModal}>Lock Modal</Button>
                     </ButtonBar>
-                    <Modal open={this.state.innerModalOpen} onclose={this.closeInnerModal} title="Inner Modal" animation="center">
+                    <Modal
+                        open={this.state.innerModalOpen}
+                        onclose={this.closeInnerModal}
+                        title="Inner Modal"
+                        animation="center"
+                        closeable
+                    >
                         <div>inner test</div>
                     </Modal>
                 </Modal>
