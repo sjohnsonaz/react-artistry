@@ -206,14 +206,17 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             headerSection = (
                 <div className="modal-header">
                     <div className="modal-title">{title}</div>
-                    <div className="modal-action">
-                        <Button onClick={this.props.onclose}>Close</Button>
+                    {closeable ?
+                        <div className="modal-action">
+                            <Button onClick={this.props.onclose}>{closeButton || 'Close'}</Button>
+                        </div> :
+                        null}
+                    <div>
+                        {header}
                     </div>
-                    {header}
                 </div>
             );
         }
-
 
         return ReactDOM.createPortal((
             <div className={classNames.join(' ')} id={this.props.id} onTransitionEnd={this.transitionEnd}>
@@ -221,9 +224,13 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                     {headerSection || footer ?
                         <div className="modal-content" onClick={this.preventClick}>
                             {headerSection}
-                            <div className={'modal-body ' + modalContentClassName}>{this.props.children}</div>
+                            <div className={'modal-body ' + modalContentClassName}>
+                                {this.props.children}
+                            </div>
                             {footer ?
-                                <div className="modal-footer">{footer}</div>
+                                <div className="modal-footer">
+                                    {footer}
+                                </div>
                                 : undefined}
                         </div> :
                         <div className={'modal-content ' + modalContentClassName} onClick={this.preventClick}>
