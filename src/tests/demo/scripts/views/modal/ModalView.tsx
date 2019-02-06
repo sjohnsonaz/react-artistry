@@ -57,6 +57,7 @@ export default class ModalView extends React.Component<IModalViewProps, IModalVi
                     size="small"
                     lockable
                     locked={this.state.modalLock}
+                    closeable
                     space
                 >
                     <div>test</div>

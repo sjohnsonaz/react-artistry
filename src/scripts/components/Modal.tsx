@@ -208,7 +208,12 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                     <div className="modal-title">{title}</div>
                     {closeable ?
                         <div className="modal-action">
-                            <Button onClick={this.props.onclose}>{closeButton || 'Close'}</Button>
+                            <Button
+                                onClick={this.props.onclose}
+                                buttonSize="small"
+                            >
+                                {closeButton || 'Close'}
+                            </Button>
                         </div> :
                         null}
                     <div>
