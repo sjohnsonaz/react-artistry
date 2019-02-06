@@ -70,6 +70,7 @@ export default class ListView extends React.Component<IListViewProps, IListViewS
                                 //onSelectOption={this.onSelectOption}
                                 //onSearch={this.onSearch}
                                 //onClose={this.onClose}
+                                fill
                             />
                         </Cell>
                     </Row>
