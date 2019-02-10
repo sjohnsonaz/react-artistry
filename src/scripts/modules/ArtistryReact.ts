@@ -2,7 +2,7 @@ export { default as BodyScroll } from '../util/BodyScroll';
 export { default as ClassNames } from '../util/ClassNames';
 export { default as DepthStack } from '../util/DepthStack';
 export { default as Portal } from '../util/Portal';
-export { default as AlignType } from '../util/Align';
+export { alignClass, AlignType } from '../util/Align';
 export { default as Button, IButtonProps } from '../components/Button';
 export { default as ButtonGroup, IButtonGroupProps } from '../components/ButtonGroup';
 export { default as ButtonBar, IButtonBarProps } from '../components/ButtonBar';
