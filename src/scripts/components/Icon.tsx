@@ -22,7 +22,7 @@ export default class Icon extends React.Component<IIconProps, any> {
         return (
             <i className="icon">
                 <svg xmlns="http://www.w3.org/2000/svg">
-                    <use href={iconName} />
+                    <use xlinkHref={iconName} />
                 </svg>
             </i>
         );
