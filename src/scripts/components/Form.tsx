@@ -7,8 +7,8 @@ export interface IFormProps extends React.HTMLProps<HTMLFormElement> {
     screenSize?: FormSize;
     lockable?: boolean;
     locked?: boolean;
-    onEnter?: (event: KeyboardEvent) => boolean | void;
-    onEscape?: (event: KeyboardEvent) => boolean | void;
+    onEnter?: (event: KeyboardEvent) => any;
+    onEscape?: (event: KeyboardEvent) => any;
 }
 
 export default class Form extends React.Component<IFormProps, any> {
