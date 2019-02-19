@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Cell, Grid, List, Search, Section, Row } from '../../../../../scripts/modules/ArtistryReact';
+import { Cell, Grid, Icon, List, Search, Section, Row } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface IListViewProps {
 
@@ -71,6 +71,7 @@ export default class ListView extends React.Component<IListViewProps, IListViewS
                                 //onSearch={this.onSearch}
                                 //onClose={this.onClose}
                                 fill
+                                buttonText={<span className="nowrap"><Icon name="search" /> Search</span>}
                             />
                         </Cell>
                     </Row>
