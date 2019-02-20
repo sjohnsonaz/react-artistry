@@ -41,7 +41,7 @@ export default class Cell extends React.Component<ICellProps, any> {
         return <div
             className={classNames.join(' ')}
             id={id}
-            style={{ '--card-min-width': width } as any}
+            style={{ '--col-width': width } as any}
         >
             {this.props.children}
         </div>
