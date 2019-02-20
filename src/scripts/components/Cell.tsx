@@ -9,6 +9,7 @@ export interface ICellProps {
     offset?: number;
     align?: AlignType;
     width?: number | string;
+    leftMargin?: number | string;
 }
 
 export default class Cell extends React.Component<ICellProps, any> {
@@ -19,7 +20,8 @@ export default class Cell extends React.Component<ICellProps, any> {
             columns,
             offset,
             align,
-            width
+            width,
+            leftMargin
         } = this.props;
 
         let classNames = className ? [className] : [];
@@ -37,11 +39,17 @@ export default class Cell extends React.Component<ICellProps, any> {
         if (width && typeof width === 'number') {
             width += 'px' as any;
         }
+        if (leftMargin && typeof leftMargin === 'number') {
+            leftMargin += 'px' as any;
+        }
 
         return <div
             className={classNames.join(' ')}
             id={id}
-            style={{ '--col-width': width } as any}
+            style={{
+                '--col-width': width,
+                '--col-offset': leftMargin
+            } as any}
         >
             {this.props.children}
         </div>
