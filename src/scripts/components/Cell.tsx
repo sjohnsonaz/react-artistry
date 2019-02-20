@@ -36,20 +36,31 @@ export default class Cell extends React.Component<ICellProps, any> {
         if (align) {
             alignClass(align, classNames);
         }
-        if (width && typeof width === 'number') {
-            width += 'px' as any;
+
+        let fixed = false;
+        let style = {};
+        if (width) {
+            if (typeof width === 'number') {
+                width += 'px' as any;
+            }
+            style['--col-width'] = width;
+            fixed = true;
         }
-        if (leftMargin && typeof leftMargin === 'number') {
-            leftMargin += 'px' as any;
+        if (leftMargin) {
+            if (typeof leftMargin === 'number') {
+                leftMargin += 'px' as any;
+            }
+            style['--col-offset'] = width;
+            fixed = true;
+        }
+        if (fixed) {
+            classNames.push('col-fixed');
         }
 
         return <div
             className={classNames.join(' ')}
             id={id}
-            style={{
-                '--col-width': width,
-                '--col-offset': leftMargin
-            } as any}
+            style={style as any}
         >
             {this.props.children}
         </div>
