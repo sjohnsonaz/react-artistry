@@ -28,7 +28,8 @@ export default class CardContainer extends React.Component<ICardContainerProps, 
         }
 
         return (
-            <div className={classNames.join(' ')}
+            <div
+                className={classNames.join(' ')}
                 id={id}
                 style={{ '--card-min-width': width } as any}
             >
