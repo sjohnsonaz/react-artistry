@@ -50,6 +50,7 @@ export { default as Section, ISectionProps } from '../components/Section';
 export { default as Tab, ITabProps } from '../components/Tab';
 export { default as Table, ITableProps } from '../components/Table';
 export { default as TimeInput, ITimeInputProps, ITimeInputState } from '../components/TimeInput';
+export { default as TimePicker, ITimePickerProps, ITimePickerState } from '../components/TimePicker';
 export { default as Thumbnail, IThumbnailProps } from '../components/Thumbnail';
 export { default as Toggle, IToggleProps } from '../components/Toggle';
 export { default as UserThumbnail, IUserThumbnailProps } from '../components/UserThumbnail';

@@ -1,20 +1,20 @@
 import * as React from 'react';
 
-export interface IFormTimePickerProps {
+export interface ITimePickerProps {
     minuteInterval?: number;
     value: Date;
     onChange: (event: React.ChangeEvent<HTMLSelectElement>, date: Date) => any;
     utc?: boolean;
 }
 
-export interface IFormTimePickerState {
+export interface ITimePickerState {
     hours?: number;
     minutes?: number;
     meridiem?: boolean;
 }
 
-export default class FormTimePicker extends React.Component<IFormTimePickerProps, IFormTimePickerState> {
-    constructor(props: IFormTimePickerProps, context: any) {
+export default class TimePicker extends React.Component<ITimePickerProps, ITimePickerState> {
+    constructor(props: ITimePickerProps, context: any) {
         super(props, context);
         let {
             value,
@@ -24,7 +24,7 @@ export default class FormTimePicker extends React.Component<IFormTimePickerProps
         let currentHour = utc ? value.getUTCHours() : value.getHours();
         let currentMinute = utc ? value.getUTCMinutes() : value.getMinutes();
         let currentMeridiem = currentHour > 11 ? true : false;
-        currentHour = ((currentHour - 1) % 12) + 1;
+        currentHour = ((currentHour + 12 - 1) % 12) + 1;
 
         this.state = {
             hours: currentHour,
@@ -94,7 +94,7 @@ export default class FormTimePicker extends React.Component<IFormTimePickerProps
         }
     }
 
-    componentWillReceiveProps(nextProps: IFormTimePickerProps) {
+    componentWillReceiveProps(nextProps: ITimePickerProps) {
         let {
             value,
             utc
