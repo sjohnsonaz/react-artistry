@@ -2,6 +2,7 @@ import * as React from 'react';
 import MaskedInput from './MaskedInput';
 
 export interface IFormInputProps<T = any> extends React.HTMLProps<HTMLInputElement> {
+    number?: boolean;
     fill?: boolean;
     mask?: string;
     model?: T;
@@ -10,9 +11,16 @@ export interface IFormInputProps<T = any> extends React.HTMLProps<HTMLInputEleme
 
 export default class FormInput<T = any> extends React.Component<IFormInputProps<T>, any> {
     onChange = (event?: React.FormEvent<HTMLInputElement>) => {
-        let { model, modelProp } = this.props;
+        let { number, model, modelProp } = this.props;
         if (model && modelProp) {
-            model[modelProp] = (event.target as HTMLInputElement).value as any;
+            let value = (event.target as HTMLInputElement).value;
+            if (number) {
+                value = parseFloat(value) as any;
+            }
+            model[modelProp] = value as any;
+        }
+        if (this.props.onChange) {
+            this.props.onChange(event);
         }
     }
 
