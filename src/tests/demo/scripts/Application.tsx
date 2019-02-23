@@ -24,6 +24,7 @@ import CodeView from './views/code/CodeView';
 import DrawerView from './views/drawer/DrawerView';
 import GridView from './views/grid/GridView';
 import CardView from './views/card/CardView';
+import NotificationView from './views/notification/NotificationView';
 
 export default class Application {
     static run() {
@@ -52,6 +53,7 @@ export default class Application {
                 <CodeView />
                 <GridView />
                 <CardView />
+                <NotificationView />
             </Container>,
             document.getElementById('root'),
         );

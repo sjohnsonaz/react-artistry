@@ -1,6 +1,7 @@
 export { default as BodyScroll } from '../util/BodyScroll';
 export { default as ClassNames } from '../util/ClassNames';
 export { default as DepthStack } from '../util/DepthStack';
+export { default as NotificationUtil, INotification, NotificationType } from '../util/NotificationUtil';
 export { default as Portal } from '../util/Portal';
 export { alignClass, AlignType } from '../util/Align';
 export { default as Button, IButtonProps } from '../components/Button';
@@ -39,6 +40,8 @@ export { default as MenuBarLink, IMenuBarLinkProps } from '../components/MenuBar
 export { default as MenuBarSpacer, IMenuBarSpacerProps } from '../components/MenuBarSpacer';
 export { default as Modal, IModalProps, IModalState, ModalSize } from '../components/Modal';
 export { default as ModalAction, IModalActionProps } from '../components/ModalAction';
+export { default as Notification, INotificationProps } from '../components/Notification';
+export { default as NotificationContainer, INotificationContainerProps, NotificationLocation } from '../components/NotificationContainer';
 export { default as Pager, IPagerProps } from '../components/Pager';
 export { default as Popover, IPopoverProps } from '../components/Popover';
 export { default as ProgressBar, IProgressBarProps } from '../components/ProgressBar';
