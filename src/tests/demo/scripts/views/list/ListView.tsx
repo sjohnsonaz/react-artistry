@@ -1,13 +1,16 @@
 import * as React from 'react';
 
 import { Cell, Grid, Icon, List, Search, Section, Row } from '../../../../../scripts/modules/ArtistryReact';
+import { wait } from '../../../../../scripts/util/PromiseUtil';
 
 export interface IListViewProps {
 
 }
 
 export interface IListViewState {
-    searchValue: string;
+    searchValue?: string;
+    showOptions?: boolean;
+    options?: IListData[];
 }
 
 interface IListData {
@@ -36,21 +39,58 @@ let data: IListData[] = [{
     ingredient: 'Hot Milk',
     quantity: '1/4',
     unit: 'cup'
+}, {
+    ingredient: 'Scallions',
+    quantity: '1/8',
+    unit: 'cup'
+}, {
+    ingredient: 'Cheese',
+    quantity: '1/8',
+    unit: 'cup'
 }];
 
 export default class ListView extends React.Component<IListViewProps, IListViewState> {
     constructor(props: IListViewProps, context: any) {
         super(props, context);
         this.state = {
-            searchValue: ''
+            searchValue: '',
+            showOptions: false,
+            options: []
         };
     }
 
-    onChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             searchValue: event.target.value
         });
+        await wait(1000);
+        this.setState({
+            showOptions: true,
+            options: data
+        });
     }
+
+    onSelectOption = (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLDivElement>, value?: string) => {
+        this.setState({
+            searchValue: value,
+            showOptions: false
+        });
+    }
+
+    onSearch = (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>, value?: string) => {
+        this.setState({
+            searchValue: value,
+            showOptions: false
+        });
+    };
+
+    onClose = (event: React.SyntheticEvent<HTMLElement>) => {
+        this.setState({
+            showOptions: false
+        });
+    }
+
+    altAction?: (option: string) => any;
 
     render() {
         return (
@@ -65,11 +105,12 @@ export default class ListView extends React.Component<IListViewProps, IListViewS
                                     'Option 2',
                                     'Option 3'
                                 ]}
-                                showOptions
-                                onChange={this.onChangeSearch}
-                                //onSelectOption={this.onSelectOption}
-                                //onSearch={this.onSearch}
-                                //onClose={this.onClose}
+                                showOptions={this.state.showOptions}
+                                onChange={this.onChange}
+                                onSelectOption={this.onSelectOption}
+                                onSearch={this.onSearch}
+                                onClose={this.onClose}
+                                altAction={this.altAction}
                                 fill
                                 buttonText={<span className="nowrap"><Icon name="search" /> Search</span>}
                             />
@@ -77,7 +118,7 @@ export default class ListView extends React.Component<IListViewProps, IListViewS
                     </Row>
                 </Grid>
                 <List
-                    data={data}
+                    data={this.state.options}
                     template={item => item.ingredient}
                 />
             </Section>

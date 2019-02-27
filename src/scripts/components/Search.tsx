@@ -12,7 +12,6 @@ export interface ISearchProps {
     disabled?: boolean;
     disabledButton?: boolean;
     disabledInput?: boolean;
-    onBlur?: (event: React.FocusEvent<HTMLInputElement>) => any;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => any;
     onSelectOption?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLDivElement>, value?: string) => any;
     onSearch?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>, value?: string) => any;
@@ -114,9 +113,9 @@ export default class Search extends React.Component<ISearchProps, any> {
         }
     }
 
-    onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-        if (this.props.onBlur) {
-            this.props.onBlur(event);
+    onBlur = async (event: React.FocusEvent<HTMLInputElement>) => {
+        if (this.props.onClose) {
+            this.props.onClose(event);
         }
     }
 
@@ -188,7 +187,7 @@ export default class Search extends React.Component<ISearchProps, any> {
         let classNames = className ? [className] : [];
         classNames.push('search');
 
-        if (options.length && !disabled && !disabledInput) {
+        if (options.length && !disabled && !disabledInput && showOptions) {
             classNames.push('search-open');
         }
 
@@ -216,32 +215,30 @@ export default class Search extends React.Component<ISearchProps, any> {
                         {buttonText || 'Search'}
                     </button>
                 </div>
-                {showOptions ?
-                    <div className="search-option-box">
-                        <ul role="listbox" className="search-option-list">
-                            {!options ? undefined : options.map((option, index) => {
-                                let optionClassName = ['search-option'];
-                                if (index === activeOption) {
-                                    optionClassName.push('search-option-active');
-                                }
-                                return (
-                                    <li className={optionClassName.join(' ')} role="presentation" key={option + '_' + index}>
-                                        <div className="search-option-action" role="option" onClick={this.onSelectOption.bind(this, option, index)}>
-                                            <div className="search-option-action-text">
-                                                <span><b>{option}</b></span>
-                                            </div>
+                <div className="search-option-box">
+                    <ul role="listbox" className="search-option-list">
+                        {!options ? undefined : options.map((option, index) => {
+                            let optionClassName = ['search-option'];
+                            if (index === activeOption) {
+                                optionClassName.push('search-option-active');
+                            }
+                            return (
+                                <li className={optionClassName.join(' ')} role="presentation" key={option + '_' + index}>
+                                    <div className="search-option-action" role="option" onClick={this.onSelectOption.bind(this, option, index)}>
+                                        <div className="search-option-action-text">
+                                            <span><b>{option}</b></span>
                                         </div>
-                                        {altAction && altActionText ?
-                                            <div className="search-option-alt-action" onClick={altAction.bind(this, option)}>
-                                                <div className="search-option-alt-action-text">{altActionText}</div>
-                                            </div> :
-                                            undefined}
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    </div>
-                    : null}
+                                    </div>
+                                    {altAction && altActionText ?
+                                        <div className="search-option-alt-action" onClick={altAction.bind(this, option)}>
+                                            <div className="search-option-alt-action-text">{altActionText}</div>
+                                        </div> :
+                                        undefined}
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
             </div>
         );
     }
