@@ -2,7 +2,7 @@
 
 import Closeable from './Closeable';
 import { IGridExternalProps, gridConfig } from './Grid';
-import {IDisableable, disabledClass } from '../abilities/Disabled';
+import { IDisableable, disabledClass } from '../abilities/Disabled';
 
 export type CardType = 'default' | 'success' | 'info' | 'warning' | 'danger';
 
@@ -35,6 +35,7 @@ export interface ICardProps extends IGridExternalProps, IDisableable {
 
     type?: CardType;
     handle?: CardHandle;
+    square?: boolean;
 
     /** determines whether the card is clickable */
     clickable?: boolean;
@@ -63,6 +64,7 @@ export default class Card extends React.Component<ICardProps, any> {
             navAlign,
             type,
             handle,
+            square,
             grid,
             clickable,
             disabled
@@ -82,6 +84,9 @@ export default class Card extends React.Component<ICardProps, any> {
         }
         if (handle) {
             classNames.push('card-handle-' + handle);
+        }
+        if (square) {
+            classNames.push('card-square');
         }
         if (grid) {
             gridConfig(innerClassNames, this.props);
