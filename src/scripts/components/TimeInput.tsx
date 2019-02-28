@@ -11,52 +11,9 @@ export interface ITimeInputProps<T = any> extends React.HTMLProps<HTMLInputEleme
 }
 
 export interface ITimeInputState {
-    value?: Date;
-    timeString?: string;
 }
 
 export default class TimeInput extends React.Component<ITimeInputProps, ITimeInputState> {
-    constructor(props: ITimeInputProps, context?: any) {
-        super(props, context);
-        let {
-            value,
-            model,
-            modelProp
-        } = this.props;
-
-        let renderedValue: string;
-        if (model && modelProp) {
-            renderedValue = model[modelProp] as any;
-        } else {
-            renderedValue = value as string;
-        }
-        let date = new Date(renderedValue);
-
-        this.state = {
-            value: date,
-            timeString: date.toTimeString()
-        };
-    }
-
-    componentWillReceiveProps(nextProps?: ITimeInputProps) {
-        let {
-            value,
-            model,
-            modelProp
-        } = nextProps;
-        let renderedValue: string;
-        if (model && modelProp) {
-            renderedValue = model[modelProp] as any;
-        } else {
-            renderedValue = value as string;
-        }
-        let date = new Date(renderedValue);
-
-        this.setState({
-            value: date,
-            timeString: date.toTimeString()
-        });
-    }
 
     onChange = (event: React.FormEvent<HTMLInputElement>) => {
         let value = (event.target as any).value;
@@ -89,10 +46,22 @@ export default class TimeInput extends React.Component<ITimeInputProps, ITimeInp
             ...props
         } = this.props;
 
+        let renderedValue: string;
+        if (model && modelProp) {
+            renderedValue = model[modelProp] as any;
+        } else {
+            renderedValue = value as string;
+        }
+        let date = new Date(renderedValue);
+
+        let timeString = date.toTimeString();
+
         let mask: string;
         if (seconds) {
+            timeString = timeString.substr(0, 8);
             mask = '[[0-23]]:[[0-59]]:[[0-59]]';
         } else {
+            timeString = timeString.substr(0, 5);
             mask = '[[0-23]]:[[0-59]]';
         }
 
@@ -108,7 +77,7 @@ export default class TimeInput extends React.Component<ITimeInputProps, ITimeInp
                 {...props as any}
                 className={classNames.join(' ')}
                 mask={mask}
-                value={this.state.timeString}
+                value={timeString}
                 onChange={this.onChange}
             />
         );

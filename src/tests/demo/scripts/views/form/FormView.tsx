@@ -7,7 +7,15 @@ export interface IFormViewProps {
 
 }
 
+export interface IFormViewState {
+    date?: Date;
+}
+
 export default class FormView extends React.Component<IFormViewProps, any> {
+    state: IFormViewState = {
+        date: new Date(Date.now())
+    }
+
     render() {
         return (
             <Section header="Form">
@@ -64,9 +72,12 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                     <FormContainer label="Time Input">
                         <TimeInput
                             fill
-                            value={(new Date(Date.now())).toUTCString()}
+                            value={this.state.date.toUTCString()}
                             onChange={(event, date?: Date) => {
                                 if (date) {
+                                    this.setState({
+                                        date: date
+                                    });
                                     console.log(date);
                                 }
                             }}
@@ -74,10 +85,13 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                     </FormContainer>
                     <FormContainer label="Time Picker">
                         <TimePicker
-                            value={new Date(Date.now())}
+                            value={this.state.date}
                             onChange={(event, date?: Date) => {
                                 event;
                                 if (date) {
+                                    this.setState({
+                                        date: date
+                                    });
                                     console.log(date);
                                 }
                             }}
@@ -87,9 +101,12 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                         <TimeInput
                             fill
                             seconds
-                            value={(new Date(Date.now())).toUTCString()}
+                            value={this.state.date.toUTCString()}
                             onChange={(event, date?: Date) => {
                                 if (date) {
+                                    this.setState({
+                                        date: date
+                                    });
                                     console.log(date);
                                 }
                             }}
