@@ -24,7 +24,7 @@
     "@cascade/diff": "0.0.0"
   },
   "peerDependencies": {
-    "artistry": "^0.7.17",
+    "artistry": "^0.7.18",
     "react": "16.8.3",
     "react-dom": "16.8.3"
   },
@@ -35,7 +35,7 @@
     "@types/mocha": "5.2.6",
     "@types/react": "16.8.5",
     "@types/react-dom": "16.8.2",
-    "artistry": "^0.7.17",
+    "artistry": "^0.7.18",
     "autoprefixer": "9.4.9",
     "chai": "4.2.0",
     "css-loader": "2.1.0",
