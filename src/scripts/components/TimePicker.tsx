@@ -83,24 +83,6 @@ export default class TimePicker extends React.Component<ITimePickerProps, ITimeP
         }
     }
 
-    componentWillReceiveProps(nextProps: ITimePickerProps) {
-        let {
-            value,
-            utc
-        } = nextProps;
-
-        let currentHour = utc ? value.getUTCHours() : value.getHours();
-        let currentMinute = utc ? value.getUTCMinutes() : value.getMinutes();
-        let currentMeridiem = currentHour > 11 ? true : false;
-        currentHour = ((currentHour + 12 - 1) % 12) + 1;
-
-        this.setState({
-            hours: currentHour,
-            minutes: currentMinute,
-            meridiem: currentMeridiem
-        });
-    }
-
     render() {
         let {
             value,

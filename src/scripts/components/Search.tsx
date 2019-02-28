@@ -30,7 +30,7 @@ export interface ISearchState {
     options?: string[];
 }
 
-export default class Search extends React.Component<ISearchProps, any> {
+export default class Search extends React.Component<ISearchProps, ISearchState> {
     private closeHandle: (event: React.SyntheticEvent) => void;
 
     constructor(props: ISearchProps, context: any) {
@@ -47,15 +47,6 @@ export default class Search extends React.Component<ISearchProps, any> {
             value: value,
             options: options
         };
-    }
-
-    componentWillMount() {
-        if (!this.closeHandle) {
-            this.closeHandle = this.onClose.bind(this);
-        }
-        if (this.props.showOptions) {
-            DepthStack.push(this.closeHandle);
-        }
     }
 
     cleanOptions(options: string[], value: string) {
@@ -106,7 +97,7 @@ export default class Search extends React.Component<ISearchProps, any> {
                 break;
             case 40: // Down
                 event.preventDefault();
-                if (!value || !value.trim(0)) {
+                if (!value || !value.trim()) {
                     activeOption = -1;
                 } else {
                     activeOption = this.state.activeOption;
@@ -154,6 +145,15 @@ export default class Search extends React.Component<ISearchProps, any> {
     onClose = (event: React.SyntheticEvent<HTMLElement>) => {
         if (this.props.onClose) {
             this.props.onClose(event);
+        }
+    }
+
+    componentWillMount() {
+        if (!this.closeHandle) {
+            this.closeHandle = this.onClose.bind(this);
+        }
+        if (this.props.showOptions) {
+            DepthStack.push(this.closeHandle);
         }
     }
 
