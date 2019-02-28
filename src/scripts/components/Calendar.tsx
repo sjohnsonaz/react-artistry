@@ -93,6 +93,13 @@ export default class Calendar extends React.Component<ICalendarProps, any> {
         for (let index = -100, length = 200; index <= length; index++) {
             years.push(year + index);
         }
+        if (this.props.date) {
+            var selectedDate: ISelectedDate = {
+                year: this.props.date.getFullYear(),
+                month: this.props.date.getMonth(),
+                date: this.props.date.getDate()
+            };
+        }
         return (
             <div className="calendar">
                 <div className="calendar-title">
@@ -116,10 +123,10 @@ export default class Calendar extends React.Component<ICalendarProps, any> {
                         <select
                             className="select"
                             style={{ flexGrow: 1 }}
-                            value={this.state.month}
+                            value={this.state.month + 1}
                             onChange={(event) => {
                                 this.setState({
-                                    month: parseInt((event.target as any).value)
+                                    month: parseInt((event.target as any).value) - 1
                                 });
                             }}>
                             <option value="1">January</option>
@@ -158,10 +165,10 @@ export default class Calendar extends React.Component<ICalendarProps, any> {
                                         <td colSpan={7 - week.length}></td>
                                         : undefined}
                                     {week.map((day, index, array) => {
-                                        var selected = this.props.date && this.props.date.getTime() === day.getTime();
+                                        var selected = compareDays(selectedDate, day);
                                         return (
-                                            <td className={selected ? 'calendar-day-selected' : undefined} key={this.state.year + ' ' + this.state.month + ' ' + index}>
-                                                <a onClick={this.selectDay.bind(this, day)}>{day.getDate()}</a>
+                                            <td key={this.state.year + ' ' + this.state.month + ' ' + index}>
+                                                <a className={selected ? 'calendar-day-selected' : undefined} onClick={this.selectDay.bind(this, day)}>{day.getDate()}</a>
                                             </td>
                                         );
                                     })}
@@ -175,5 +182,24 @@ export default class Calendar extends React.Component<ICalendarProps, any> {
                 </table>
             </div>
         );
+    }
+}
+
+interface ISelectedDate {
+    year: number;
+    month: number;
+    date: number;
+}
+
+function compareDays(selectedDate: ISelectedDate, date: Date) {
+    if (
+        selectedDate &&
+        selectedDate.year === date.getFullYear() &&
+        selectedDate.month === date.getMonth() &&
+        selectedDate.date === date.getDate()
+    ) {
+        return true;
+    } else {
+        return false;
     }
 }

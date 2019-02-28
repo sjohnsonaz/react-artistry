@@ -5,13 +5,23 @@ import { DatePicker, FormContainer, Section } from '../../../../../scripts/modul
 export interface ICalendarViewProps {
 
 }
-
+export interface ICalendarViewState {
+    date?: Date;
+}
 export default class CalendarView extends React.Component<ICalendarViewProps, any> {
+    state: ICalendarViewState = {
+        date: new Date(Date.now())
+    };
+
     render() {
         return (
             <Section header="Calendar" space>
                 <FormContainer label="Calendar">
-                    <DatePicker date={new Date(Date.now())} onSelect={() => { }} />
+                    <DatePicker date={this.state.date} onSelect={(date) => {
+                        this.setState({
+                            date: date
+                        });
+                    }} />
                 </FormContainer>
             </Section>
         );
