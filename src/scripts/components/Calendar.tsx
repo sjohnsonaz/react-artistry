@@ -117,6 +117,9 @@ export default class Calendar extends React.Component<ICalendarProps, any> {
                 date: this.props.date.getDate()
             };
         }
+        let today = new Date();
+        today.setHours(0, 0, 0, 0);
+        let todayTime = today.getTime();
         return (
             <div className="calendar">
                 <div className="calendar-title">
@@ -183,9 +186,16 @@ export default class Calendar extends React.Component<ICalendarProps, any> {
                                         : undefined}
                                     {week.map((day, index, array) => {
                                         var selected = compareDays(selectedDate, day);
+                                        var current = todayTime === day.getTime();
+                                        let dayClassName = undefined;
+                                        if (selected) {
+                                            dayClassName = 'calendar-day-selected';
+                                        } else if (current) {
+                                            dayClassName = 'calendar-day-current';
+                                        }
                                         return (
                                             <td key={this.state.year + ' ' + this.state.month + ' ' + index}>
-                                                <a className={selected ? 'calendar-day-selected' : undefined} onClick={this.selectDay.bind(this, day)}>{day.getDate()}</a>
+                                                <a className={dayClassName} onClick={this.selectDay.bind(this, day)}>{day.getDate()}</a>
                                             </td>
                                         );
                                     })}

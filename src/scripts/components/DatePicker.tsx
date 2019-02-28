@@ -5,7 +5,7 @@ import ButtonGroup from './ButtonGroup';
 import Input from './FormInput';
 
 import Calendar, { ICalendarProps } from './Calendar';
-import { MaskedInput } from '../modules/ArtistryReact';
+import MaskedInput from './MaskedInput';
 export { Calendar, ICalendarProps };
 
 export interface IDatePickerProps {
