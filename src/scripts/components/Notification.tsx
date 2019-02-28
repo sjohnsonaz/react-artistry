@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { wait } from '../util/PromiseUtil';
-import { NotificationType, INotification } from '../util/NotificationUtil';
+import { INotification } from '../util/NotificationUtil';
 import ClassNames from '../util/ClassNames';
 
 export interface INotificationProps extends INotification {

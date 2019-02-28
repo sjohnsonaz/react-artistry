@@ -10,7 +10,10 @@ export default class ProgressBarView extends React.Component<IProgressBarViewPro
     render() {
         return (
             <Section header="Progress Bar" space>
+                <h3>Default</h3>
                 <ProgressBar value={50} min={0} max={100} decimal={2} decimalFixed showPercentage />
+                <h3>Success</h3>
+                <ProgressBar value={50} min={0} max={100} decimal={2} decimalFixed showPercentage type="success" />
             </Section>
         );
     }

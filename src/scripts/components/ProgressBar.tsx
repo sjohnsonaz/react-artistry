@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+export type ProgressBarType = 'default' | 'success' | 'info' | 'warning' | 'danger';
+
 export interface IProgressBarProps {
     id?: string;
     className?: string;
@@ -9,6 +11,7 @@ export interface IProgressBarProps {
     showPercentage?: boolean;
     decimal?: number;
     decimalFixed?: boolean;
+    type?: ProgressBarType;
 }
 
 export default class ProgressBar extends React.Component<IProgressBarProps, any> {
@@ -21,7 +24,8 @@ export default class ProgressBar extends React.Component<IProgressBarProps, any>
             max,
             showPercentage,
             decimal,
-            decimalFixed
+            decimalFixed,
+            type
         } = this.props;
 
         let classNames = className ? [className] : [];
@@ -45,12 +49,27 @@ export default class ProgressBar extends React.Component<IProgressBarProps, any>
         let percentage = 100 * (value - minOrZero) / (maxOrOne - minOrZero);
         let text = showPercentage ? numberToPercentage(percentage, decimal, decimalFixed) : undefined;
 
+        switch (type) {
+            case 'success':
+                classNames.push('progress-bar-success');
+                break;
+            case 'info':
+                classNames.push('progress-bar-info');
+                break;
+            case 'warning':
+                classNames.push('progress-bar-warning');
+                break;
+            case 'danger':
+                classNames.push('progress-bar-danger');
+                break;
+        }
+
         let style = { "--progress-bar-progress": percentage + '%' };
 
         return (
             <div
+                id={id}
                 className={classNames.join(' ')}
-                id={this.props.id}
                 role="progressbar"
                 aria-valuenow={value}
                 aria-valuemin={min}
