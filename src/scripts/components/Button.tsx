@@ -48,7 +48,7 @@ export default class Button extends React.Component<IButtonProps, any> {
 
     onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (this.props.onClick) {
-            if (this.props.popover) {
+            if (this.props.popover && !this.props.popoverOpen) {
                 event.stopPropagation();
             }
             this.props.onClick(event);
