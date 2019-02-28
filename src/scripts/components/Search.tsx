@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import DepthStack from '../util/DepthStack';
+
 export interface ISearchProps {
     id?: string;
     className?: string;
@@ -26,6 +28,8 @@ export interface ISearchState {
 }
 
 export default class Search extends React.Component<ISearchProps, any> {
+    private closeHandle: (event: React.SyntheticEvent) => void;
+
     constructor(props: ISearchProps, context: any) {
         super(props, context);
         let {
@@ -40,6 +44,15 @@ export default class Search extends React.Component<ISearchProps, any> {
             value: value,
             options: options
         };
+    }
+
+    componentWillMount() {
+        if (!this.closeHandle) {
+            this.closeHandle = this.onClose.bind(this);
+        }
+        if (this.props.showOptions) {
+            DepthStack.push(this.closeHandle);
+        }
     }
 
     cleanOptions(options: string[], value: string) {
@@ -113,12 +126,6 @@ export default class Search extends React.Component<ISearchProps, any> {
         }
     }
 
-    onBlur = async (event: React.FocusEvent<HTMLInputElement>) => {
-        if (this.props.onClose) {
-            this.props.onClose(event);
-        }
-    }
-
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (this.props.onChange) {
             this.props.onChange(event);
@@ -150,17 +157,31 @@ export default class Search extends React.Component<ISearchProps, any> {
     componentWillReceiveProps(nextProps: ISearchProps) {
         let {
             value,
-            options
+            options,
+            showOptions
         } = nextProps;
         options = this.cleanOptions(options, value);
         this.setState({
             value: value,
             options: options
         });
+        if (showOptions !== this.props.showOptions) {
+            if (showOptions) {
+                DepthStack.push(this.closeHandle);
+            } else {
+                DepthStack.remove(this.closeHandle);
+            }
+        }
         if (value !== this.props.value) {
             this.setState({
                 activeOption: -1
             });
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.props.showOptions) {
+            DepthStack.remove(this.closeHandle);
         }
     }
 
@@ -187,8 +208,9 @@ export default class Search extends React.Component<ISearchProps, any> {
         let classNames = className ? [className] : [];
         classNames.push('search');
 
+        let open: string = undefined;
         if (options.length && !disabled && !disabledInput && showOptions) {
-            classNames.push('search-open');
+            open = "true";
         }
 
         let inputClassNames = ['input', 'search-input'];
@@ -197,13 +219,16 @@ export default class Search extends React.Component<ISearchProps, any> {
         }
 
         return (
-            <div id={id} className={classNames.join(' ')}>
+            <div
+                id={id}
+                className={classNames.join(' ')}
+                data-open={open}
+            >
                 <div className="button-group search-button-group">
                     <input
                         className={inputClassNames.join(' ')}
                         onKeyDown={this.onKeyDown}
                         onChange={this.onChange}
-                        onBlur={this.onBlur}
                         value={value}
                         disabled={disabled || disabledInput}
                     />
