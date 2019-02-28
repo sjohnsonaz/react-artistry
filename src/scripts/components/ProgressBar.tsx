@@ -1,35 +1,87 @@
 import * as React from 'react';
 
 export interface IProgressBarProps {
-    className?: string;
     id?: string;
-    value: number;
-    title?: any;
+    className?: string;
+    value?: number;
+    min?: number;
+    max?: number;
+    decimal?: number;
+    decimalFixed?: boolean;
 }
 
 export default class ProgressBar extends React.Component<IProgressBarProps, any> {
     render() {
-        let classNames = this.props.className ? [this.props.className] : [];
+        let {
+            id,
+            className,
+            value,
+            min,
+            max,
+            decimal,
+            decimalFixed
+        } = this.props;
+
+        let classNames = className ? [className] : [];
         classNames.push('progress-bar');
-        classNames.push('progress-bar-content')
-
-        let value = this.props.value;
-        if (value < 0) {
-            value = 0;
+        if (this.props.children) {
+            classNames.push('progress-bar-content');
         }
-        if (value > 100) {
-            value = 100;
-        }
-        let style = { "--progress-bar-progress": value + '%' };
 
-        let title = this.props.title || value + '%'
+        min = parseNumber(min);
+        max = parseNumber(max);
+        let minOrZero = min || 0;
+        let maxOrOne = max || 1;
+
+        if (value < minOrZero) {
+            value = minOrZero;
+        }
+        if (value > maxOrOne) {
+            value = maxOrOne;
+        }
+
+        let percentage = 100 * (value - minOrZero) / (maxOrOne - minOrZero);
+
+        let style = { "--progress-bar-progress": percentage + '%' };
 
         return (
-            <div className={classNames.join(' ')} id={this.props.id}>
-                <div style={style as any}>
-                    {title}
-                </div>
+            <div
+                className={classNames.join(' ')}
+                id={this.props.id}
+                role="progressbar"
+                aria-valuenow={value}
+                aria-valuemin={min}
+                aria-valuemax={max}
+                aria-valuetext={numberToPercentage(percentage, decimal, decimalFixed)}
+                style={style as any}
+            >
+                {this.props.children ?
+                    <div>
+                        {this.props.children}
+                    </div> :
+                    undefined}
             </div>
         );
+    }
+}
+
+function parseNumber(value: string | number) {
+    if (typeof value === 'number') {
+        return value;
+    } else {
+        value = parseFloat(value);
+        if (!isNaN(value) && isFinite(value)) {
+            return value;
+        } else {
+            return undefined;
+        }
+    }
+}
+
+function numberToPercentage(value: number, decimals: number, fixed: boolean) {
+    if (fixed || !Number.isInteger(value)) {
+        return value.toFixed(decimals || 0) + '%';
+    } else {
+        return value + '%';
     }
 }
