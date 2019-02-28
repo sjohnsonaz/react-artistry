@@ -5,6 +5,7 @@ import ButtonGroup from './ButtonGroup';
 import Input from './FormInput';
 
 import Calendar, { ICalendarProps } from './Calendar';
+import { MaskedInput } from '../modules/ArtistryReact';
 export { Calendar, ICalendarProps };
 
 export interface IDatePickerProps {
@@ -19,6 +20,14 @@ export default class DatePicker extends React.Component<IDatePickerProps, any>{
         this.props.onSelect(date);
     }
 
+    onChange = (event: React.FormEvent<HTMLInputElement>) => {
+        let value = (event.target as any).value;
+        let output = new Date(value);
+        if (!isNaN(output.getTime())) {
+            this.props.onSelect(output);
+        }
+    }
+
     render() {
         var date: Date;
         if (!(this.props.date instanceof Date)) {
@@ -26,15 +35,17 @@ export default class DatePicker extends React.Component<IDatePickerProps, any>{
         } else {
             date = this.props.date as Date;
         }
+
         return (
             <ButtonGroup
                 fill={this.props.fill}
                 className="popover-trigger"
             >
-                <Input
+                <MaskedInput
+                    mask={'[[0-12]]/[[0-31]]/[[0-9999]]'}
                     value={getDateFormatted(date)}
                     fill={this.props.fill}
-                    onChange={() => { }}
+                    onChange={this.onChange}
                 />
                 <Button
                     link

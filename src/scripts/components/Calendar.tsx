@@ -86,6 +86,23 @@ export default class Calendar extends React.Component<ICalendarProps, any> {
         return weeks;
     }
 
+    componentWillReceiveProps(nextProps: ICalendarProps): void {
+        if (nextProps.date) {
+            let year = nextProps.date.getFullYear();
+            let month = nextProps.date.getMonth();
+            if (
+                !this.props.date ||
+                this.props.date.getFullYear() !== year ||
+                this.props.date.getMonth() !== month
+            ) {
+                this.setState({
+                    year: year,
+                    month: month
+                });
+            }
+        }
+    }
+
     render() {
         var weeks = this.getWeeks(this.state.year, this.state.month);
         let years = [];

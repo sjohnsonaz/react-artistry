@@ -5,8 +5,9 @@ export interface IMaskedInputProps<T> extends React.HTMLProps<HTMLInputElement> 
     id?: string;
     className?: string;
     mask: string;
-    onChange?: (event: React.FormEvent<HTMLInputElement>) => (void | boolean);
     value?: any;
+    fill?: boolean;
+    onChange?: (event: React.FormEvent<HTMLInputElement>) => (void | boolean);
 }
 
 export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>, any> {
@@ -211,12 +212,17 @@ export default class MaskedInput<T> extends React.Component<IMaskedInputProps<T>
             id,
             className,
             value,
+            fill,
             onChange,
             ...props
         } = this.props;
 
         let classNames = this.props.className ? [this.props.className] : [];
         classNames.push('input');
+
+        if (fill) {
+            classNames.push('fill-width');
+        }
 
         return (
             <input
