@@ -73,13 +73,17 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                         <TimeInput
                             fill
                             value={this.state.date.toUTCString()}
-                            onChange={(event, date?: Date) => {
-                                if (date) {
-                                    this.setState({
-                                        date: date
-                                    });
-                                    console.log(date);
+                            onChange={(event) => {
+                                let value = (event.target as any).value;
+                                let date = new Date(this.state.date);
+                                let parts = value.split(':').map(part => parseInt(part));
+                                if (parts) {
+                                    date.setHours(parts[0], parts[1]);
                                 }
+                                this.setState({
+                                    date: date
+                                });
+                                console.log(date);
                             }}
                         />
                     </FormContainer>
@@ -102,13 +106,17 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                             fill
                             seconds
                             value={this.state.date.toUTCString()}
-                            onChange={(event, date?: Date) => {
-                                if (date) {
-                                    this.setState({
-                                        date: date
-                                    });
-                                    console.log(date);
+                            onChange={(event) => {
+                                let value = (event.target as any).value;
+                                let date = new Date(this.state.date);
+                                let parts = value.split(':').map(part => parseInt(part));
+                                if (parts) {
+                                    date.setHours(parts[0], parts[1], parts[2]);
                                 }
+                                this.setState({
+                                    date: date
+                                });
+                                console.log(date);
                             }}
                         />
                     </FormContainer>
