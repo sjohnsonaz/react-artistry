@@ -2,7 +2,6 @@ import * as React from 'react';
 import MaskedInput from './MaskedInput';
 
 export interface ITimeInputProps<T = any> extends React.HTMLProps<HTMLInputElement> {
-    onChange?: (event: React.FormEvent<HTMLInputElement>) => (void | boolean);
     seconds?: boolean;
     value?: string;
     fill?: boolean;
