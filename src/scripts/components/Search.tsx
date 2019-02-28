@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import DepthStack from '../util/DepthStack';
 
+export type SearchSize = 'default' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
+
 export interface ISearchProps {
     id?: string;
     className?: string;
@@ -14,6 +16,7 @@ export interface ISearchProps {
     disabled?: boolean;
     disabledButton?: boolean;
     disabledInput?: boolean;
+    size?: SearchSize;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => any;
     onSelectOption?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLDivElement>, value?: string) => any;
     onSearch?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>, value?: string) => any;
@@ -196,7 +199,8 @@ export default class Search extends React.Component<ISearchProps, any> {
             fill,
             disabled,
             disabledButton,
-            disabledInput
+            disabledInput,
+            size
         } = this.props;
 
         let {
@@ -216,6 +220,24 @@ export default class Search extends React.Component<ISearchProps, any> {
         let inputClassNames = ['input', 'search-input'];
         if (fill) {
             inputClassNames.push('fill-width');
+        }
+
+        switch (size) {
+            case 'x-small':
+                classNames.push('search-xs');
+                break;
+            case 'small':
+                classNames.push('search-sm');
+                break;
+            case 'medium':
+                classNames.push('search-md');
+                break;
+            case 'large':
+                classNames.push('search-lg');
+                break;
+            case 'x-large':
+                classNames.push('search-xl');
+                break;
         }
 
         return (
