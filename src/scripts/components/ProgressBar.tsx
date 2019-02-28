@@ -6,6 +6,7 @@ export interface IProgressBarProps {
     value?: number;
     min?: number;
     max?: number;
+    showPercentage?: boolean;
     decimal?: number;
     decimalFixed?: boolean;
 }
@@ -18,6 +19,7 @@ export default class ProgressBar extends React.Component<IProgressBarProps, any>
             value,
             min,
             max,
+            showPercentage,
             decimal,
             decimalFixed
         } = this.props;
@@ -41,6 +43,7 @@ export default class ProgressBar extends React.Component<IProgressBarProps, any>
         }
 
         let percentage = 100 * (value - minOrZero) / (maxOrOne - minOrZero);
+        let text = showPercentage ? numberToPercentage(percentage, decimal, decimalFixed) : undefined;
 
         let style = { "--progress-bar-progress": percentage + '%' };
 
@@ -52,7 +55,7 @@ export default class ProgressBar extends React.Component<IProgressBarProps, any>
                 aria-valuenow={value}
                 aria-valuemin={min}
                 aria-valuemax={max}
-                aria-valuetext={numberToPercentage(percentage, decimal, decimalFixed)}
+                aria-valuetext={text}
                 style={style as any}
             >
                 {this.props.children ?
