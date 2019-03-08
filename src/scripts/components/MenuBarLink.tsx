@@ -7,9 +7,16 @@ export interface IMenuBarLinkProps {
     href?: string;
     active?: boolean;
     noLink?: boolean;
+    onClick?: (event: React.MouseEvent<HTMLElement>) => any;
 }
 
 export default class MenuBarLink extends React.Component<IMenuBarLinkProps, any> {
+    onClick = (event: React.MouseEvent<HTMLElement>) => {
+        if (this.props.onClick) {
+            this.props.onClick(event);
+        }
+    }
+
     render() {
         let classNames = this.props.className ? [this.props.className] : [];
         classNames.push('menu-link');
@@ -19,8 +26,17 @@ export default class MenuBarLink extends React.Component<IMenuBarLinkProps, any>
         return (
             <li className={classNames.join(' ')} id={this.props.id}>
                 {!this.props.noLink ?
-                    <a href={this.props.href || ''}>{this.props.title}</a> :
-                    <span>{this.props.title}</span>}
+                    <a
+                        href={this.props.href || ''}
+                        onClick={this.onClick}
+                    >
+                        {this.props.title}
+                    </a> :
+                    <span
+                        onClick={this.onClick}
+                    >
+                        {this.props.title}
+                    </span>}
             </li>
         );
     }
