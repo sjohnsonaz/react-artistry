@@ -2,7 +2,7 @@ import * as React from 'react';
 
 export interface IModalActionProps {
     id?: string;
-    className: string;
+    className?: string;
 }
 
 export default class ModalAction extends React.Component<IModalActionProps, any> {
