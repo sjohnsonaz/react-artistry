@@ -12,7 +12,7 @@ export default class ModalAction extends React.Component<IModalActionProps, any>
             className
         } = this.props;
         let classNames = className ? [className] : [];
-        classNames.push('modal');
+        classNames.push('modal-action');
 
         return (
             <div className={classNames.join(' ')} id={id}>
