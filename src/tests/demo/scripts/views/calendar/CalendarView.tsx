@@ -10,7 +10,7 @@ export interface ICalendarViewState {
 }
 export default class CalendarView extends React.Component<ICalendarViewProps, any> {
     state: ICalendarViewState = {
-        date: new Date(Date.now())
+        date: undefined
     };
 
     render() {
