@@ -15,6 +15,7 @@ export interface IDrawerProps extends IGridExternalProps {
     full?: boolean;
     onClose: (event: React.MouseEvent<HTMLDivElement>) => void;
     background?: boolean;
+    space?: boolean;
 }
 
 export interface IDrawerState {
@@ -120,8 +121,8 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
             id,
             direction,
             full,
-            onClose,
-            background
+            background,
+            space
         } = this.props;
 
         let classNames = className ? [className] : [];
@@ -134,12 +135,16 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
             classNames.push('drawer-open');
         }
 
+        if (full) {
+            classNames.push('drawer-full');
+        }
+
         if (background) {
             classNames.push('drawer-background');
         }
 
-        if (full) {
-            classNames.push('drawer-full');
+        if (space) {
+            classNames.push('drawer-space');
         }
 
         let innerClassNames = ['drawer-content'];
