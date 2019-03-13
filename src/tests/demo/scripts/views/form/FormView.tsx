@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Form, FormAction, FormContainer, FormDivider, FormInput, FormText, Section, TimePicker } from '../../../../../scripts/modules/ArtistryReact';
+import { Button, Form, FormAction, FormContainer, FormDivider, FormInput, FormText, Section, TimePicker, AmountInput } from '../../../../../scripts/modules/ArtistryReact';
 import TimeInput from '../../../../../scripts/components/TimeInput';
 
 export interface IFormViewProps {
@@ -119,6 +119,9 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                                 console.log(date);
                             }}
                         />
+                    </FormContainer>
+                    <FormContainer label="Amount" nonLabel>
+                        <AmountInput />
                     </FormContainer>
                     <FormDivider />
                     <FormAction>
