@@ -9,11 +9,13 @@ export interface IFormViewProps {
 
 export interface IFormViewState {
     date?: Date;
+    amount: number;
 }
 
 export default class FormView extends React.Component<IFormViewProps, any> {
     state: IFormViewState = {
-        date: new Date(Date.now())
+        date: new Date(Date.now()),
+        amount: 0
     }
 
     render() {
@@ -121,7 +123,11 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                         />
                     </FormContainer>
                     <FormContainer label="Amount" nonLabel>
-                        <AmountInput />
+                        <AmountInput value={this.state.amount} minimum={1} maximum={10} onChange={(value) => {
+                            this.setState({
+                                amount: value
+                            });
+                        }} />
                     </FormContainer>
                     <FormDivider />
                     <FormAction>
