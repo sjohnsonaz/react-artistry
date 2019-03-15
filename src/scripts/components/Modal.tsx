@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { ITemplate } from './ITemplate';
 import Button from './Button';
 import { IGridExternalProps, gridConfig } from './Grid';
 import BodyScroll from '../util/BodyScroll';

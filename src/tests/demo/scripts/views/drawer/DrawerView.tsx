@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Form, ActionBar, FormContainer, Drawer, Section } from '../../../../../scripts/modules/ArtistryReact';
+import { ActionBar, Button, Drawer, Divider, Form, FormContainer, Section, } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface IDrawerViewProps {
 
@@ -38,6 +38,7 @@ export default class DrawerView extends React.Component<IDrawerViewProps, IDrawe
                         <FormContainer label="Input">
                             <input className="input" />
                         </FormContainer>
+                        <Divider />
                         <ActionBar>
                             <Button theme="primary">OK</Button>
                         </ActionBar>

@@ -32,7 +32,7 @@ export default class SectionView extends React.Component<ISectionViewProps, ISec
 
     render() {
         return (
-            <Section header="Section" space lockable closeable locked={this.state.locked} closed={this.state.closed} onClose={this.close}>
+            <Section header="Section" space headerSpace lockable closeable locked={this.state.locked} closed={this.state.closed} onClose={this.close}>
                 Section Content<br />
                 <Button onClick={this.lockContents}>Lock</Button>
             </Section>

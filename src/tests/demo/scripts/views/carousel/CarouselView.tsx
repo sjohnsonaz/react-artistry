@@ -28,7 +28,7 @@ export default class CarouselView extends React.Component<ICarouselViewProps, an
 
     render() {
         return (
-            <Section header="Carousel">
+            <Section header="Carousel" headerSpace>
                 <div className="space">
                     <Button onClick={this.backCarouselSlide}>Back</Button>
                     <Button onClick={this.nextCarouselSlide}>Next</Button>
