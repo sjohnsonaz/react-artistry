@@ -9,7 +9,7 @@ export interface IButtonProps extends React.HTMLProps<HTMLButtonElement> {
     className?: string;
     type?: 'button' | 'submit' | 'reset';
     theme?: 'default' | 'primary' | 'danger';
-    buttonSize?: 'default' | 'small' | 'large';
+    displaySize?: 'default' | 'small' | 'large';
     display?: 'default' | 'textonly' | 'outline';
     fill?: boolean;
     tooltip?: string;
@@ -113,7 +113,7 @@ export default class Button extends React.Component<IButtonProps, any> {
             className,
             type,
             theme,
-            buttonSize,
+            displaySize,
             display,
             fill,
             down,
@@ -150,7 +150,7 @@ export default class Button extends React.Component<IButtonProps, any> {
                 break;
         }
 
-        switch (buttonSize) {
+        switch (displaySize) {
             case 'small':
                 classNames.push('button-small');
                 break;

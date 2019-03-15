@@ -15,7 +15,7 @@ export default class CalendarView extends React.Component<ICalendarViewProps, an
 
     render() {
         return (
-            <Section header="Calendar" space>
+            <Section header="Calendar" space headerSpace>
                 <FormContainer label="Calendar">
                     <DatePicker date={this.state.date} onSelect={(date) => {
                         this.setState({

@@ -12,6 +12,8 @@ export interface ISectionProps extends React.HTMLProps<HTMLElement>, IGridExtern
     closeable?: boolean;
     closed?: boolean;
     space?: boolean;
+    headerSpace?: boolean;
+    footerSpace?: boolean;
     relative?: boolean;
     grid?: boolean;
     onClose?: (closed: boolean) => void;
@@ -147,6 +149,8 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
             lockable,
             locked,
             space,
+            headerSpace,
+            footerSpace,
             relative,
             grid,
             gridColumns,
@@ -194,7 +198,10 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
                 style={{ height: this.state.height }}
                 ref={this.root}
             >
-                <header ref={this.header}>
+                <header
+                    ref={this.header}
+                    className={headerSpace ? 'section-title' : undefined}
+                >
                     {header}
                     {closeable ?
                         <Button className="section-toggle" onClick={this.close}>-</Button>
@@ -202,8 +209,12 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
                 </header>
                 <div className={innerClassNames.join(' ')} ref={this.content}>{this.props.children}</div>
                 {footer ?
-                    <footer>{footer}</footer> :
-                    null}
+                    <footer
+                        className={footerSpace ? 'section-title' : undefined}
+                    >
+                        {footer}
+                    </footer> :
+                    undefined}
             </section>
         );
     }

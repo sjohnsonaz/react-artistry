@@ -35,7 +35,7 @@ export default class CardView extends React.Component<ICardViewProps, ICardViewS
 
     render() {
         return (
-            <Section header="Card" space>
+            <Section header="Card" space headerSpace>
                 <h3>Card</h3>
                 <CardContainer>
                     <VerticalCard />

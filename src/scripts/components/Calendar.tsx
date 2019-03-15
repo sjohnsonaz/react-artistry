@@ -126,7 +126,7 @@ export default class Calendar extends React.Component<ICalendarProps, any> {
                     <ButtonGroup>
                         <Button onClick={this.decreaseYear}>-</Button>
                         <select
-                            className="select"
+                            className="input"
                             style={{ flexGrow: 1 }}
                             value={this.state.year}
                             onChange={(event) => {
@@ -141,7 +141,7 @@ export default class Calendar extends React.Component<ICalendarProps, any> {
                     <ButtonGroup>
                         <Button onClick={this.decreaseMonth}>-</Button>
                         <select
-                            className="select"
+                            className="input"
                             style={{ flexGrow: 1 }}
                             value={this.state.month + 1}
                             onChange={(event) => {

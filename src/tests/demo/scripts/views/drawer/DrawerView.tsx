@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Form, FormAction, FormContainer, Drawer, Section } from '../../../../../scripts/modules/ArtistryReact';
+import { Button, Form, ActionBar, FormContainer, Drawer, Section } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface IDrawerViewProps {
 
@@ -28,7 +28,7 @@ export default class DrawerView extends React.Component<IDrawerViewProps, IDrawe
 
     render() {
         return (
-            <Section header="Drawer" space>
+            <Section header="Drawer" space headerSpace>
                 <Button onClick={this.openDrawer}>Open Drawer</Button>
                 <Drawer open={this.state.drawerOpen} onClose={this.closeDrawer}>
                     <Button onClick={this.closeDrawer} className="pull-right">Close</Button>
@@ -38,9 +38,9 @@ export default class DrawerView extends React.Component<IDrawerViewProps, IDrawe
                         <FormContainer label="Input">
                             <input className="input" />
                         </FormContainer>
-                        <FormAction>
+                        <ActionBar>
                             <Button theme="primary">OK</Button>
-                        </FormAction>
+                        </ActionBar>
                     </Form>
                 </Drawer>
             </Section>

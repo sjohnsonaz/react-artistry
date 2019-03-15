@@ -1,15 +1,16 @@
 import * as React from 'react';
 import MaskedInput from './MaskedInput';
 
-export interface IFormInputProps<T = any> extends React.HTMLProps<HTMLInputElement> {
+export interface IInputProps<T = any> extends React.HTMLProps<HTMLInputElement> {
     number?: boolean;
     fill?: boolean;
     mask?: string;
     model?: T;
     modelProp?: keyof T;
+    displaySize?: 'default' | 'small' | 'large';
 }
 
-export default class FormInput<T = any> extends React.Component<IFormInputProps<T>, any> {
+export default class Input<T = any> extends React.Component<IInputProps<T>, any> {
     onChange = (event?: React.FormEvent<HTMLInputElement>) => {
         let { number, model, modelProp } = this.props;
         if (model && modelProp) {
@@ -33,6 +34,7 @@ export default class FormInput<T = any> extends React.Component<IFormInputProps<
             mask,
             model,
             modelProp,
+            displaySize,
             onChange,
             ...props
         } = this.props;
@@ -48,6 +50,15 @@ export default class FormInput<T = any> extends React.Component<IFormInputProps<
 
         if (fill) {
             classNames.push('fill-width');
+        }
+
+        switch (displaySize) {
+            case 'small':
+                classNames.push('input-small');
+                break;
+            case 'large':
+                classNames.push('input-large');
+                break;
         }
 
         if (mask) {

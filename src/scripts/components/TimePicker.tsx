@@ -102,21 +102,21 @@ export default class TimePicker extends React.Component<ITimePickerProps, ITimeP
         return (
             <span>
                 <select
-                    className="select"
+                    className="input"
                     value={state.hours}
                     onChange={this.onChangeHour}
                 >
                     {hours.map((hour) => <option value={hour} key={hour}>{prependZero(hour)}</option>)}
                 </select>
                 <select
-                    className="select"
+                    className="input"
                     value={state.minutes}
                     onChange={this.onChangeMinute}
                 >
                     {minutes.map((minute) => <option value={minute} key={minute}>{prependZero(minute)}</option>)}
                 </select>
                 <select
-                    className="select"
+                    className="input"
                     value={state.meridiem ? 'PM' : 'AM'}
                     onChange={this.onChangeMeridiem}
                 >

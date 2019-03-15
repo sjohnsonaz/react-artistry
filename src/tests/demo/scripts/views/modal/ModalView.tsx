@@ -47,7 +47,7 @@ export default class ModalView extends React.Component<IModalViewProps, IModalVi
 
     render() {
         return (
-            <Section header="Modal" space>
+            <Section header="Modal" space headerSpace>
                 <Button onClick={this.openModal}>Open Modal</Button>
                 <Modal
                     open={this.state.modalOpen}

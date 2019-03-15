@@ -80,7 +80,7 @@ export default class NotificationView extends React.Component<INotificationViewP
 
     render() {
         return (
-            <Section header="Notification" space>
+            <Section header="Notification" space headerSpace>
                 <Button onClick={this.pushDefault}>Push Default</Button>
                 <Button onClick={this.pushSuccess}>Push Success</Button>
                 <Button onClick={this.pushInfo}>Push Info</Button>

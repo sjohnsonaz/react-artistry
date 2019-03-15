@@ -37,7 +37,7 @@ export default class ButtonView extends React.Component<IButtonViewProps, IButto
 
     render() {
         return (
-            <Section header="Buttons" space>
+            <Section header="Buttons" space headerSpace>
                 <h3>Individual Buttons</h3>
                 <div>
                     <Button>Edit</Button>{' '}
@@ -61,9 +61,9 @@ export default class ButtonView extends React.Component<IButtonViewProps, IButto
 
                 <h3>Button Sizes</h3>
                 <div>
-                    <Button buttonSize="small">Small</Button>{' '}
+                    <Button displaySize="small">Small</Button>{' '}
                     <Button>Medium</Button>{' '}
-                    <Button buttonSize="large">Large</Button>
+                    <Button displaySize="large">Large</Button>
                 </div>
 
                 <h3>Disabled Buttons</h3>

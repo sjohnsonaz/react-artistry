@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Button from './Button';
 import ButtonGroup from './ButtonGroup';
-import FormInput from './FormInput';
+import Input from './Input';
 import Icon from './Icon';
 
 export enum RoundingType {
@@ -251,7 +251,7 @@ export default class AmountInput extends React.Component<IAmountInputProps, IAmo
                     {decrementIconFull}
                     {decrementText}
                 </Button>
-                <FormInput
+                <Input
                     value={this.state.value}
                     onChange={this.change}
                     disabled={disableInput || disabled}
