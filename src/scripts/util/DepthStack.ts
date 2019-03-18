@@ -40,9 +40,10 @@ export default class DepthStack {
                     break;
             }
         });
-        window.addEventListener('click', (event: MouseEvent) => {
+        // Use onclick for iOS Safari
+        window.onclick = (event: MouseEvent) => {
             // TODO: Fix this
             this.close(event as any);
-        });
+        };
     }
 }
