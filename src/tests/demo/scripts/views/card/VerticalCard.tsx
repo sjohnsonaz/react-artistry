@@ -34,7 +34,6 @@ export default class VerticalCard extends React.Component<IVerticalCardProps, IV
             <Card
                 header={<span>Card Content</span>}
                 nav={<Button onClick={this.toggleClosed}>Expand</Button>}
-                navAlign="end"
                 grid
             >
                 <Row>

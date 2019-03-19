@@ -30,9 +30,6 @@ export interface ICardProps extends IGridExternalProps, IDisableable {
     /** JSX to display in the nav section */
     nav?: any;
 
-    /** determines the direction the nav section should be aligned */
-    navAlign?: 'start' | 'end';
-
     type?: CardType;
     handle?: CardHandle;
     square?: boolean;
@@ -61,7 +58,6 @@ export default class Card extends React.Component<ICardProps, any> {
             space,
             fill,
             nav,
-            navAlign,
             type,
             handle,
             square,
@@ -102,7 +98,7 @@ export default class Card extends React.Component<ICardProps, any> {
                 <div className={innerClassNames.join(' ')}>
                     {this.props.children}
                 </div>
-                {nav ? <nav className={navAlign === 'end' ? 'card-nav-align-end' : ''}>{nav}</nav> : null}
+                {nav ? <nav className='card-nav'>{nav}</nav> : null}
                 {footer ? <footer>{footer}</footer> : null}
             </div>
         );
