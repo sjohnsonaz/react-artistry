@@ -23,33 +23,40 @@ export enum ScrollableTypeEnum {
     yNever = "yNever"
 }
 
-export interface IScrollableProps {
+export interface IScrollableExternalProps {
+    buffer?: number;
+    onScroll?: (event?: React.UIEvent<HTMLElement>) => void;
+    onTop?: (event?: React.UIEvent<HTMLElement>) => void;
+    onRight?: (event?: React.UIEvent<HTMLElement>) => void;
+    onBottom?: (event?: React.UIEvent<HTMLElement>) => any
+    onLeft?: (event?: React.UIEvent<HTMLElement>) => void;
+}
+
+export interface IScrollableProps extends IScrollableExternalProps {
     id?: string;
     className?: string;
     type?: ScrollableType;
-    buffer?: number;
     height?: number | string;
-    onScroll?: (event?: React.UIEvent<HTMLDivElement>) => void;
-    onTop?: (event?: React.UIEvent<HTMLDivElement>) => void;
-    onRight?: (event?: React.UIEvent<HTMLDivElement>) => void;
-    onBottom?: (event?: React.UIEvent<HTMLDivElement>) => any
-    onLeft?: (event?: React.UIEvent<HTMLDivElement>) => void;
+}
+
+export function scrollHandler(props: IScrollableExternalProps, event: React.UIEvent<HTMLElement>) {
+    let element = event.currentTarget;
+
+    let buffer = props.buffer || 0;
+    if (props.onBottom) {
+        if (element.scrollTop + element.clientHeight + buffer >= element.scrollHeight) {
+            props.onBottom(event);
+        }
+    }
+
+    if (props.onScroll) {
+        props.onScroll(event);
+    }
 }
 
 export default class Scrollable extends React.Component<IScrollableProps, any> {
     onScroll = (event: React.UIEvent<HTMLDivElement>) => {
-        let element = event.currentTarget;
-
-        let buffer = this.props.buffer || 0;
-        if (this.props.onBottom) {
-            if (element.scrollTop + element.clientHeight + buffer >= element.scrollHeight) {
-                this.props.onBottom(event);
-            }
-        }
-
-        if (this.props.onScroll) {
-            this.props.onScroll(event);
-        }
+        scrollHandler(this.props, event);
     }
 
     render() {

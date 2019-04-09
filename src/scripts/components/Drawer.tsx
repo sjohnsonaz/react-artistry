@@ -2,12 +2,13 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { IGridExternalProps, gridConfig } from './Grid';
+import { IScrollableExternalProps, scrollHandler } from './Scrollable';
 import BodyScroll from '../util/BodyScroll';
 import { waitAnimation } from '../util/PromiseUtil';
 import Portal from '../util/Portal';
 import DepthStack from '../util/DepthStack';
 
-export interface IDrawerProps extends IGridExternalProps {
+export interface IDrawerProps extends IGridExternalProps, IScrollableExternalProps {
     className?: string;
     id?: string;
     direction?: 'top' | 'right' | 'bottom' | 'left';
@@ -60,6 +61,10 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
                 this.updateModalRoot();
             }
         }
+    }
+
+    onScroll(event: React.UIEvent<HTMLElement>) {
+        scrollHandler(this.props, event);
     }
 
     async componentWillReceiveProps(nextProps?: IDrawerProps) {
@@ -122,7 +127,12 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
             direction,
             full,
             background,
-            space
+            space,
+            onScroll,
+            onTop,
+            onRight,
+            onBottom,
+            onLeft
         } = this.props;
 
         let classNames = className ? [className] : [];
@@ -152,10 +162,12 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
             gridConfig(innerClassNames, this.props);
         }
 
+        let onScrollHandler = (onScroll || onTop || onRight || onBottom || onLeft) ? this.onScroll.bind(this) : undefined;
+
         return ReactDOM.createPortal((
             <div className={classNames.join(' ')} id={id} onTransitionEnd={this.transitionEnd}>
                 <div className="drawer-background">
-                    <div className="drawer-scroller">
+                    <div className="drawer-scroller" onScroll={onScrollHandler}>
                         <div className={innerClassNames.join(' ')} onClick={this.preventClick}>
                             {this.props.children}
                         </div>
