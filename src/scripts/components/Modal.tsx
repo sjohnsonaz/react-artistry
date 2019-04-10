@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 
 import Button from './Button';
 import { IGridExternalProps, gridConfig } from './Grid';
+import { IScrollableExternalProps, scrollHandler } from './Scrollable';
 import BodyScroll from '../util/BodyScroll';
 import { waitAnimation } from '../util/PromiseUtil';
 import Portal from '../util/Portal';
@@ -10,7 +11,7 @@ import DepthStack from '../util/DepthStack';
 
 export type ModalSize = 'none' | 'all' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
 
-export interface IModalProps extends IGridExternalProps {
+export interface IModalProps extends IGridExternalProps, IScrollableExternalProps {
     className?: string;
     id?: string;
     open: boolean;
@@ -76,6 +77,10 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         }
     }
 
+    onScroll(event: React.UIEvent<HTMLElement>) {
+        scrollHandler(this.props, event);
+    }
+
     async componentWillReceiveProps(nextProps?: IModalProps) {
         if (this.props.open != nextProps.open) {
             if (nextProps.open) {
@@ -138,7 +143,12 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             closeButton,
             title,
             header,
-            footer
+            footer,
+            onScroll,
+            onTop,
+            onRight,
+            onBottom,
+            onLeft
         } = this.props;
 
         let classNames = this.props.className ? [this.props.className] : [];
@@ -225,13 +235,15 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             );
         }
 
+        let onScrollHandler = (onScroll || onTop || onRight || onBottom || onLeft) ? this.onScroll.bind(this) : undefined;
+
         return ReactDOM.createPortal((
-            <div className={classNames.join(' ')} id={this.props.id} onTransitionEnd={this.transitionEnd}>
+            <div className={classNames.join(' ')} id={this.props.id} onTransitionEnd={this.transitionEnd} onScroll={onScrollHandler}>
                 <div className="modal-background">
                     {headerSection || footer ?
                         <div className="modal-content" onClick={this.preventClick}>
                             {headerSection}
-                            <div className={'modal-body ' + modalContentClassName}>
+                            <div className={'modal-body ' + modalContentClassName} onScroll={onScrollHandler}>
                                 {this.props.children}
                             </div>
                             {footer ?
