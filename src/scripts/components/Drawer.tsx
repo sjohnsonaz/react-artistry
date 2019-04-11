@@ -166,8 +166,8 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
 
         return ReactDOM.createPortal((
             <div className={classNames.join(' ')} id={id} onTransitionEnd={this.transitionEnd}>
-                <div className="drawer-background">
-                    <div className="drawer-scroller" onScroll={onScrollHandler}>
+                <div className="drawer-background" onScroll={onScrollHandler}>
+                    <div className="drawer-scroller">
                         <div className={innerClassNames.join(' ')} onClick={this.preventClick}>
                             {this.props.children}
                         </div>
