@@ -2,6 +2,9 @@ import * as React from 'react';
 
 import DepthStack from '../util/DepthStack';
 
+import { ITemplate } from './ITemplate';
+import Button from './Button';
+
 export type SearchSize = 'default' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
 
 export interface ISearchProps {
@@ -22,6 +25,29 @@ export interface ISearchProps {
     onSearch?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>, value?: string) => any;
     onClose?: (event: React.SyntheticEvent<HTMLElement>) => any;
     altAction?: (option: string) => any;
+
+    // Button Props
+    type?: 'button' | 'submit' | 'reset';
+    theme?: 'default' | 'primary' | 'danger';
+    displaySize?: 'default' | 'small' | 'large';
+    display?: 'default' | 'textonly' | 'outline';
+    tooltip?: string;
+    tooltipDirection?: 'top' | 'right' | 'bottom' | 'left';
+    tooltipOpen?: boolean;
+    popover?: ITemplate;
+    popoverDirection?: 'top' | 'right' | 'bottom' | 'left';
+    popoverAlign?: 'top' | 'right' | 'bottom' | 'left' | 'center';
+    popoverMenu?: boolean;
+    popoverOpen?: boolean;
+    popoverFill?: boolean;
+    lockContent?: any;
+    locked?: boolean;
+    down?: boolean;
+    link?: boolean;
+    noTrigger?: boolean;
+    noWrap?: boolean;
+    noFocus?: boolean;
+    onPopoverClose?: (event: React.SyntheticEvent) => boolean | void;
 }
 
 export interface ISearchState {
@@ -200,7 +226,16 @@ export default class Search extends React.Component<ISearchProps, ISearchState> 
             disabled,
             disabledButton,
             disabledInput,
-            size
+            size,
+
+            // Unused
+            value: _value,
+            options: _options,
+            onChange,
+            onSelectOption,
+            onSearch,
+            onClose,
+            ...buttonProps
         } = this.props;
 
         let {
@@ -254,13 +289,14 @@ export default class Search extends React.Component<ISearchProps, ISearchState> 
                         value={value}
                         disabled={disabled || disabledInput}
                     />
-                    <button
-                        className="button search-button"
+                    <Button
+                        className="search-button"
                         onClick={this.onSearch}
                         disabled={disabled || disabledButton}
+                        {...buttonProps}
                     >
                         {buttonText || 'Search'}
-                    </button>
+                    </Button>
                 </div>
                 <div className="search-option-box">
                     <ul role="listbox" className="search-option-list">
