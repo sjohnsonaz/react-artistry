@@ -36,16 +36,21 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
         selected: true
     };
     runCount: number = 0;
+    transitionCount: number = 0;
 
     transitionEnd = async (event: React.TransitionEvent<HTMLElement>) => {
-        if (event.propertyName === 'height') {
-            let running = this.state.running;
-            if (!running) {
-                this.setState({
-                    animating: false,
-                    height: undefined,
-                    previousActiveIndex: this.state.activeIndex
-                });
+        if (event.propertyName === 'transform') {
+            this.transitionCount++;
+            this.transitionCount %= 2;
+            if (!this.transitionCount) {
+                let running = this.state.running;
+                if (!running) {
+                    this.setState({
+                        animating: false,
+                        height: undefined,
+                        previousActiveIndex: this.state.activeIndex
+                    });
+                }
             }
         }
     }
