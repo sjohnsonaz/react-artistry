@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Card, CardContainer, CardControl, CardSection, Cell, Closeable, Fillable, Grid, Row, Section } from '../../../../../scripts/modules/ArtistryReact';
+import { Button, Card, CardCarousel, CardContainer, CardControl, CardSection, Cell, Closeable, Fillable, Grid, Row, Section } from '../../../../../scripts/modules/ArtistryReact';
 
 import VerticalCard from './VerticalCard';
 
@@ -11,13 +11,15 @@ export interface ICardViewProps {
 export interface ICardViewState {
     closed?: boolean;
     filled?: boolean;
+    index?: number;
 }
 
 export default class CardView extends React.Component<ICardViewProps, ICardViewState> {
     constructor(props?: ICardViewProps) {
         super(props);
         this.state = {
-            closed: false
+            closed: false,
+            index: 0
         };
     }
 
@@ -30,6 +32,18 @@ export default class CardView extends React.Component<ICardViewProps, ICardViewS
     toggleFilled = () => {
         this.setState({
             filled: !this.state.filled
+        });
+    }
+
+    clickNext = () => {
+        this.setState({
+            index: this.state.index + 1
+        });
+    }
+
+    clickPrevious = () => {
+        this.setState({
+            index: this.state.index - 1
         });
     }
 
@@ -70,6 +84,60 @@ export default class CardView extends React.Component<ICardViewProps, ICardViewS
                         <CardControl title="Title 4">Data 4</CardControl>
                     </CardSection>
                 </Card>
+                <div>
+                    <Button onClick={this.clickPrevious}>&lt;</Button>
+                    <CardCarousel activeIndex={this.state.index}>
+                        <Card type="success" handle="left" square>
+                            <CardSection multiColumn>
+                                <CardControl title="Title 1">Data 1</CardControl>
+                                <CardControl title="Title 2">Data 2</CardControl>
+                                <CardControl title="Title 3">Data 3</CardControl>
+                                <CardControl title="Title 4">Data 4</CardControl>
+                            </CardSection>
+                        </Card>
+                        <Card type="success" handle="left" square>
+                            <CardSection multiColumn>
+                                <CardControl title="Title 1">Data 1</CardControl>
+                                <CardControl title="Title 2">Data 2</CardControl>
+                                <CardControl title="Title 3">Data 3</CardControl>
+                                <CardControl title="Title 4">Data 4</CardControl>
+                            </CardSection>
+                        </Card>
+                        <Card type="success" handle="left" square>
+                            <CardSection multiColumn>
+                                <CardControl title="Title 1">Data 1</CardControl>
+                                <CardControl title="Title 2">Data 2</CardControl>
+                                <CardControl title="Title 3">Data 3</CardControl>
+                                <CardControl title="Title 4">Data 4</CardControl>
+                            </CardSection>
+                        </Card>
+                        <Card type="success" handle="left" square>
+                            <CardSection multiColumn>
+                                <CardControl title="Title 1">Data 1</CardControl>
+                                <CardControl title="Title 2">Data 2</CardControl>
+                                <CardControl title="Title 3">Data 3</CardControl>
+                                <CardControl title="Title 4">Data 4</CardControl>
+                            </CardSection>
+                        </Card>
+                        <Card type="success" handle="left" square>
+                            <CardSection multiColumn>
+                                <CardControl title="Title 1">Data 1</CardControl>
+                                <CardControl title="Title 2">Data 2</CardControl>
+                                <CardControl title="Title 3">Data 3</CardControl>
+                                <CardControl title="Title 4">Data 4</CardControl>
+                            </CardSection>
+                        </Card>
+                        <Card type="success" handle="left" square>
+                            <CardSection multiColumn>
+                                <CardControl title="Title 1">Data 1</CardControl>
+                                <CardControl title="Title 2">Data 2</CardControl>
+                                <CardControl title="Title 3">Data 3</CardControl>
+                                <CardControl title="Title 4">Data 4</CardControl>
+                            </CardSection>
+                        </Card>
+                    </CardCarousel>
+                    <Button onClick={this.clickNext}>&gt;</Button>
+                </div>
             </Section>
         );
     }
