@@ -9,6 +9,7 @@ export interface IPopoverProps {
     open?: boolean;
     closed?: boolean;
     preventClick?: boolean;
+    space?: boolean;
 }
 
 export default class Popover extends React.Component<IPopoverProps, any> {
@@ -65,6 +66,9 @@ export default class Popover extends React.Component<IPopoverProps, any> {
         }
         if (this.props.closed) {
             classNames.push('popover-closed');
+        }
+        if (this.props.space) {
+            classNames.push('popover-space');
         }
 
         return (

@@ -26,6 +26,7 @@ export interface IButtonProps extends React.HTMLProps<HTMLButtonElement> {
     locked?: boolean;
     down?: boolean;
     link?: boolean;
+    noCaps?: boolean;
     noTrigger?: boolean;
     noWrap?: boolean;
     noFocus?: boolean;
@@ -130,6 +131,7 @@ export default class Button extends React.Component<IButtonProps, any> {
             popoverFill,
             onPopoverClose,
             link,
+            noCaps,
             noTrigger,
             noWrap,
             noFocus,
@@ -170,6 +172,10 @@ export default class Button extends React.Component<IButtonProps, any> {
 
         if (fill) {
             classNames.push('fill-width');
+        }
+
+        if (noCaps) {
+            classNames.push('button-no-caps');
         }
 
         if (noWrap) {
