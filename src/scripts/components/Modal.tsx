@@ -211,7 +211,6 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             gridConfig(modalContentClassNames, this.props);
         }
 
-        let modalContentClassName = modalContentClassNames.join(' ');
 
         let headerSection;
         if (title || header || closeable) {
@@ -238,12 +237,20 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         let onScrollHandler = (onScroll || onTop || onRight || onBottom || onLeft) ? this.onScroll.bind(this) : undefined;
 
         return ReactDOM.createPortal((
-            <div className={classNames.join(' ')} id={this.props.id} onTransitionEnd={this.transitionEnd} onScroll={onScrollHandler}>
+            <div
+                className={classNames.join(' ')}
+                id={this.props.id}
+                onTransitionEnd={this.transitionEnd}
+                onScroll={onScrollHandler}
+            >
                 <div className="modal-background">
                     {headerSection || footer ?
                         <div className="modal-content" onClick={this.preventClick}>
                             {headerSection}
-                            <div className={'modal-body ' + modalContentClassName} onScroll={onScrollHandler}>
+                            <div
+                                className={'modal-body ' + modalContentClassNames.join(' ')}
+                                onScroll={onScrollHandler}
+                            >
                                 {this.props.children}
                             </div>
                             {footer ?
@@ -252,7 +259,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                                 </div>
                                 : undefined}
                         </div> :
-                        <div className={'modal-content ' + modalContentClassName} onClick={this.preventClick}>
+                        <div className={'modal-content ' + modalContentClassNames.join(' ')} onClick={this.preventClick}>
                             {this.props.children}
                         </div>
                     }

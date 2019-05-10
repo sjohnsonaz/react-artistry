@@ -17,13 +17,14 @@ export enum ScrollableTypeEnum {
     none = "none",
     x = "x",
     y = "y",
-    xAlways = "xAlways",
-    yAlways = "yAlways",
-    xNever = "xNever",
-    yNever = "yNever"
+    xAlways = "x-always",
+    yAlways = "y-always",
+    xNever = "x-never",
+    yNever = "y-never"
 }
 
 export interface IScrollableExternalProps {
+    scrollType?: ScrollableType;
     buffer?: number;
     onScroll?: (event?: React.UIEvent<HTMLElement>) => void;
     onTop?: (event?: React.UIEvent<HTMLElement>) => void;
@@ -32,11 +33,17 @@ export interface IScrollableExternalProps {
     onLeft?: (event?: React.UIEvent<HTMLElement>) => void;
 }
 
-export interface IScrollableProps extends IScrollableExternalProps {
+export interface IScrollableProps {
     id?: string;
     className?: string;
     type?: ScrollableType;
     height?: number | string;
+    buffer?: number;
+    onScroll?: (event?: React.UIEvent<HTMLElement>) => void;
+    onTop?: (event?: React.UIEvent<HTMLElement>) => void;
+    onRight?: (event?: React.UIEvent<HTMLElement>) => void;
+    onBottom?: (event?: React.UIEvent<HTMLElement>) => any
+    onLeft?: (event?: React.UIEvent<HTMLElement>) => void;
 }
 
 export function scrollHandler(props: IScrollableExternalProps, event: React.UIEvent<HTMLElement>) {
@@ -92,7 +99,7 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
             <div
                 className={classNames.join(' ')}
                 id={id}
-                data-scroll={type}
+                data-scroll={ScrollableTypeEnum[type]}
                 onScroll={scrollHandler}
                 style={style}
             >
