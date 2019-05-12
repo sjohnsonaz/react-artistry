@@ -44,6 +44,8 @@ export interface IScrollableProps {
     onRight?: (event?: React.UIEvent<HTMLElement>) => void;
     onBottom?: (event?: React.UIEvent<HTMLElement>) => any
     onLeft?: (event?: React.UIEvent<HTMLElement>) => void;
+    onFitHeight?: () => void;
+    onFitWidth?: () => void;
 }
 
 export function scrollHandler(props: IScrollableExternalProps, event: React.UIEvent<HTMLElement>) {
@@ -62,8 +64,24 @@ export function scrollHandler(props: IScrollableExternalProps, event: React.UIEv
 }
 
 export default class Scrollable extends React.Component<IScrollableProps, any> {
+    root: React.RefObject<HTMLDivElement> = React.createRef();
+
     onScroll = (event: React.UIEvent<HTMLDivElement>) => {
         scrollHandler(this.props, event);
+    }
+
+    componentDidMount() {
+        let root = this.root.current;
+        if (root.scrollHeight === root.clientHeight) {
+            if (this.props.onFitHeight) {
+                this.props.onFitHeight();
+            }
+        }
+        if (root.scrollWidth === root.clientWidth) {
+            if (this.props.onFitWidth) {
+                this.props.onFitWidth();
+            }
+        }
     }
 
     render() {
@@ -97,6 +115,7 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
 
         return (
             <div
+                ref={this.root}
                 className={classNames.join(' ')}
                 id={id}
                 data-scroll={ScrollableTypeEnum[type]}
