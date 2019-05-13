@@ -121,6 +121,9 @@ export default class ListView extends React.Component<IListViewProps, IListViewS
                 <List
                     data={this.state.options}
                     template={item => item.ingredient}
+                    active={3}
+                    selected={[1, 3, 5]}
+                    space
                 />
             </Section>
         );
