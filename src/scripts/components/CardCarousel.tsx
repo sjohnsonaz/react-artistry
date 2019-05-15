@@ -5,8 +5,7 @@ import Carousel, { ICarouselProps } from './Carousel';
 import CardContainer from './CardContainer';
 
 export interface ICardCarouselProps extends ICarouselProps {
-
-
+    slideSize: number;
 }
 
 export interface ICardCarouselState {
@@ -29,6 +28,7 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
         let {
             id,
             className,
+            slideSize,
             children,
             ...props
         } = this.props;
@@ -40,7 +40,7 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
 
         let innerWrapper: React.ReactNode[];
         React.Children.forEach(children, (child, index) => {
-            if (index % 3 === 0) {
+            if (index % slideSize === 0) {
                 innerWrapper = [];
                 wrappedChildren.push(innerWrapper);
             }
