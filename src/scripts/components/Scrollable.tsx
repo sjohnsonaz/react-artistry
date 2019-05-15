@@ -38,6 +38,7 @@ export interface IScrollableProps {
     className?: string;
     type?: ScrollableType;
     height?: number | string;
+    maxHeight?: number | string;
     buffer?: number;
     onScroll?: (event?: React.UIEvent<HTMLElement>) => void;
     onTop?: (event?: React.UIEvent<HTMLElement>) => void;
@@ -70,7 +71,7 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
         scrollHandler(this.props, event);
     }
 
-    componentDidMount() {
+    componentDidUpdate() {
         let root = this.root.current;
         if (root.scrollHeight === root.clientHeight) {
             if (this.props.onFitHeight) {
@@ -90,6 +91,7 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
             className,
             type,
             height,
+            maxHeight,
             onScroll,
             onTop,
             onRight,
@@ -110,7 +112,9 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
 
         let style;
         if (height) {
-            style = { height: height }
+            style = { height: height };
+        } else if (maxHeight) {
+            style = { maxHeight: maxHeight };
         }
 
         return (
