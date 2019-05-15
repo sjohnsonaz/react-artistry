@@ -21,6 +21,7 @@ export interface IButtonProps extends React.HTMLProps<HTMLButtonElement> {
     popoverMenu?: boolean;
     popoverOpen?: boolean;
     popoverFill?: boolean;
+    popoverSpace?: boolean;
     onPopoverClose?: (event: React.SyntheticEvent) => boolean | void;
     lockContent?: any;
     locked?: boolean;
@@ -129,6 +130,7 @@ export default class Button extends React.Component<IButtonProps, any> {
             popoverMenu,
             popoverOpen,
             popoverFill,
+            popoverSpace,
             onPopoverClose,
             link,
             noCaps,
@@ -235,6 +237,7 @@ export default class Button extends React.Component<IButtonProps, any> {
                     direction={popoverDirection}
                     open={!popoverMenu ? popoverOpen : undefined}
                     fill={popoverFill}
+                    space={popoverSpace}
                     preventClick
                 >
                     {typeof popover === 'function' ?
