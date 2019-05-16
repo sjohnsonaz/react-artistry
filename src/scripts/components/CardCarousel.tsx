@@ -5,30 +5,70 @@ import Carousel, { ICarouselProps } from './Carousel';
 import CardContainer from './CardContainer';
 
 export interface ICardCarouselProps extends ICarouselProps {
-    slideSize: number;
+    cardWidth?: number;
 }
 
 export interface ICardCarouselState {
     rendered?: boolean;
+    slideSize?: number;
 }
 
 export default class CardCarousel extends React.Component<ICardCarouselProps, ICardCarouselState> {
-    element: React.Ref<HTMLDivElement> = React.createRef();
+    element: React.RefObject<HTMLDivElement> = React.createRef();
     state: ICardCarouselState = {
-        rendered: false
+        rendered: false,
+        slideSize: 1
     };
 
     componentDidMount() {
+        let {
+            cardWidth
+        } = this.props;
+
+        let slideSize = 1;
+        let element = this.element.current;
+        if (element) {
+            cardWidth = cardWidth || 300;
+            let width = element.clientWidth;
+            if (width > cardWidth) {
+                let remainder = width % cardWidth;
+                slideSize = (width - remainder) / cardWidth;
+            }
+        }
+
         this.setState({
-            rendered: true
+            rendered: true,
+            slideSize: slideSize
         });
+    }
+
+    componentDidUpdate() {
+        let {
+            cardWidth
+        } = this.props;
+
+        let slideSize = 1;
+        let element = this.element.current;
+        if (element) {
+            cardWidth = cardWidth || 300;
+            let width = element.clientWidth;
+            if (width > cardWidth) {
+                let remainder = width % cardWidth;
+                slideSize = (width - remainder) / cardWidth;
+            }
+        }
+
+        if (slideSize !== this.state.slideSize) {
+            this.setState({
+                slideSize: slideSize
+            });
+        }
     }
 
     render() {
         let {
             id,
             className,
-            slideSize,
             children,
             ...props
         } = this.props;
@@ -40,7 +80,7 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
 
         let innerWrapper: React.ReactNode[];
         React.Children.forEach(children, (child, index) => {
-            if (index % slideSize === 0) {
+            if (index % this.state.slideSize === 0) {
                 innerWrapper = [];
                 wrappedChildren.push(innerWrapper);
             }
