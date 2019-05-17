@@ -66,9 +66,30 @@ export function scrollHandler(props: IScrollableExternalProps, event: React.UIEv
 
 export default class Scrollable extends React.Component<IScrollableProps, any> {
     root: React.RefObject<HTMLDivElement> = React.createRef();
+    topBumper: React.RefObject<HTMLDivElement> = React.createRef();
+    bottomBumper: React.RefObject<HTMLDivElement> = React.createRef();
+    rootObserver: IntersectionObserver;
 
     onScroll = (event: React.UIEvent<HTMLDivElement>) => {
         scrollHandler(this.props, event);
+    }
+
+    componentDidMount() {
+        let root = this.root.current;
+        let topBumper = this.topBumper.current;
+        let bottomBumper = this.bottomBumper.current;
+        this.rootObserver = new IntersectionObserver(
+            () => {
+
+            }, {
+
+            });
+    }
+
+    componentWillUnmount() {
+        if (this.rootObserver) {
+            this.rootObserver.disconnect();
+        }
     }
 
     componentDidUpdate() {
@@ -126,7 +147,19 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
                 onScroll={scrollHandler}
                 style={style}
             >
+                <div
+                    ref={this.topBumper}
+                    style={{
+                        height: '30px'
+                    }}
+                ></div>
                 {this.props.children}
+                <div
+                    ref={this.bottomBumper}
+                    style={{
+                        height: '30px'
+                    }}
+                ></div>
             </div>
         );
     }
