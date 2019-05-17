@@ -79,10 +79,14 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
         let topBumper = this.topBumper.current;
         let bottomBumper = this.bottomBumper.current;
         this.rootObserver = new IntersectionObserver(
-            () => {
-
+            (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+                entries.forEach(entry => {
+                    entry.isIntersecting
+                });
             }, {
-
+                root: root,
+                rootMargin: '0px',
+                threshold: [0]
             });
     }
 
