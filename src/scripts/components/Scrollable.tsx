@@ -84,13 +84,13 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
                     if (entry.isIntersecting) {
                         switch (entry.target.className) {
                             case 'scrollable-bumper-top':
-                                if (this.props.onBottom) {
-                                    this.props.onBottom();
+                                if (this.props.onTop) {
+                                    this.props.onTop();
                                 }
                                 break;
                             case 'scrollable-bumper-bottom':
-                                if (this.props.onTop) {
-                                    this.props.onTop();
+                                if (this.props.onBottom) {
+                                    this.props.onBottom();
                                 }
                                 break;
                         }
