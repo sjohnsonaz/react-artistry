@@ -81,13 +81,28 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
         this.rootObserver = new IntersectionObserver(
             (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
                 entries.forEach(entry => {
-                    entry.isIntersecting
+                    if (entry.isIntersecting) {
+                        switch (entry.target.className) {
+                            case 'scrollable-bumper-top':
+                                if (this.props.onBottom) {
+                                    this.props.onBottom();
+                                }
+                                break;
+                            case 'scrollable-bumper-bottom':
+                                if (this.props.onTop) {
+                                    this.props.onTop();
+                                }
+                                break;
+                        }
+                    }
                 });
             }, {
                 root: root,
                 rootMargin: '0px',
                 threshold: [0]
             });
+        this.rootObserver.observe(topBumper);
+        this.rootObserver.observe(bottomBumper);
     }
 
     componentWillUnmount() {
@@ -153,6 +168,7 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
             >
                 <div
                     ref={this.topBumper}
+                    className="scrollable-bumper-top"
                     style={{
                         height: '30px'
                     }}
@@ -160,6 +176,7 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
                 {this.props.children}
                 <div
                     ref={this.bottomBumper}
+                    className="scrollable-bumper-bottom"
                     style={{
                         height: '30px'
                     }}
