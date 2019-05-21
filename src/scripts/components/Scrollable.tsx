@@ -25,7 +25,7 @@ export enum ScrollableTypeEnum {
 
 export interface IScrollableExternalProps {
     scrollType?: ScrollableType;
-    buffer?: number;
+    bumper?: number;
     onScroll?: (event?: React.UIEvent<HTMLElement>) => void;
     onTop?: (event?: React.UIEvent<HTMLElement>) => void;
     onRight?: (event?: React.UIEvent<HTMLElement>) => void;
@@ -39,7 +39,7 @@ export interface IScrollableProps {
     type?: ScrollableType;
     height?: number | string;
     maxHeight?: number | string;
-    buffer?: number;
+    bumper?: number | string;
     onScroll?: (event?: React.UIEvent<HTMLElement>) => void;
     onTop?: (event?: React.UIEvent<HTMLElement>) => void;
     onRight?: (event?: React.UIEvent<HTMLElement>) => void;
@@ -52,9 +52,9 @@ export interface IScrollableProps {
 export function scrollHandler(props: IScrollableExternalProps, event: React.UIEvent<HTMLElement>) {
     let element = event.currentTarget;
 
-    let buffer = props.buffer || 0;
+    let bumper = props.bumper || 0;
     if (props.onBottom) {
-        if (element.scrollTop + element.clientHeight + buffer >= element.scrollHeight) {
+        if (element.scrollTop + element.clientHeight + bumper >= element.scrollHeight) {
             props.onBottom(event);
         }
     }
@@ -71,7 +71,9 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
     rootObserver: IntersectionObserver;
 
     onScroll = (event: React.UIEvent<HTMLDivElement>) => {
-        scrollHandler(this.props, event);
+        if (this.props.onScroll) {
+            this.props.onScroll(event);
+        }
     }
 
     componentDidMount() {
@@ -132,7 +134,7 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
             type,
             height,
             maxHeight,
-            onScroll,
+            bumper,
             onTop,
             onRight,
             onBottom,
@@ -141,20 +143,30 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
         let classNames = className ? [className] : [];
         classNames.push('scrollable');
 
-        let scrollHandler = undefined;
-        if (onScroll || onTop || onRight || onBottom || onLeft) {
-            scrollHandler = this.onScroll;
+        if (onTop || onRight || onBottom || onLeft) {
+            classNames.push('scrollable-bumper');
         }
 
         if (typeof height === 'number') {
             height = height + 'px';
         }
 
-        let style;
+        if (typeof maxHeight === 'number') {
+            maxHeight = maxHeight + 'px';
+        }
+
+        if (typeof bumper === 'number') {
+            bumper = bumper + 'px';
+        }
+
+        let style: React.CSSProperties = {};
+        if (bumper) {
+            style['--scrollable-bumper-size'] = bumper
+        }
         if (height) {
-            style = { height: height };
+            style.height = height;
         } else if (maxHeight) {
-            style = { maxHeight: maxHeight };
+            style.maxHeight = maxHeight;
         }
 
         return (
@@ -163,23 +175,17 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
                 className={classNames.join(' ')}
                 id={id}
                 data-scroll={ScrollableTypeEnum[type]}
-                onScroll={scrollHandler}
+                onScroll={this.onScroll}
                 style={style}
             >
                 <div
                     ref={this.topBumper}
                     className="scrollable-bumper-top"
-                    style={{
-                        height: '30px'
-                    }}
                 ></div>
                 {this.props.children}
                 <div
                     ref={this.bottomBumper}
                     className="scrollable-bumper-bottom"
-                    style={{
-                        height: '30px'
-                    }}
                 ></div>
             </div>
         );
