@@ -26,11 +26,15 @@ export enum ScrollableTypeEnum {
 export interface IScrollableExternalProps {
     scrollType?: ScrollableType;
     bumper?: number;
-    onScroll?: (event?: React.UIEvent<HTMLElement>) => void;
-    onTop?: (event?: React.UIEvent<HTMLElement>) => void;
-    onRight?: (event?: React.UIEvent<HTMLElement>) => void;
-    onBottom?: (event?: React.UIEvent<HTMLElement>) => any
-    onLeft?: (event?: React.UIEvent<HTMLElement>) => void;
+    onScroll?: (event?: React.UIEvent<HTMLElement>) => any;
+    onTopEnter?: (event?: React.UIEvent<HTMLElement>) => any;
+    onTopExit?: (event?: React.UIEvent<HTMLElement>) => any;
+    onRightEnter?: (event?: React.UIEvent<HTMLElement>) => any;
+    onRightExit?: (event?: React.UIEvent<HTMLElement>) => any;
+    onBottomEnter?: (event?: React.UIEvent<HTMLElement>) => any;
+    onBottomExit?: (event?: React.UIEvent<HTMLElement>) => any;
+    onLeftEnter?: (event?: React.UIEvent<HTMLElement>) => any;
+    onLeftExit?: (event?: React.UIEvent<HTMLElement>) => any;
 }
 
 export interface IScrollableProps {
@@ -40,20 +44,24 @@ export interface IScrollableProps {
     height?: number | string;
     maxHeight?: number | string;
     bumper?: number | string;
-    onScroll?: (event?: React.UIEvent<HTMLElement>) => void;
-    onTop?: (event?: React.UIEvent<HTMLElement>) => void;
-    onRight?: (event?: React.UIEvent<HTMLElement>) => void;
-    onBottom?: (event?: React.UIEvent<HTMLElement>) => any
-    onLeft?: (event?: React.UIEvent<HTMLElement>) => void;
+    onScroll?: (event?: React.UIEvent<HTMLElement>) => any;
+    onTopEnter?: (event?: React.UIEvent<HTMLElement>) => any;
+    onTopExit?: (event?: React.UIEvent<HTMLElement>) => any;
+    onRightEnter?: (event?: React.UIEvent<HTMLElement>) => any;
+    onRightExit?: (event?: React.UIEvent<HTMLElement>) => any;
+    onBottomEnter?: (event?: React.UIEvent<HTMLElement>) => any;
+    onBottomExit?: (event?: React.UIEvent<HTMLElement>) => any;
+    onLeftEnter?: (event?: React.UIEvent<HTMLElement>) => any;
+    onLeftExit?: (event?: React.UIEvent<HTMLElement>) => any;
 }
 
 export function scrollHandler(props: IScrollableExternalProps, event: React.UIEvent<HTMLElement>) {
     let element = event.currentTarget;
 
     let bumper = props.bumper || 0;
-    if (props.onBottom) {
+    if (props.onBottomEnter) {
         if (element.scrollTop + element.clientHeight + bumper >= element.scrollHeight) {
-            props.onBottom(event);
+            props.onBottomEnter(event);
         }
     }
 
@@ -90,29 +98,67 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
         this.rootObserver = new IntersectionObserver(
             (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        switch (entry.target.className) {
-                            case 'scrollable-bumper-top':
-                                if (this.props.onTop) {
-                                    this.props.onTop();
+                    switch (entry.target.className) {
+                        case 'scrollable-bumper-top':
+                            if (entry.isIntersecting !== this.topIntersected) {
+                                if (entry.isIntersecting) {
+                                    if (this.props.onTopEnter) {
+                                        this.props.onTopEnter();
+                                    }
+                                    this.topIntersected = true;
+                                } else {
+                                    if (this.props.onTopExit) {
+                                        this.props.onTopExit();
+                                    }
+                                    this.topIntersected = false;
                                 }
-                                break;
-                            case 'scrollable-bumper-right':
-                                if (this.props.onRight) {
-                                    this.props.onRight();
+                            }
+                            break;
+                        case 'scrollable-bumper-right':
+                            if (entry.isIntersecting !== this.rightIntersected) {
+                                if (entry.isIntersecting) {
+                                    if (this.props.onRightEnter) {
+                                        this.props.onRightEnter();
+                                    }
+                                    this.rightIntersected = true;
+                                } else {
+                                    if (this.props.onRightExit) {
+                                        this.props.onRightExit();
+                                    }
+                                    this.rightIntersected = false;
                                 }
-                                break;
-                            case 'scrollable-bumper-bottom':
-                                if (this.props.onBottom) {
-                                    this.props.onBottom();
+                            }
+                            break;
+                        case 'scrollable-bumper-bottom':
+                            if (entry.isIntersecting !== this.bottomIntersected) {
+                                if (entry.isIntersecting) {
+                                    if (this.props.onBottomEnter) {
+                                        this.props.onBottomEnter();
+                                    }
+                                    this.bottomIntersected = true;
+                                } else {
+                                    if (this.props.onBottomExit) {
+                                        this.props.onBottomExit();
+                                    }
+                                    this.bottomIntersected = false;
                                 }
-                                break;
-                            case 'scrollable-bumper-left':
-                                if (this.props.onLeft) {
-                                    this.props.onLeft();
+                            }
+                            break;
+                        case 'scrollable-bumper-left':
+                            if (entry.isIntersecting !== this.leftIntersected) {
+                                if (entry.isIntersecting) {
+                                    if (this.props.onLeftEnter) {
+                                        this.props.onLeftEnter();
+                                    }
+                                    this.leftIntersected = true;
+                                } else {
+                                    if (this.props.onLeftExit) {
+                                        this.props.onLeftExit();
+                                    }
+                                    this.leftIntersected = false;
                                 }
-                                break;
-                        }
+                            }
+                            break;
                     }
                 });
             }, {
