@@ -77,8 +77,10 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         }
     }
 
-    onScroll(event: React.UIEvent<HTMLElement>) {
-        scrollHandler(this.props, event);
+    onScroll = (event: React.UIEvent<HTMLElement>) => {
+        if (this.props.onScroll) {
+            this.props.onScroll(event);
+        }
     }
 
     async componentWillReceiveProps(nextProps?: IModalProps) {
@@ -143,12 +145,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             closeButton,
             title,
             header,
-            footer,
-            onScroll,
-            onTop,
-            onRight,
-            onBottom,
-            onLeft
+            footer
         } = this.props;
 
         let classNames = this.props.className ? [this.props.className] : [];
@@ -234,14 +231,12 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             );
         }
 
-        let onScrollHandler = (onScroll || onTop || onRight || onBottom || onLeft) ? this.onScroll.bind(this) : undefined;
-
         return ReactDOM.createPortal((
             <div
                 className={classNames.join(' ')}
                 id={this.props.id}
                 onTransitionEnd={this.transitionEnd}
-                onScroll={onScrollHandler}
+                onScroll={this.onScroll}
             >
                 <div className="modal-background">
                     {headerSection || footer ?
@@ -249,7 +244,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                             {headerSection}
                             <div
                                 className={'modal-body ' + modalContentClassNames.join(' ')}
-                                onScroll={onScrollHandler}
+                                onScroll={this.onScroll}
                             >
                                 {this.props.children}
                             </div>

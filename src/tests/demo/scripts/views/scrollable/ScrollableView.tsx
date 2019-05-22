@@ -17,7 +17,7 @@ export default class ScrollableView extends React.Component<IScrollableViewProps
         }
         return (
             <div>
-                <Scrollable type="y" height="100px" bumper={10} onBottom={this.bottom}>
+                <Scrollable type="y" height="100px" bumper={10} onBottomEnter={this.bottom}>
                     <ul>
                         {values.map((value, index) => <li key={index}>{value}</li>)}
                     </ul>

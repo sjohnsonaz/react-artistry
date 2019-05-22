@@ -63,8 +63,10 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
         }
     }
 
-    onScroll(event: React.UIEvent<HTMLElement>) {
-        scrollHandler(this.props, event);
+    onScroll = (event: React.UIEvent<HTMLElement>) => {
+        if (this.props.onScroll) {
+            this.props.onScroll(event);
+        }
     }
 
     async componentWillReceiveProps(nextProps?: IDrawerProps) {
@@ -128,11 +130,7 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
             full,
             background,
             space,
-            onScroll,
-            onTop,
-            onRight,
-            onBottom,
-            onLeft
+            onScroll
         } = this.props;
 
         let classNames = className ? [className] : [];
@@ -162,11 +160,9 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
             gridConfig(innerClassNames, this.props);
         }
 
-        let onScrollHandler = (onScroll || onTop || onRight || onBottom || onLeft) ? this.onScroll.bind(this) : undefined;
-
         return ReactDOM.createPortal((
             <div className={classNames.join(' ')} id={id} onTransitionEnd={this.transitionEnd}>
-                <div className="drawer-background" onScroll={onScrollHandler}>
+                <div className="drawer-background" onScroll={this.onScroll}>
                     <div className="drawer-scroller">
                         <div className={innerClassNames.join(' ')} onClick={this.preventClick}>
                             {this.props.children}
