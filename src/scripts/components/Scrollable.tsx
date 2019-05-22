@@ -45,8 +45,6 @@ export interface IScrollableProps {
     onRight?: (event?: React.UIEvent<HTMLElement>) => void;
     onBottom?: (event?: React.UIEvent<HTMLElement>) => any
     onLeft?: (event?: React.UIEvent<HTMLElement>) => void;
-    onFitHeight?: () => void;
-    onFitWidth?: () => void;
 }
 
 export function scrollHandler(props: IScrollableExternalProps, event: React.UIEvent<HTMLElement>) {
@@ -67,8 +65,15 @@ export function scrollHandler(props: IScrollableExternalProps, event: React.UIEv
 export default class Scrollable extends React.Component<IScrollableProps, any> {
     root: React.RefObject<HTMLDivElement> = React.createRef();
     topBumper: React.RefObject<HTMLDivElement> = React.createRef();
+    rightBumper: React.RefObject<HTMLDivElement> = React.createRef();
     bottomBumper: React.RefObject<HTMLDivElement> = React.createRef();
+    leftBumper: React.RefObject<HTMLDivElement> = React.createRef();
     rootObserver: IntersectionObserver;
+
+    topIntersected: boolean = false;
+    rightIntersected: boolean = false;
+    bottomIntersected: boolean = false;
+    leftIntersected: boolean = false;
 
     onScroll = (event: React.UIEvent<HTMLDivElement>) => {
         if (this.props.onScroll) {
@@ -79,7 +84,9 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
     componentDidMount() {
         let root = this.root.current;
         let topBumper = this.topBumper.current;
+        let rightBumper = this.rightBumper.current;
         let bottomBumper = this.bottomBumper.current;
+        let leftBumper = this.leftBumper.current;
         this.rootObserver = new IntersectionObserver(
             (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
                 entries.forEach(entry => {
@@ -90,9 +97,19 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
                                     this.props.onTop();
                                 }
                                 break;
+                            case 'scrollable-bumper-right':
+                                if (this.props.onRight) {
+                                    this.props.onRight();
+                                }
+                                break;
                             case 'scrollable-bumper-bottom':
                                 if (this.props.onBottom) {
                                     this.props.onBottom();
+                                }
+                                break;
+                            case 'scrollable-bumper-left':
+                                if (this.props.onLeft) {
+                                    this.props.onLeft();
                                 }
                                 break;
                         }
@@ -104,26 +121,14 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
                 threshold: [0]
             });
         this.rootObserver.observe(topBumper);
+        this.rootObserver.observe(rightBumper);
         this.rootObserver.observe(bottomBumper);
+        this.rootObserver.observe(leftBumper);
     }
 
     componentWillUnmount() {
         if (this.rootObserver) {
             this.rootObserver.disconnect();
-        }
-    }
-
-    componentDidUpdate() {
-        let root = this.root.current;
-        if (root.scrollHeight === root.clientHeight) {
-            if (this.props.onFitHeight) {
-                this.props.onFitHeight();
-            }
-        }
-        if (root.scrollWidth === root.clientWidth) {
-            if (this.props.onFitWidth) {
-                this.props.onFitWidth();
-            }
         }
     }
 
@@ -134,18 +139,10 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
             type,
             height,
             maxHeight,
-            bumper,
-            onTop,
-            onRight,
-            onBottom,
-            onLeft
+            bumper
         } = this.props;
         let classNames = className ? [className] : [];
         classNames.push('scrollable');
-
-        if (onTop || onRight || onBottom || onLeft) {
-            classNames.push('scrollable-bumper');
-        }
 
         if (typeof height === 'number') {
             height = height + 'px';
@@ -178,15 +175,25 @@ export default class Scrollable extends React.Component<IScrollableProps, any> {
                 onScroll={this.onScroll}
                 style={style}
             >
-                <div
-                    ref={this.topBumper}
-                    className="scrollable-bumper-top"
-                ></div>
-                {this.props.children}
-                <div
-                    ref={this.bottomBumper}
-                    className="scrollable-bumper-bottom"
-                ></div>
+                <div className="scrollable-bumper">
+                    <div
+                        ref={this.topBumper}
+                        className="scrollable-bumper-top"
+                    ></div>
+                    <div
+                        ref={this.rightBumper}
+                        className="scrollable-bumper-right"
+                    ></div>
+                    <div
+                        ref={this.bottomBumper}
+                        className="scrollable-bumper-bottom"
+                    ></div>
+                    <div
+                        ref={this.leftBumper}
+                        className="scrollable-bumper-left"
+                    ></div>
+                    {this.props.children}
+                </div>
             </div>
         );
     }
