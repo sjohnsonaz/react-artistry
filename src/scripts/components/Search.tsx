@@ -21,8 +21,8 @@ export interface ISearchProps {
     disabledInput?: boolean;
     size?: SearchSize;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => any;
-    onSelectOption?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLDivElement>, value?: string) => any;
-    onSearch?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>, value?: string) => any;
+    onSelectOption?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLDivElement>, value: string) => any;
+    onSearch?: (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>, value: string) => any;
     onClose?: (event: React.SyntheticEvent<HTMLElement>) => any;
     altAction?: (option: string) => any;
 
@@ -154,7 +154,7 @@ export default class Search extends React.Component<ISearchProps, ISearchState> 
 
     onSearch = (event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>) => {
         if (this.props.onSearch) {
-            this.props.onSearch(event);
+            this.props.onSearch(event, this.state.value);
         }
     }
 
