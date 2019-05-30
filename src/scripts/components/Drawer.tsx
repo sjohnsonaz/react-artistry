@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { IGridExternalProps, gridConfig } from './Grid';
-import { IScrollableExternalProps, scrollHandler } from './Scrollable';
+import { IScrollableExternalProps } from './Scrollable';
 import BodyScroll from '../util/BodyScroll';
 import { waitAnimation } from '../util/PromiseUtil';
 import Portal from '../util/Portal';
@@ -129,8 +129,7 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
             direction,
             full,
             background,
-            space,
-            onScroll
+            space
         } = this.props;
 
         let classNames = className ? [className] : [];

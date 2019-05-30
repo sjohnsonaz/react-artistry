@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 
 import Button from './Button';
 import { IGridExternalProps, gridConfig } from './Grid';
-import { IScrollableExternalProps, scrollHandler } from './Scrollable';
+import { IScrollableExternalProps } from './Scrollable';
 import BodyScroll from '../util/BodyScroll';
 import { waitAnimation } from '../util/PromiseUtil';
 import Portal from '../util/Portal';
