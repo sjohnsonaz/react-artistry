@@ -69,6 +69,7 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
         let {
             id,
             className,
+            cardWidth,
             children,
             ...props
         } = this.props;
@@ -101,6 +102,7 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
                             return (
                                 <CardContainer
                                     className="space"
+                                    width={cardWidth}
                                     key={index}>
                                     {children}
                                 </CardContainer>
