@@ -1,7 +1,7 @@
 import * as React from 'react';
 import MaskedInput from './MaskedInput';
 
-export interface ITimeInputProps<T = any> extends React.HTMLProps<HTMLInputElement> {
+export interface ITimeInputProps extends React.HTMLProps<HTMLInputElement> {
     seconds?: boolean;
     value?: string;
     fill?: boolean;

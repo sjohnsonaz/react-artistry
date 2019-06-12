@@ -1,13 +1,13 @@
 import * as React from 'react';
 import MaskedInput from './MaskedInput';
 
-export interface IInputProps<T = any> extends React.HTMLProps<HTMLInputElement> {
+export interface IInputProps extends React.HTMLProps<HTMLInputElement> {
     fill?: boolean;
     mask?: string;
     displaySize?: 'default' | 'small' | 'large';
 }
 
-export default class Input<T = any> extends React.Component<IInputProps<T>, any> {
+export default class Input extends React.Component<IInputProps, any> {
     render() {
         let {
             id,
