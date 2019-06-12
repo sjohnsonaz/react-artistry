@@ -5,8 +5,6 @@ export interface ITimeInputProps<T = any> extends React.HTMLProps<HTMLInputEleme
     seconds?: boolean;
     value?: string;
     fill?: boolean;
-    model?: T;
-    modelProp?: keyof T;
 }
 
 export interface ITimeInputState {
@@ -16,19 +14,11 @@ export default class TimeInput extends React.Component<ITimeInputProps, ITimeInp
     render() {
         let {
             seconds,
-            model,
-            modelProp,
             value,
             ...props
         } = this.props;
 
-        let renderedValue: string;
-        if (model && modelProp) {
-            renderedValue = model[modelProp] as any;
-        } else {
-            renderedValue = value as string;
-        }
-        let date = new Date(renderedValue);
+        let date = new Date(value);
 
         let timeString = date.toTimeString();
 
