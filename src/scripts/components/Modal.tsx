@@ -15,7 +15,7 @@ export interface IModalProps extends IGridExternalProps, IScrollableExternalProp
     className?: string;
     id?: string;
     open: boolean;
-    onclose: (event: React.MouseEvent<HTMLElement>) => void;
+    onClose?: (event: React.MouseEvent<HTMLElement>) => void;
     closeable?: boolean;
     closeButton?: any;
     title?: any;
@@ -61,8 +61,8 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
 
     close = (event: React.MouseEvent<HTMLElement>) => {
         // TODO: Create a prop for preventing mask clicks.
-        if (this.props.onclose) {
-            this.props.onclose(event);
+        if (this.props.onClose) {
+            this.props.onClose(event);
         }
     }
 
@@ -217,7 +217,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                     {closeable ?
                         <div className="action-bar">
                             <Button
-                                onClick={this.props.onclose}
+                                onClick={this.props.onClose}
                                 displaySize="small"
                             >
                                 {closeButton || 'Close'}
