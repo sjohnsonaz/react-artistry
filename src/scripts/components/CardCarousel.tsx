@@ -7,6 +7,8 @@ import CardContainer from './CardContainer';
 export interface ICardCarouselProps extends ICarouselProps {
     minWidth?: number;
     maxWidth?: number;
+    cardSpacing?: number;
+    carouselSpacing?: number;
 }
 
 export interface ICardCarouselState {
@@ -24,17 +26,21 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
     componentDidMount() {
         let {
             minWidth,
-            maxWidth
+            cardSpacing,
+            carouselSpacing
         } = this.props;
 
         let slideSize = 1;
         let element = this.element.current;
         if (element) {
             minWidth = minWidth || 300;
+            cardSpacing = cardSpacing || 10;
+            carouselSpacing = carouselSpacing || 10;
+            minWidth += cardSpacing;
             let width = element.clientWidth;
-            if (width > minWidth) {
-                let remainder = width % minWidth;
-                slideSize = (width - remainder) / minWidth;
+            if (width > minWidth + cardSpacing) {
+                let remainder = (width - cardSpacing) % minWidth;
+                slideSize = (width - cardSpacing - remainder) / minWidth;
             }
         }
 
@@ -46,17 +52,22 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
 
     componentDidUpdate() {
         let {
-            minWidth
+            minWidth,
+            cardSpacing,
+            carouselSpacing
         } = this.props;
 
         let slideSize = 1;
         let element = this.element.current;
         if (element) {
             minWidth = minWidth || 300;
+            cardSpacing = cardSpacing || 10;
+            carouselSpacing = carouselSpacing || 10;
+            minWidth += cardSpacing;
             let width = element.clientWidth;
-            if (width > minWidth) {
-                let remainder = width % minWidth;
-                slideSize = (width - remainder) / minWidth;
+            if (width > minWidth + cardSpacing) {
+                let remainder = (width - cardSpacing) % minWidth;
+                slideSize = (width - cardSpacing - remainder) / minWidth;
             }
         }
 
