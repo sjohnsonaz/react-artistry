@@ -15,7 +15,7 @@ export interface IModalProps extends IGridExternalProps, IScrollableExternalProp
     className?: string;
     id?: string;
     open: boolean;
-    onclose: (event: React.MouseEvent<HTMLElement>) => void;
+    onClose?: (event: React.MouseEvent<HTMLElement>) => void;
     closeable?: boolean;
     closeButton?: any;
     title?: any;
@@ -26,7 +26,7 @@ export interface IModalProps extends IGridExternalProps, IScrollableExternalProp
     locked?: boolean;
     space?: boolean;
     background?: boolean;
-    displaySize?: ModalSize | ModalSize[];
+    screenSize?: ModalSize | ModalSize[];
 }
 
 export interface IModalState {
@@ -61,8 +61,8 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
 
     close = (event: React.MouseEvent<HTMLElement>) => {
         // TODO: Create a prop for preventing mask clicks.
-        if (this.props.onclose) {
-            this.props.onclose(event);
+        if (this.props.onClose) {
+            this.props.onClose(event);
         }
     }
 
@@ -140,7 +140,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         let {
             animation,
             background,
-            displaySize,
+            screenSize,
             closeable,
             closeButton,
             title,
@@ -162,8 +162,8 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             classNames.push('modal-animate-' + animation.trim());
         }
 
-        if (displaySize) {
-            let sizes = (displaySize instanceof Array) ? displaySize : [displaySize];
+        if (screenSize) {
+            let sizes = (screenSize instanceof Array) ? screenSize : [screenSize];
 
             sizes.forEach(size => {
                 switch (size) {
@@ -217,7 +217,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                     {closeable ?
                         <div className="action-bar">
                             <Button
-                                onClick={this.props.onclose}
+                                onClick={this.props.onClose}
                                 displaySize="small"
                             >
                                 {closeButton || 'Close'}

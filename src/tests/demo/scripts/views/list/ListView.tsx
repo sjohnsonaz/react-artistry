@@ -113,7 +113,7 @@ export default class ListView extends React.Component<IListViewProps, IListViewS
                                 altAction={this.altAction}
                                 fill
                                 buttonText={<span className="nowrap"><Icon name="search" /> Search</span>}
-                                size="small"
+                                screenSize="small"
                             />
                         </Cell>
                     </Row>
