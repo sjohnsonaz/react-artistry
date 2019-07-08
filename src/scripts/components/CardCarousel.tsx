@@ -5,7 +5,10 @@ import Carousel, { ICarouselProps } from './Carousel';
 import CardContainer from './CardContainer';
 
 export interface ICardCarouselProps extends ICarouselProps {
-    cardWidth?: number;
+    minWidth?: number;
+    maxWidth?: number;
+    cardSpacing?: number;
+    carouselSpacing?: number;
 }
 
 export interface ICardCarouselState {
@@ -31,17 +34,22 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
 
     resizeHandler = () => {
         let {
-            cardWidth
+            minWidth,
+            cardSpacing,
+            carouselSpacing
         } = this.props;
 
         let slideSize = 1;
         let element = this.element.current;
         if (element) {
-            cardWidth = cardWidth || 300;
+            minWidth = minWidth || 300;
+            cardSpacing = cardSpacing || 10;
+            carouselSpacing = carouselSpacing || 10;
+            minWidth += cardSpacing;
             let width = element.clientWidth;
-            if (width > cardWidth) {
-                let remainder = width % cardWidth;
-                slideSize = (width - remainder) / cardWidth;
+            if (width > minWidth + cardSpacing) {
+                let remainder = (width - cardSpacing) % minWidth;
+                slideSize = (width - cardSpacing - remainder) / minWidth;
             }
         }
 
@@ -53,17 +61,22 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
 
     componentDidUpdate() {
         let {
-            cardWidth
+            minWidth,
+            cardSpacing,
+            carouselSpacing
         } = this.props;
 
         let slideSize = 1;
         let element = this.element.current;
         if (element) {
-            cardWidth = cardWidth || 300;
+            minWidth = minWidth || 300;
+            cardSpacing = cardSpacing || 10;
+            carouselSpacing = carouselSpacing || 10;
+            minWidth += cardSpacing;
             let width = element.clientWidth;
-            if (width > cardWidth) {
-                let remainder = width % cardWidth;
-                slideSize = (width - remainder) / cardWidth;
+            if (width > minWidth + cardSpacing) {
+                let remainder = (width - cardSpacing) % minWidth;
+                slideSize = (width - cardSpacing - remainder) / minWidth;
             }
         }
 
@@ -78,7 +91,8 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
         let {
             id,
             className,
-            cardWidth,
+            minWidth,
+            maxWidth,
             children,
             ...props
         } = this.props;
@@ -111,7 +125,8 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
                             return (
                                 <CardContainer
                                     className="space"
-                                    width={cardWidth}
+                                    minWidth={minWidth}
+                                    maxWidth={maxWidth}
                                     key={index}>
                                     {children}
                                 </CardContainer>
