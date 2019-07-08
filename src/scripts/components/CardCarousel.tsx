@@ -21,6 +21,15 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
     };
 
     componentDidMount() {
+        this.resizeHandler();
+        window.addEventListener('resize', this.resizeHandler);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.resizeHandler);
+    }
+
+    resizeHandler = () => {
         let {
             cardWidth
         } = this.props;
@@ -40,7 +49,7 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
             rendered: true,
             slideSize: slideSize
         });
-    }
+    };
 
     componentDidUpdate() {
         let {
