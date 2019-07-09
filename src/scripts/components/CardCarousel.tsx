@@ -53,38 +53,20 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
             }
         }
 
-        this.setState({
-            rendered: true,
-            slideSize: slideSize
-        });
-    };
-
-    componentDidUpdate() {
-        let {
-            minWidth,
-            cardSpacing,
-            carouselSpacing
-        } = this.props;
-
-        let slideSize = 1;
-        let element = this.element.current;
-        if (element) {
-            minWidth = minWidth || 300;
-            cardSpacing = cardSpacing || 10;
-            carouselSpacing = carouselSpacing || 10;
-            minWidth += cardSpacing;
-            let width = element.clientWidth;
-            if (width > minWidth + cardSpacing) {
-                let remainder = (width - cardSpacing) % minWidth;
-                slideSize = (width - cardSpacing - remainder) / minWidth;
-            }
-        }
-
-        if (slideSize !== this.state.slideSize) {
+        if (!this.state.rendered) {
+            this.setState({
+                rendered: true,
+                slideSize: slideSize
+            });
+        } else if (slideSize !== this.state.slideSize) {
             this.setState({
                 slideSize: slideSize
             });
         }
+    };
+
+    componentDidUpdate() {
+        this.resizeHandler();
     }
 
     render() {
