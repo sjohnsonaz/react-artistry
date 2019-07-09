@@ -9,7 +9,7 @@ export interface ICardCarouselProps extends ICarouselProps {
     maxWidth?: number;
     cardSpacing?: number;
     carouselSpacing?: number;
-    onChangeSize?: (slideSize: number) => any;
+    onChangeSize?: (slideSize: number, oldSlideSize: number) => any;
 }
 
 export interface ICardCarouselState {
@@ -33,9 +33,9 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
         window.removeEventListener('resize', this.resizeHandler);
     }
 
-    onChangeSize = (slideSize: number) => {
+    onChangeSize = (slideSize: number, oldSlideSize: number) => {
         if (this.props.onChangeSize) {
-            this.props.onChangeSize(slideSize);
+            this.props.onChangeSize(slideSize, oldSlideSize);
         }
     }
 
@@ -61,16 +61,18 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
         }
 
         if (!this.state.rendered) {
+            let oldSlideSize = this.state.slideSize;
             this.setState({
                 rendered: true,
                 slideSize: slideSize
             });
-            this.onChangeSize(slideSize);
+            this.onChangeSize(slideSize, oldSlideSize);
         } else if (slideSize !== this.state.slideSize) {
+            let oldSlideSize = this.state.slideSize;
             this.setState({
                 slideSize: slideSize
             });
-            this.onChangeSize(slideSize);
+            this.onChangeSize(slideSize, oldSlideSize);
         }
     };
 
