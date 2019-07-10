@@ -9,7 +9,7 @@ export interface ICardCarouselProps extends ICarouselProps {
     maxWidth?: number;
     cardSpacing?: number;
     carouselSpacing?: number;
-    onChangeSize?: (slideSize: number, oldSlideSize: number) => any;
+    onChangeSize?: (index: number, slideSize?: number, oldSlideSize?: number) => any;
 }
 
 export interface ICardCarouselState {
@@ -35,7 +35,8 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
 
     onChangeSize = (slideSize: number, oldSlideSize: number) => {
         if (this.props.onChangeSize) {
-            this.props.onChangeSize(slideSize, oldSlideSize);
+            let newIndex = Math.floor(this.props.activeIndex * oldSlideSize / slideSize);
+            this.props.onChangeSize(newIndex, slideSize, oldSlideSize);
         }
     }
 
