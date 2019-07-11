@@ -35,7 +35,12 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
 
     onChangeSize = (slideSize: number, oldSlideSize: number) => {
         if (this.props.onChangeSize) {
-            let newIndex = Math.floor(this.props.activeIndex * oldSlideSize / slideSize);
+            let oldIndex = this.props.activeIndex;
+            if (oldIndex < 0) {
+                let length = React.Children.count(this.props.children);
+                oldIndex = (oldIndex % length) + length;
+            }
+            let newIndex = Math.floor(oldIndex * oldSlideSize / slideSize);
             this.props.onChangeSize(newIndex, slideSize, oldSlideSize);
         }
     }
