@@ -9,6 +9,7 @@ export interface ICardCarouselProps extends ICarouselProps {
     maxWidth?: number;
     cardSpacing?: number;
     carouselSpacing?: number;
+    onChangeSize?: (index: number, slideSize?: number, oldSlideSize?: number) => any;
 }
 
 export interface ICardCarouselState {
@@ -24,33 +25,27 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
     };
 
     componentDidMount() {
-        let {
-            minWidth,
-            cardSpacing,
-            carouselSpacing
-        } = this.props;
-
-        let slideSize = 1;
-        let element = this.element.current;
-        if (element) {
-            minWidth = minWidth || 300;
-            cardSpacing = cardSpacing || 10;
-            carouselSpacing = carouselSpacing || 10;
-            minWidth += cardSpacing;
-            let width = element.clientWidth;
-            if (width > minWidth + cardSpacing) {
-                let remainder = (width - cardSpacing) % minWidth;
-                slideSize = (width - cardSpacing - remainder) / minWidth;
-            }
-        }
-
-        this.setState({
-            rendered: true,
-            slideSize: slideSize
-        });
+        this.resizeHandler();
+        window.addEventListener('resize', this.resizeHandler);
     }
 
-    componentDidUpdate() {
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.resizeHandler);
+    }
+
+    onChangeSize = (slideSize: number, oldSlideSize: number) => {
+        if (this.props.onChangeSize) {
+            let oldIndex = this.props.activeIndex;
+            if (oldIndex < 0) {
+                let length = React.Children.count(this.props.children);
+                oldIndex = (oldIndex % length) + length;
+            }
+            let newIndex = Math.floor(oldIndex * oldSlideSize / slideSize);
+            this.props.onChangeSize(newIndex, slideSize, oldSlideSize);
+        }
+    }
+
+    resizeHandler = () => {
         let {
             minWidth,
             cardSpacing,
@@ -71,11 +66,24 @@ export default class CardCarousel extends React.Component<ICardCarouselProps, IC
             }
         }
 
-        if (slideSize !== this.state.slideSize) {
+        if (!this.state.rendered) {
+            let oldSlideSize = this.state.slideSize;
+            this.setState({
+                rendered: true,
+                slideSize: slideSize
+            });
+            this.onChangeSize(slideSize, oldSlideSize);
+        } else if (slideSize !== this.state.slideSize) {
+            let oldSlideSize = this.state.slideSize;
             this.setState({
                 slideSize: slideSize
             });
+            this.onChangeSize(slideSize, oldSlideSize);
         }
+    };
+
+    componentDidUpdate() {
+        this.resizeHandler();
     }
 
     render() {
