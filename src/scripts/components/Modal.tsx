@@ -208,7 +208,6 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             gridConfig(modalContentClassNames, this.props);
         }
 
-
         let headerSection;
         if (title || header || closeable) {
             headerSection = (
