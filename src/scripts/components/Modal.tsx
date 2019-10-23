@@ -83,9 +83,9 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         }
     }
 
-    async componentWillReceiveProps(nextProps?: IModalProps) {
-        if (this.props.open != nextProps.open) {
-            if (nextProps.open) {
+    async componentDidUpdate(prevProps?: IModalProps) {
+        if (this.props.open != prevProps.open) {
+            if (this.props.open) {
                 let runCount = this.runCount;
                 await this.setState({
                     remove: false
@@ -97,13 +97,13 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                 BodyScroll.lock();
                 await waitAnimation();
                 this.setState({
-                    open: nextProps.open
+                    open: this.props.open
                 });
                 DepthStack.push(this.close);
             } else {
                 BodyScroll.unlock();
                 this.setState({
-                    open: nextProps.open
+                    open: this.props.open
                 });
                 DepthStack.remove(this.close);
             }

@@ -69,9 +69,9 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
         }
     }
 
-    async componentWillReceiveProps(nextProps?: IDrawerProps) {
-        if (this.props.open != nextProps.open) {
-            if (nextProps.open) {
+    async componentDidUpdate(prevProps?: IDrawerProps) {
+        if (this.props.open != prevProps.open) {
+            if (this.props.open) {
                 let runCount = this.runCount;
                 await this.setState({
                     remove: false
@@ -83,13 +83,13 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
                 BodyScroll.lock();
                 await waitAnimation();
                 this.setState({
-                    open: nextProps.open
+                    open: this.props.open
                 });
                 DepthStack.push(this.close);
             } else {
                 BodyScroll.unlock();
                 this.setState({
-                    open: nextProps.open
+                    open: this.props.open
                 });
                 DepthStack.remove(this.close);
             }
