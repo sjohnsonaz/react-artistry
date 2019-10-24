@@ -95,6 +95,8 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                 }
                 this.updateModalRoot();
                 BodyScroll.lock();
+                // Wait for two animation frames
+                await waitAnimation();
                 await waitAnimation();
                 this.setState({
                     open: this.props.open

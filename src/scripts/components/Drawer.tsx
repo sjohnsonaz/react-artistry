@@ -81,6 +81,8 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
                 }
                 this.updateModalRoot();
                 BodyScroll.lock();
+                // Wait for two animation frames
+                await waitAnimation();
                 await waitAnimation();
                 this.setState({
                     open: this.props.open
