@@ -28,10 +28,12 @@ export default class ModalView extends React.Component<IModalViewProps, IModalVi
 
     closeModal = () => {
         this.setState({ modalOpen: false });
+        console.log('close');
     }
 
     confirmModal = () => {
         this.setState({ modalOpen: false });
+        console.log('confirm');
     }
 
     openInnerModal = () => {

@@ -60,16 +60,20 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         }
     }
 
-    close = (event: React.MouseEvent<HTMLElement>, confirm: boolean) => {
-        if (confirm) {
-            if (this.props.onConfirm) {
-                this.props.onConfirm(event);
-            }
+    close = (event: React.MouseEvent<HTMLElement>) => {
+        // TODO: Create a prop for preventing mask clicks.
+        if (this.props.onClose) {
+            return this.props.onClose(event);
         } else {
-            // TODO: Create a prop for preventing mask clicks.
-            if (this.props.onClose) {
-                this.props.onClose(event);
-            }
+            return false;
+        }
+    }
+
+    confirm = (event: React.MouseEvent<HTMLElement>) => {
+        if (this.props.onClose) {
+            return this.props.onConfirm(event);
+        } else {
+            return false;
         }
     }
 
@@ -109,7 +113,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                 this.setState({
                     open: this.props.open
                 });
-                DepthStack.push(this.close, true);
+                DepthStack.push(this.close, this.confirm);
             } else {
                 BodyScroll.unlock();
                 this.setState({

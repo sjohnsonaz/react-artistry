@@ -1,38 +1,49 @@
 export interface ICloseHandle {
-    (event: React.SyntheticEvent, confirm: boolean): boolean | void;
+    (event: React.SyntheticEvent): boolean | void;
 }
 
 export interface ICloseItem {
-    handleConfirm: boolean;
-    closeHandle: ICloseHandle;
+    close: ICloseHandle;
+    confirm: ICloseHandle;
 }
 
 export default class DepthStack {
     static items: ICloseItem[] = [];
 
-    static push(closeHandle: ICloseHandle, handleConfirm: boolean = false) {
+    static push(close: ICloseHandle, confirm?: ICloseHandle) {
         this.items.push({
-            closeHandle: closeHandle,
-            handleConfirm: handleConfirm
+            close: close,
+            confirm: confirm
         });
     }
 
-    static remove(closeHandle: ICloseHandle) {
-        let index = this.items.findIndex(closeItem => closeItem.closeHandle === closeHandle);
+    static remove(close: ICloseHandle) {
+        let index = this.items.findIndex(closeItem => {
+            return (closeItem.close === close) || (closeItem.confirm === close);
+        });
         if (index > -1) {
             this.items.splice(index, 1);
         }
     }
 
-    static close(event: React.SyntheticEvent, confirm?: boolean) {
+    static close(event: React.SyntheticEvent) {
         let item = this.items[this.items.length - 1];
-        if (item) {
-            if (item.handleConfirm || !confirm) {
-                let result = item.closeHandle(event, confirm);
-                if (result !== false) {
-                    // Use remove instead of pop in case already removed.
-                    DepthStack.remove(item.closeHandle);
-                }
+        if (item && item.close) {
+            let result = item.close(event);
+            if (result !== false) {
+                // Use remove instead of pop in case already removed.
+                DepthStack.remove(item.close);
+            }
+        }
+    }
+
+    static confirm(event: React.SyntheticEvent) {
+        let item = this.items[this.items.length - 1];
+        if (item && item.confirm) {
+            let result = item.confirm(event);
+            if (result !== false) {
+                // Use remove instead of pop in case already removed.
+                DepthStack.remove(item.confirm);
             }
         }
     }
@@ -41,11 +52,11 @@ export default class DepthStack {
         window.addEventListener('keydown', (event: KeyboardEvent) => {
             switch (event.keyCode) {
                 case 13: // Enter
-                    this.close(event as any, true);
+                    this.confirm(event as any);
                     break;
                 case 27: // Escape
                     // TODO: Fix this
-                    this.close(event as any, false);
+                    this.close(event as any);
                     break;
                 default:
                     break;
@@ -54,7 +65,7 @@ export default class DepthStack {
         // Use onclick for iOS Safari
         window.onclick = (event: MouseEvent) => {
             // TODO: Fix this
-            this.close(event as any, false);
+            this.close(event as any);
         };
     }
 
