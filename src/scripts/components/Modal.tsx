@@ -16,6 +16,7 @@ export interface IModalProps extends IGridExternalProps, IScrollableExternalProp
     id?: string;
     open: boolean;
     onClose?: (event: React.MouseEvent<HTMLElement>) => void;
+    onConfirm?: (event: React.MouseEvent<HTMLElement>) => void;
     closeable?: boolean;
     closeButton?: any;
     title?: any;
@@ -59,10 +60,16 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         }
     }
 
-    close = (event: React.MouseEvent<HTMLElement>) => {
-        // TODO: Create a prop for preventing mask clicks.
-        if (this.props.onClose) {
-            this.props.onClose(event);
+    close = (event: React.MouseEvent<HTMLElement>, confirm: boolean) => {
+        if (confirm) {
+            if (this.props.onConfirm) {
+                this.props.onConfirm(event);
+            }
+        } else {
+            // TODO: Create a prop for preventing mask clicks.
+            if (this.props.onClose) {
+                this.props.onClose(event);
+            }
         }
     }
 
@@ -86,6 +93,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
     async componentDidUpdate(prevProps?: IModalProps) {
         if (this.props.open != prevProps.open) {
             if (this.props.open) {
+                DepthStack.blur();
                 let runCount = this.runCount;
                 await this.setState({
                     remove: false
@@ -101,7 +109,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                 this.setState({
                     open: this.props.open
                 });
-                DepthStack.push(this.close);
+                DepthStack.push(this.close, true);
             } else {
                 BodyScroll.unlock();
                 this.setState({

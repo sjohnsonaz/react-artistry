@@ -23,25 +23,29 @@ export default class ModalView extends React.Component<IModalViewProps, IModalVi
     }
 
     openModal = () => {
-        this.setState({modalOpen :true});
+        this.setState({ modalOpen: true });
     }
 
     closeModal = () => {
-        this.setState({modalOpen :false});
+        this.setState({ modalOpen: false });
+    }
+
+    confirmModal = () => {
+        this.setState({ modalOpen: false });
     }
 
     openInnerModal = () => {
-        this.setState({innerModalOpen : true});
+        this.setState({ innerModalOpen: true });
     }
 
     closeInnerModal = () => {
-        this.setState({innerModalOpen :false});
+        this.setState({ innerModalOpen: false });
     }
 
     lockModal = () => {
-        this.setState({modalLock : true});
+        this.setState({ modalLock: true });
         window.setTimeout(() => {
-            this.setState({modalLock : false});
+            this.setState({ modalLock: false });
         }, 1000);
     }
 
@@ -52,6 +56,7 @@ export default class ModalView extends React.Component<IModalViewProps, IModalVi
                 <Modal
                     open={this.state.modalOpen}
                     onClose={this.closeModal}
+                    onConfirm={this.confirmModal}
                     title="Modal"
                     animation="top"
                     screenSize="small"

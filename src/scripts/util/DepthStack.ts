@@ -2,27 +2,37 @@ export interface ICloseHandle {
     (event: React.SyntheticEvent, confirm: boolean): boolean | void;
 }
 
-export default class DepthStack {
-    static items: ICloseHandle[] = [];
+export interface ICloseItem {
+    handleConfirm: boolean;
+    closeHandle: ICloseHandle;
+}
 
-    static push(closeHandle: ICloseHandle) {
-        this.items.push(closeHandle);
+export default class DepthStack {
+    static items: ICloseItem[] = [];
+
+    static push(closeHandle: ICloseHandle, handleConfirm: boolean = false) {
+        this.items.push({
+            closeHandle: closeHandle,
+            handleConfirm: handleConfirm
+        });
     }
 
     static remove(closeHandle: ICloseHandle) {
-        let index = this.items.indexOf(closeHandle);
+        let index = this.items.findIndex(closeItem => closeItem.closeHandle === closeHandle);
         if (index > -1) {
             this.items.splice(index, 1);
         }
     }
 
-    static close(event: React.SyntheticEvent, confirm: boolean) {
+    static close(event: React.SyntheticEvent, confirm?: boolean) {
         let item = this.items[this.items.length - 1];
         if (item) {
-            let result = item(event, confirm);
-            if (result !== false) {
-                // Use remove instead of pop in case already removed.
-                DepthStack.remove(item);
+            if (item.handleConfirm || !confirm) {
+                let result = item.closeHandle(event, confirm);
+                if (result !== false) {
+                    // Use remove instead of pop in case already removed.
+                    DepthStack.remove(item.closeHandle);
+                }
             }
         }
     }
@@ -46,5 +56,11 @@ export default class DepthStack {
             // TODO: Fix this
             this.close(event as any, false);
         };
+    }
+
+    static blur() {
+        if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur();
+        }
     }
 }
