@@ -36,7 +36,7 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
         };
         this.element = document.createElement('div');
         if (props.open) {
-            BodyScroll.lock();
+            BodyScroll.lock(true);
             DepthStack.push(this.close);
         }
     }
@@ -80,7 +80,7 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
                     return;
                 }
                 this.updateModalRoot();
-                BodyScroll.lock();
+                BodyScroll.lock(true);
                 // Wait for two animation frames
                 await waitAnimation();
                 await waitAnimation();
@@ -99,7 +99,7 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
     }
 
     updateModalRoot() {
-        let modalRoot = Portal.getElement('modal-root');
+        let modalRoot = Portal.getElement('layer-overlay');
 
         if (!modalRoot.contains(this.element)) {
             if (!this.state.remove) {
@@ -118,7 +118,7 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
             BodyScroll.unlock();
             DepthStack.remove(this.close);
         }
-        let modalRoot = Portal.getElement('modal-root');
+        let modalRoot = Portal.getElement('layer-overlay');
         if (modalRoot.contains(this.element)) {
             modalRoot.removeChild(this.element);
         }

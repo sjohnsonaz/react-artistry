@@ -47,7 +47,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
         };
         this.element = document.createElement('div');
         if (props.open) {
-            BodyScroll.lock();
+            BodyScroll.lock(true);
             DepthStack.push(this.close);
         }
     }
@@ -106,7 +106,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                     return;
                 }
                 this.updateModalRoot();
-                BodyScroll.lock();
+                BodyScroll.lock(true);
                 // Wait for two animation frames
                 await waitAnimation();
                 await waitAnimation();
@@ -125,7 +125,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
     }
 
     updateModalRoot() {
-        let modalRoot = Portal.getElement('modal-root');
+        let modalRoot = Portal.getElement('layer-overlay');
 
         if (!modalRoot.contains(this.element)) {
             if (!this.state.remove) {
@@ -144,7 +144,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             BodyScroll.unlock();
             DepthStack.remove(this.close);
         }
-        let modalRoot = Portal.getElement('modal-root');
+        let modalRoot = Portal.getElement('layer-overlay');
         if (modalRoot.contains(this.element)) {
             modalRoot.removeChild(this.element);
         }

@@ -1,4 +1,7 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+
+import Portal from '../util/Portal';
 
 export interface IMenuBarProps {
     className?: string;
@@ -10,11 +13,34 @@ export interface IMenuBarProps {
 }
 
 export default class MenuBar extends React.Component<IMenuBarProps, any> {
+    element: HTMLDivElement;
+
+    constructor(props: IMenuBarProps) {
+        super(props);
+        this.element = document.createElement('div');
+    }
+
+    componentDidMount() {
+        let fixedLayer = Portal.getElement('layer-fixed');
+
+        if (!fixedLayer.contains(this.element)) {
+            fixedLayer.appendChild(this.element);
+        }
+    }
+
+    componentWillUnmount() {
+        let fixedLayer = Portal.getElement('layer-fixed');
+
+        if (fixedLayer.contains(this.element)) {
+            fixedLayer.removeChild(this.element);
+        }
+    }
+
     onOpen(event: MouseEvent) {
         event.preventDefault();
         if (this.props.onOpen) {
             this.props.onOpen(event);
-        }    
+        }
     }
 
     render() {
@@ -36,7 +62,7 @@ export default class MenuBar extends React.Component<IMenuBarProps, any> {
             )
         }
 
-        return (
+        return ReactDOM.createPortal((
             <div className={classNames.join(' ')} id={this.props.id}>
                 {this.props.top ? <div className="menu-bar-expander">
                     <a href="#" onClick={this.onOpen.bind(this)}>&#9776;</a>
@@ -46,6 +72,6 @@ export default class MenuBar extends React.Component<IMenuBarProps, any> {
                     {this.props.children}
                 </ul>
             </div>
-        );
+        ), this.element);
     }
 }

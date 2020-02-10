@@ -31,7 +31,9 @@ export default class Application {
     static run() {
         BodyScroll.init();
         DepthStack.init();
-        Portal.addElement('modal-root', 'modal-root');
+        Portal.addElement('layer-fixed', 'layer-fixed');
+        Portal.addElement('layer-overlay', 'layer-overlay');
+        Portal.addElement('layer-flyout', 'layer-flyout');
         ReactDom.render(
             <Container menuBarTop screenSize="all">
                 <MenuBarView />
@@ -57,7 +59,7 @@ export default class Application {
                 <CardView />
                 <NotificationView />
             </Container>,
-            document.getElementById('root'),
+            document.getElementById('layer-root'),
         );
     }
 }

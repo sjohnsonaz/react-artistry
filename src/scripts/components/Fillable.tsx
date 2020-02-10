@@ -30,7 +30,7 @@ export default class Fillable extends React.Component<IFillableProps, IFillableS
     constructor(props?: IFillableProps) {
         super(props);
         if (props.filled) {
-            BodyScroll.lock();
+            BodyScroll.lock(true);
         }
     }
 
@@ -101,7 +101,7 @@ export default class Fillable extends React.Component<IFillableProps, IFillableS
                     return;
                 }
 
-                BodyScroll.lock();
+                BodyScroll.lock(true);
             }
         }
     }
