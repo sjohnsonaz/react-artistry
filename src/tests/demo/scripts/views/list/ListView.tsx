@@ -94,7 +94,7 @@ export default class ListView extends React.Component<IListViewProps, IListViewS
 
     render() {
         return (
-            <Section header="List">
+            <Section header="List" headerSpace>
                 <Grid space>
                     <Row>
                         <Cell>

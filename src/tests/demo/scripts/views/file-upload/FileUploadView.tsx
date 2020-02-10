@@ -15,6 +15,7 @@ export default class TableView extends React.Component<ITableViewProps, any> {
         return (
             <Section
                 header="File Upload"
+                headerSpace
                 space
             >
                 <FileUpload onUpload={this.upload} />

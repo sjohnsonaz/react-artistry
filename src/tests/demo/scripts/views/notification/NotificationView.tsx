@@ -25,6 +25,7 @@ export default class NotificationView extends React.Component<INotificationViewP
         title?: string;
         text?: string;
         decay?: number;
+        onClick?: (event: React.MouseEvent<HTMLElement>) => any;
     }) {
         let items = this.state.items.splice(0);
         items.push(item);

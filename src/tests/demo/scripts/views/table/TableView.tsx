@@ -43,7 +43,7 @@ let data: ITableData[] = [{
 export default class TableView extends React.Component<ITableViewProps, any> {
     render() {
         return (
-            <Section header="Table">
+            <Section header="Table" headerSpace>
                 <Table
                     id="table-component"
                     data={data}

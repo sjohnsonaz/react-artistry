@@ -20,7 +20,7 @@ export default class FormView extends React.Component<IFormViewProps, any> {
 
     render() {
         return (
-            <Section header="Form">
+            <Section header="Form" headerSpace>
                 <Form
                     screenSize="small"
                     onEnter={(event: KeyboardEvent) => {

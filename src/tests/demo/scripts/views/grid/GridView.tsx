@@ -9,7 +9,7 @@ export interface IGridViewProps {
 export default class GridView extends React.Component<IGridViewProps, any> {
     render() {
         return (
-            <Section header="Grid">
+            <Section header="Grid" headerSpace>
                 <h3>Grid</h3>
                 <Grid screenSize="small" space>
                     <Row>

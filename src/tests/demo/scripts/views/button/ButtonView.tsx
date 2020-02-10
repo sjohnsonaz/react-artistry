@@ -76,14 +76,14 @@ export default class ButtonView extends React.Component<IButtonViewProps, IButto
                 <h3>Button Group</h3>
                 <ButtonGroup>
                     <Button>View</Button>
-                    <Button theme="primary" popover="Popover" popoverAlign="left">Edit</Button>
+                    <Button theme="primary" popover="Popover" popoverAlign="left" popoverSpace>Edit</Button>
                     <Button theme="danger">Delete</Button>
                 </ButtonGroup>
 
                 <h3>Button Bar</h3>
                 <ButtonBar>
                     <Button>View</Button>
-                    <Button theme="primary" popover="Popover" popoverAlign="left">Edit</Button>
+                    <Button theme="primary" popover="Popover" popoverAlign="left" popoverSpace>Edit</Button>
                     <Button theme="danger">Delete</Button>
                 </ButtonBar>
 
@@ -98,11 +98,16 @@ export default class ButtonView extends React.Component<IButtonViewProps, IButto
                 <Button tooltip="Information..." tooltipDirection="right">Tooltip</Button>
 
                 <h3>Popover</h3>
-                <Button popover={<span><strong>Popover</strong> Text</span>} popoverDirection="right">Popover</Button>
+                <Button
+                    popover={<span><strong>Popover</strong> Text</span>}
+                    popoverDirection="right"
+                    popoverSpace
+                >Popover</Button>
 
                 <h3>Popover Menu</h3>
                 <Button popover={<span><strong>Popover</strong> Text</span>} popoverDirection="right"
                     popoverMenu
+                    popoverSpace
                     popoverOpen={this.state.popoverOpen}
                     onPopoverClose={this.closePopover}
                     onClick={this.openPopover}
