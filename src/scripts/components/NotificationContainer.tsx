@@ -1,6 +1,8 @@
 import * as React from 'react';
-import ClassNames from '../util/ClassNames';
+import * as ReactDOM from 'react-dom';
 
+import Portal from '../util/Portal';
+import ClassNames from '../util/ClassNames';
 import { NotificationType } from '../util/NotificationUtil';
 import Notification from './Notification';
 
@@ -19,6 +21,29 @@ export interface INotificationContainerProps {
 }
 
 export default class NotificationContainer extends React.Component<INotificationContainerProps, any> {
+    element: HTMLDivElement;
+
+    constructor(props: INotificationContainerProps, context: any) {
+        super(props, context);
+        this.element = document.createElement('div');
+    }
+
+    componentDidMount() {
+        let flyoutLayer = Portal.getElement('layer-flyout');
+
+        if (!flyoutLayer.contains(this.element)) {
+            flyoutLayer.appendChild(this.element);
+        }
+    }
+
+    componentWillUnmount() {
+        let flyoutLayer = Portal.getElement('layer-flyout');
+
+        if (flyoutLayer.contains(this.element)) {
+            flyoutLayer.removeChild(this.element);
+        }
+    }
+
     render() {
         let {
             id,
@@ -67,7 +92,7 @@ export default class NotificationContainer extends React.Component<INotification
                 break;
         }
 
-        return (
+        return ReactDOM.createPortal((
             <div className={classNames.toString()} id={id}>
                 {items ? items.map((item, index) => (
                     <Notification
@@ -80,6 +105,6 @@ export default class NotificationContainer extends React.Component<INotification
                     </Notification>
                 )) : undefined}
             </div>
-        );
+        ), this.element);
     }
 }

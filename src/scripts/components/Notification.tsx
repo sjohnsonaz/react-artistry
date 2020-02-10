@@ -8,6 +8,7 @@ export interface INotificationProps extends INotification {
     id?: string;
     className?: string;
     clickable?: boolean;
+    onClick?: (event: React.MouseEvent<HTMLElement>) => any;
     onClose?: () => any;
 }
 
@@ -50,18 +51,19 @@ export default class Notification extends React.Component<INotificationProps, IN
         let classNames = new ClassNames(className);
         classNames.add('notification', 'animatable');
 
+        let theme: string;
         switch (type) {
             case 'success':
-                classNames.add('notification-success');
+                theme = 'success';
                 break;
             case 'info':
-                classNames.add('notification-info');
+                theme = 'info';
                 break;
             case 'warning':
-                classNames.add('notification-warning');
+                theme = 'warning';
                 break;
             case 'danger':
-                classNames.add('notification-danger');
+                theme = 'danger';
                 break;
         }
 
@@ -79,7 +81,10 @@ export default class Notification extends React.Component<INotificationProps, IN
                 className={classNames.toString()}
                 data-animation="fade-right"
                 data-direction={direction}
+                data-theme={theme}
                 id={id}
+                onClick={this.props.onClick}
+                aria-role="button"
             >
                 {title ?
                     <header>{title}</header> :

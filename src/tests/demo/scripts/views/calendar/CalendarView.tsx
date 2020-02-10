@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { DatePicker, FormContainer, Section } from '../../../../../scripts/modules/ArtistryReact';
+import { DatePicker, FormGroup, Section } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface ICalendarViewProps {
 
@@ -16,13 +16,13 @@ export default class CalendarView extends React.Component<ICalendarViewProps, an
     render() {
         return (
             <Section header="Calendar" space headerSpace>
-                <FormContainer label="Calendar">
+                <FormGroup label="Calendar">
                     <DatePicker date={this.state.date} onSelect={(date) => {
                         this.setState({
                             date: date
                         });
                     }} />
-                </FormContainer>
+                </FormGroup>
             </Section>
         );
     }

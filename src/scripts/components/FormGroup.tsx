@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export interface IFormContainerProps {
+export interface IFormGroupProps {
     className?: string;
     id?: string;
     label?: any;
@@ -9,13 +9,13 @@ export interface IFormContainerProps {
     inline?: boolean;
 }
 
-export default class FormContainer extends React.Component<IFormContainerProps, any> {
+export default class FormGroup extends React.Component<IFormGroupProps, any> {
     render() {
         let classNames = this.props.className ? [this.props.className] : [];
-        classNames.push('form-container');
+        classNames.push('form-group');
 
         if (this.props.inline) {
-            classNames.push('form-container-inline');
+            classNames.push('form-group-inline');
         }
 
         let input = (
