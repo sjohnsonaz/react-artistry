@@ -3,20 +3,12 @@ import * as ReactDOM from 'react-dom';
 
 import Portal from '../util/Portal';
 import ClassNames from '../util/ClassNames';
-import { NotificationType } from '../util/NotificationUtil';
-import Notification from './Notification';
 
 export type NotificationLocation = 'default' | 'top' | 'right' | 'bottom' | 'left' | 'center-horizontal' | 'center-vertical' | 'top-right' | 'bottom-right' | 'bottom-left' | 'top-left';
 
 export interface INotificationContainerProps {
     id?: string;
     className?: string;
-    items?: {
-        type?: NotificationType;
-        title?: string;
-        text?: string;
-        decay?: number;
-    }[];
     location?: NotificationLocation;
 }
 
@@ -48,14 +40,13 @@ export default class NotificationContainer extends React.Component<INotification
         let {
             id,
             className,
-            items,
             location
         } = this.props;
 
         let classNames = new ClassNames(className);
         classNames.add('notification-container');
 
-        if (!items || !items.length) {
+        if (!React.Children.count(this.props.children)) {
             classNames.add('hidden');
         }
 
@@ -94,16 +85,7 @@ export default class NotificationContainer extends React.Component<INotification
 
         return ReactDOM.createPortal((
             <div className={classNames.toString()} id={id}>
-                {items ? items.map((item, index) => (
-                    <Notification
-                        type={item.type}
-                        title={item.title}
-                        decay={item.decay}
-                        key={index}
-                    >
-                        {item.text}
-                    </Notification>
-                )) : undefined}
+                {this.props.children}
             </div>
         ), this.element);
     }

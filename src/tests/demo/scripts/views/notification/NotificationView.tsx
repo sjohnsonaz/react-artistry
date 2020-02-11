@@ -1,37 +1,32 @@
 import * as React from 'react';
 
-import { Button, NotificationContainer, NotificationType, Section } from '../../../../../scripts/modules/ArtistryReact';
+import { Button, NotificationContainer, NotificationType, Section, Notification, INotificationProps } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface INotificationViewProps {
 
 }
 
+export interface INotification extends INotificationProps {
+    text?: string;
+}
+
 export interface INotificationViewState {
     items?: {
-        type?: NotificationType;
-        title?: string;
-        text?: string;
-        decay?: number;
-    }[];
+        [index: number]: INotification;
+    };
 }
 
 export default class NotificationView extends React.Component<INotificationViewProps, any> {
     state: INotificationViewState = {
-        items: []
+        items: {}
     };
 
-    pushItem(item: {
-        type?: NotificationType;
-        title?: string;
-        text?: string;
-        decay?: number;
-        onClick?: (event: React.MouseEvent<HTMLElement>) => any;
-    }) {
-        let items = this.state.items.splice(0);
-        items.push(item);
-        this.setState({
-            items: items
-        });
+    static currentKey = 0;
+
+    pushItem(item: INotification) {
+        this.state.items[NotificationView.currentKey] = item;
+        NotificationView.currentKey++;
+        this.forceUpdate();
     }
 
     pushDefault = () => {
@@ -87,9 +82,26 @@ export default class NotificationView extends React.Component<INotificationViewP
                 <Button onClick={this.pushInfo}>Push Info</Button>
                 <Button onClick={this.pushWarning}>Push Warning</Button>
                 <Button onClick={this.pushDanger}>Push Danger</Button>
-                <NotificationContainer
-                    items={this.state.items}
-                />
+                <NotificationContainer>
+                    {Object.keys(this.state.items).map(key => {
+                        let item = this.state.items[key];
+                        return (
+                            <Notification
+                                key={key}
+                                title={item.title}
+                                type={item.type}
+                                decay={item.decay}
+                                onClick={item.onClick}
+                                onClose={() => {
+                                    delete this.state.items[key];
+                                    this.forceUpdate();
+                                }}
+                            >
+                                {item.text}
+                            </Notification>
+                        );
+                    })}
+                </NotificationContainer>
             </Section>
         );
     }

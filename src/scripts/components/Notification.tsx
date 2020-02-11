@@ -31,11 +31,13 @@ export default class Notification extends React.Component<INotificationProps, IN
             await wait(this.props.decay);
             this.setState({
                 hide: true
-            }, () => {
-                if (this.props.onClose) {
-                    this.props.onClose();
-                }
             });
+        }
+    }
+
+    endDecay = async (event: React.AnimationEvent) => {
+        if (event.animationName === 'slide-right-out' && this.props.onClose) {
+            this.props.onClose();
         }
     }
 
@@ -84,7 +86,8 @@ export default class Notification extends React.Component<INotificationProps, IN
                 data-theme={theme}
                 id={id}
                 onClick={this.props.onClick}
-                aria-role="button"
+                onAnimationEnd={this.endDecay}
+                role={clickable ? "button" : undefined}
             >
                 {title ?
                     <header>{title}</header> :
