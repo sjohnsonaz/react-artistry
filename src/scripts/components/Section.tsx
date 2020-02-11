@@ -54,14 +54,17 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
         if (event.propertyName === 'height') {
             let animating = this.state.animating;
             if (!animating) {
-                if (this.state.closed) {
+                if (this.props.closed) {
                     await setState({
-                        running: false
+                        height: undefined,
+                        running: false,
+                        closed: true
                     }, this);
                 } else {
                     await setState({
                         height: undefined,
-                        running: false
+                        running: false,
+                        closed: false
                     }, this);
                 }
             }
@@ -94,8 +97,7 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
                 }
 
                 await setState({
-                    height: header.offsetHeight + 'px',
-                    closed: true,
+                    height: header.offsetHeight + 'px'
                 }, this);
                 if (runCount !== this.runCount) {
                     return;
