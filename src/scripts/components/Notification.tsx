@@ -9,7 +9,8 @@ export interface INotificationProps extends INotification {
     id?: string;
     className?: string;
     clickable?: boolean;
-    animation?: Animation
+    animation?: Animation;
+    allowDelay?: boolean;
     onClick?: (event: React.MouseEvent<HTMLElement>) => any;
     onClose?: () => any;
 }
@@ -19,6 +20,7 @@ export interface INotificationState {
 }
 
 export default class Notification extends React.Component<INotificationProps, INotificationState> {
+    decayCounter: number = 0;
     state: INotificationState = {
         hide: false
     };
@@ -28,12 +30,16 @@ export default class Notification extends React.Component<INotificationProps, IN
         this.startDecay();
     }
 
-    async startDecay() {
+    startDecay = async () => {
         if (this.props.decay) {
+            this.decayCounter++;
+            let decayCounter = this.decayCounter;
             await wait(this.props.decay);
-            this.setState({
-                hide: true
-            });
+            if (decayCounter === this.decayCounter) {
+                this.setState({
+                    hide: true
+                });
+            }
         }
     }
 
@@ -43,13 +49,20 @@ export default class Notification extends React.Component<INotificationProps, IN
         }
     }
 
+    stopDecay = () => {
+        if (this.props.allowDelay) {
+            this.decayCounter++;
+        }
+    }
+
     render() {
         let {
             id,
             className,
             type,
             title,
-            clickable
+            clickable,
+            allowDelay
         } = this.props;
 
         let classNames = new ClassNames(className);
@@ -71,7 +84,7 @@ export default class Notification extends React.Component<INotificationProps, IN
                 break;
         }
 
-        if (clickable) {
+        if (clickable || allowDelay) {
             classNames.add('clickable');
         }
 
@@ -88,6 +101,8 @@ export default class Notification extends React.Component<INotificationProps, IN
                 data-theme={theme}
                 id={id}
                 onClick={this.props.onClick}
+                onMouseEnter={this.stopDecay}
+                onMouseLeave={this.startDecay}
                 onAnimationEnd={this.endDecay}
                 role={clickable ? "button" : undefined}
             >

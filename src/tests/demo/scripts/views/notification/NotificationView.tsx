@@ -34,7 +34,8 @@ export default class NotificationView extends React.Component<INotificationViewP
             type: 'default',
             title: 'Default',
             text: 'This is a default message.',
-            decay: 2000
+            decay: 2000,
+            onClick: () => console.log('Default clicked!')
         });
     }
 
@@ -94,6 +95,8 @@ export default class NotificationView extends React.Component<INotificationViewP
                                 type={item.type}
                                 decay={item.decay}
                                 onClick={item.onClick}
+                                clickable={!!item.onClick}
+                                allowDelay
                                 onClose={() => {
                                     delete this.state.items[key];
                                     this.forceUpdate();
