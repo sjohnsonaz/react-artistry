@@ -3,11 +3,13 @@ import * as React from 'react';
 import { wait } from '../util/PromiseUtil';
 import { INotification } from '../util/NotificationUtil';
 import ClassNames from '../util/ClassNames';
+import { Animation } from '../abilities/Animatable';
 
 export interface INotificationProps extends INotification {
     id?: string;
     className?: string;
     clickable?: boolean;
+    animation?: Animation
     onClick?: (event: React.MouseEvent<HTMLElement>) => any;
     onClose?: () => any;
 }
@@ -36,7 +38,7 @@ export default class Notification extends React.Component<INotificationProps, IN
     }
 
     endDecay = async (event: React.AnimationEvent) => {
-        if (event.animationName === 'slide-right-out' && this.props.onClose) {
+        if (event.animationName.endsWith('out') && this.props.onClose) {
             this.props.onClose();
         }
     }
@@ -81,7 +83,7 @@ export default class Notification extends React.Component<INotificationProps, IN
         return (
             <aside
                 className={classNames.toString()}
-                data-animation="fade-right"
+                data-animation={this.props.animation || "fade-right"}
                 data-direction={direction}
                 data-theme={theme}
                 id={id}
