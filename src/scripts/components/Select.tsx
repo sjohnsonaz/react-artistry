@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { DOMEvent } from '../util/BaseEventTarget';
-
 export interface ISelectProps<T> {
     id?: string;
     className?: string;
