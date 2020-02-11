@@ -1,5 +1,4 @@
 export default class BodyScroll {
-    static lockCount: number = 0;
     static lockStack: {
         scrollTop: number;
         hideScroll: boolean;
@@ -9,8 +8,6 @@ export default class BodyScroll {
     static scrollbarWidth: string;
 
     static lock(hideScroll: boolean) {
-        this.lockCount++;
-
         let body = document.body;
         let root = document.querySelector(this.rootSelector) as HTMLElement;
         if (root) {
@@ -40,16 +37,18 @@ export default class BodyScroll {
         let root = document.querySelector(this.rootSelector) as HTMLElement;
 
         let lockConfig = this.lockStack.pop();
-        root.setAttribute('data-status', '');
-        body.scrollTop = lockConfig.scrollTop;
-        if (lockConfig.hideScroll) {
-            body.setAttribute('data-lock', 'hide');
-            root.setAttribute('data-pad-scroll', 'true');
-        } else {
-            body.setAttribute('data-lock', '');
-            root.setAttribute('data-pad-scroll', '');
+        if (lockConfig) {
+            root.setAttribute('data-status', '');
+            body.scrollTop = lockConfig.scrollTop;
+            if (lockConfig.hideScroll) {
+                body.setAttribute('data-lock', 'hide');
+                root.setAttribute('data-pad-scroll', 'true');
+            } else {
+                body.setAttribute('data-lock', '');
+                root.setAttribute('data-pad-scroll', '');
+            }
+            document.documentElement.scrollTop = lockConfig.scrollTop;
         }
-        document.documentElement.scrollTop = lockConfig.scrollTop;
     }
 
     static init() {
@@ -66,7 +65,6 @@ export default class BodyScroll {
         }
 
         window.addEventListener('beforeunload', () => {
-            this.lockCount = 1;
             this.unlock();
         });
     }
