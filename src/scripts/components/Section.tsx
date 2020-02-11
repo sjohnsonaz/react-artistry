@@ -196,6 +196,7 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
                 id={id}
                 {...props}
                 style={{ height: this.state.height }}
+                onTransitionEnd={this.transitionEnd}
                 ref={this.root}
             >
                 <header
