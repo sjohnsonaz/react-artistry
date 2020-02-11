@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, NotificationContainer, NotificationType, Section, Notification, INotificationProps } from '../../../../../scripts/modules/ArtistryReact';
+import { Button, NotificationContainer, NotificationType, Section, Notification, INotificationProps, ActionBar } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface INotificationViewProps {
 
@@ -76,12 +76,14 @@ export default class NotificationView extends React.Component<INotificationViewP
 
     render() {
         return (
-            <Section header="Notification" space headerSpace>
-                <Button onClick={this.pushDefault}>Push Default</Button>
-                <Button onClick={this.pushSuccess}>Push Success</Button>
-                <Button onClick={this.pushInfo}>Push Info</Button>
-                <Button onClick={this.pushWarning}>Push Warning</Button>
-                <Button onClick={this.pushDanger}>Push Danger</Button>
+            <Section header="Notification" headerSpace>
+                <ActionBar align="start">
+                    <Button onClick={this.pushDefault}>Push Default</Button>
+                    <Button onClick={this.pushSuccess}>Push Success</Button>
+                    <Button onClick={this.pushInfo}>Push Info</Button>
+                    <Button onClick={this.pushWarning}>Push Warning</Button>
+                    <Button onClick={this.pushDanger}>Push Danger</Button>
+                </ActionBar>
                 <NotificationContainer>
                     {Object.keys(this.state.items).map(key => {
                         let item = this.state.items[key];
