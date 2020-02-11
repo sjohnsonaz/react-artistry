@@ -13,7 +13,7 @@ export default class BodyScroll {
         if (root) {
             // We must query multiple objects for the scrollTop.
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop || body.scrollTop || root.scrollTop;
-            let currentHideScroll = body.getAttribute('data-status') === 'hide';
+            let currentHideScroll = body.getAttribute('data-lock') === 'hide';
             this.lockStack.push({
                 scrollTop: scrollTop,
                 hideScroll: currentHideScroll
@@ -35,19 +35,22 @@ export default class BodyScroll {
     static unlock() {
         let body = document.body;
         let root = document.querySelector(this.rootSelector) as HTMLElement;
-
-        let lockConfig = this.lockStack.pop();
-        if (lockConfig) {
-            root.setAttribute('data-status', '');
-            body.scrollTop = lockConfig.scrollTop;
-            if (lockConfig.hideScroll) {
-                body.setAttribute('data-lock', 'hide');
-                root.setAttribute('data-pad-scroll', 'true');
-            } else {
-                body.setAttribute('data-lock', '');
-                root.setAttribute('data-pad-scroll', '');
+        if (root) {
+            let lockConfig = this.lockStack.pop();
+            if (!this.lockStack.length) {
+                root.setAttribute('data-status', '');
             }
-            document.documentElement.scrollTop = lockConfig.scrollTop;
+            if (lockConfig) {
+                body.scrollTop = lockConfig.scrollTop;
+                if (lockConfig.hideScroll) {
+                    body.setAttribute('data-lock', 'hide');
+                    root.setAttribute('data-pad-scroll', 'true');
+                } else {
+                    body.setAttribute('data-lock', '');
+                    root.setAttribute('data-pad-scroll', '');
+                }
+                document.documentElement.scrollTop = lockConfig.scrollTop;
+            }
         }
     }
 
