@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Carousel, Section } from '../../../../../scripts/modules/ArtistryReact';
+import { Button, Carousel, Section, ActionBar, Divider } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface ICarouselViewProps {
 
@@ -29,11 +29,11 @@ export default class CarouselView extends React.Component<ICarouselViewProps, an
     render() {
         return (
             <Section header="Carousel" headerSpace>
-                <div className="space">
+                <ActionBar align="space-between">
                     <Button onClick={this.backCarouselSlide}>Back</Button>
                     <Button onClick={this.nextCarouselSlide}>Next</Button>
-                </div>
-                <hr />
+                </ActionBar>
+                <Divider />
                 <Carousel activeIndex={this.state.activeIndex} animation="slide" space>
                     <div style={{ backgroundColor: "red", padding: "10px" }}>
                         Content 0
@@ -48,7 +48,7 @@ export default class CarouselView extends React.Component<ICarouselViewProps, an
                         <br /> Line 3
                     </div>
                 </Carousel>
-                <hr />
+                <Divider />
                 <Carousel activeIndex={this.state.activeIndex} animation="flip" space>
                     <div style={{ backgroundColor: "red", padding: "10px" }}>
                         Content 0
