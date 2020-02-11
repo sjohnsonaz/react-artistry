@@ -70,7 +70,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
     }
 
     confirm = (event: React.MouseEvent<HTMLElement>) => {
-        if (this.props.onClose) {
+        if (this.props.onConfirm) {
             return this.props.onConfirm(event);
         } else {
             return false;
