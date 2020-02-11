@@ -36,9 +36,11 @@ export default class Notification extends React.Component<INotificationProps, IN
             let decayCounter = this.decayCounter;
             await wait(this.props.decay);
             if (decayCounter === this.decayCounter) {
-                this.setState({
-                    hide: true
-                });
+                if (!this.state.hide) {
+                    this.setState({
+                        hide: true
+                    });
+                }
             }
         }
     }
