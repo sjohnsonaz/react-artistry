@@ -35,8 +35,23 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                     <FormGroup label="Value">
                         <Input type="text" fill />
                     </FormGroup>
+                    <FormGroup label="Text" text="Text">
+                        <Input type="text" fill required />
+                    </FormGroup>
+                    <FormGroup label="Success" theme="success" text="Success">
+                        <Input type="text" fill />
+                    </FormGroup>
+                    <FormGroup label="Info" theme="info" text="Info">
+                        <Input type="text" fill />
+                    </FormGroup>
+                    <FormGroup label="Warning" theme="warning" text="Warning">
+                        <Input type="text" fill />
+                    </FormGroup>
+                    <FormGroup label="Error" theme="danger" text="Error">
+                        <Input type="text" fill />
+                    </FormGroup>
                     <Divider />
-                    <FormText>
+                    <FormText fill>
                         <h2>Masked Inputs</h2>
                     </FormText>
                     <FormGroup label="Time">
@@ -49,7 +64,7 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                         <Input mask="#000000" fill />
                     </FormGroup>
                     <Divider />
-                    <FormText>
+                    <FormText fill>
                         <h3>Test Examples</h3>
                     </FormText>
                     <FormGroup label="99999">
@@ -68,7 +83,7 @@ export default class FormView extends React.Component<IFormViewProps, any> {
                         <Input mask="99aa99aa99aa" fill />
                     </FormGroup>
                     <Divider />
-                    <FormText>
+                    <FormText fill>
                         <h3>Advanced Input</h3>
                     </FormText>
                     <FormGroup label="Time Input">

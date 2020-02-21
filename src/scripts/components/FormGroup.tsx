@@ -1,21 +1,32 @@
 import * as React from 'react';
 
+import ClassNames from '../util/ClassNames';
+
+import { FormTextTheme } from './FormText';
+import { FormText } from '../modules/ArtistryReact';
+
 export interface IFormGroupProps {
     className?: string;
     id?: string;
     label?: any;
     text?: any;
+    theme?: FormTextTheme;
     nonLabel?: boolean;
     inline?: boolean;
+    stacked?: boolean;
 }
 
 export default class FormGroup extends React.Component<IFormGroupProps, any> {
     render() {
-        let classNames = this.props.className ? [this.props.className] : [];
-        classNames.push('form-group');
+        let classNames = new ClassNames(this.props.className);
+        classNames.add('form-group');
 
         if (this.props.inline) {
-            classNames.push('form-group-inline');
+            classNames.add('form-group-inline');
+        }
+
+        if (this.props.stacked) {
+            classNames.add('form-group-stacked');
         }
 
         let input = (
@@ -24,37 +35,34 @@ export default class FormGroup extends React.Component<IFormGroupProps, any> {
             </div>
         );
 
-        let control;
+        let label;
         if (this.props.label) {
             if (this.props.nonLabel) {
-                control = (
-                    <div className="form-label">
-                        <div className="form-title">
-                            {this.props.label}
-                        </div>
-                        {input}
+                label = (
+                    <div className="form-title">
+                        {this.props.label}
                     </div>
                 );
             } else {
-                control = (
-                    <label className="form-label">
-                        <div className="form-title">
-                            {this.props.label}
-                        </div>
-                        {input}
+                label = (
+                    <label className="form-title">
+                        {this.props.label}
                     </label>
                 );
             }
-        } else {
-            control = input;
         }
 
         return (
-            <div className={classNames.join(' ')} id={this.props.id}>
+            <div className={classNames.toString()} id={this.props.id}>
+                {label}
+                {input}
                 {this.props.text ?
-                    <div className="form-text">{this.props.text}</div> :
+                    <FormText
+                        theme={this.props.theme}
+                    >
+                        {this.props.text}
+                    </FormText> :
                     null}
-                {control}
             </div>
         );
     }

@@ -25,12 +25,13 @@ export default class Input extends React.Component<IInputProps, any> {
             classNames.push('fill-width');
         }
 
+        let _displaySize: string;
         switch (displaySize) {
             case 'small':
-                classNames.push('input-small');
+                _displaySize='input-small';
                 break;
             case 'large':
-                classNames.push('input-large');
+                _displaySize='input-large';
                 break;
         }
 
@@ -39,6 +40,7 @@ export default class Input extends React.Component<IInputProps, any> {
                 <MaskedInput
                     id={id}
                     className={classNames.join(' ')}
+                    data-size={_displaySize}
                     mask={mask}
                     {...props as any}
                 />
@@ -48,6 +50,7 @@ export default class Input extends React.Component<IInputProps, any> {
                 <input
                     id={id}
                     className={classNames.join(' ')}
+                    data-size={_displaySize}
                     {...props}
                 />
             );

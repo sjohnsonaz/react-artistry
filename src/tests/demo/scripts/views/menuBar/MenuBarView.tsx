@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, MenuBar, MenuBarLink, Popover, Section, UserThumbnail } from '../../../../../scripts/modules/ArtistryReact';
+import { MenuBar, MenuBarLink, UserThumbnail, Spacer } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface IMenuBarViewProps {
 
@@ -38,7 +38,7 @@ export default class MenuBarView extends React.Component<IMenuBarViewProps, IMen
                     title="Home"
                     href="#"
                 />
-                <li className="menu-spacer"></li>
+                <Spacer />
                 <MenuBarLink
                     noLink
                     title={

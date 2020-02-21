@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export type FormSize = 'none' | 'small' | 'medium' | 'large' | 'x-large';
+export type FormSize = 'none' | 'small' | 'medium' | 'large' | 'x-large' | 'stacked';
 
 export interface IFormProps extends React.HTMLProps<HTMLFormElement> {
     // TODO: Change this to size when the React typings allow.
@@ -52,6 +52,9 @@ export default class Form extends React.Component<IFormProps, any> {
                 break;
             case 'x-large':
                 classNames.push('form-xl');
+                break;
+            case 'stacked':
+                classNames.push('form-stacked');
                 break;
         }
 

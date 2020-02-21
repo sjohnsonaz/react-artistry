@@ -1,14 +1,14 @@
 import * as React from 'react';
 
-export interface IMenuBarSpacerProps {
+export interface ISpacerProps {
     className?: string;
     id?: string;
 }
 
-export default class MenuBarSpacer extends React.Component<IMenuBarSpacerProps, any> {
+export default class Spacer extends React.Component<ISpacerProps, any> {
     render() {
         let classNames = this.props.className ? [this.props.className] : [];
-        classNames.push('menu-spacer');
+        classNames.push('spacer');
         return (
             <li className={classNames.join(' ')} id={this.props.id}></li>
         );
