@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { alignClass, AlignType } from '../util/Align';
+import ClassNames from '../util/ClassNames';
 
 export interface ICardRowProps {
     id?: string;
@@ -16,15 +17,15 @@ export default class CardRow extends React.Component<ICardRowProps, any> {
             align
         } = this.props;
 
-        let classNames = className ? [className] : [];
-        classNames.push('card-row');
+        let classNames = new ClassNames(className);
+        classNames.add('card-row');
 
         if (align) {
             alignClass(align, classNames);
         }
 
         return (
-            <div className={classNames.join(' ')} id={id}>
+            <div className={classNames.toString()} id={id}>
                 {this.props.children}
             </div>
         );

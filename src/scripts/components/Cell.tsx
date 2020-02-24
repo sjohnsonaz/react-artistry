@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { alignClass, AlignType } from '../util/Align';
+import ClassNames from '../util/ClassNames';
 
 export interface ICellProps {
     className?: string;
@@ -24,14 +25,14 @@ export default class Cell extends React.Component<ICellProps, any> {
             leftMargin
         } = this.props;
 
-        let classNames = className ? [className] : [];
+        let classNames = new ClassNames(className);
         if (columns) {
-            classNames.push('col-' + columns);
+            classNames.add('col-' + columns);
         } else {
-            classNames.push('col');
+            classNames.add('col');
         }
         if (offset) {
-            classNames.push('offset-' + offset);
+            classNames.add('offset-' + offset);
         }
         if (align) {
             alignClass(align, classNames);
@@ -54,11 +55,11 @@ export default class Cell extends React.Component<ICellProps, any> {
             fixed = true;
         }
         if (fixed) {
-            classNames.push('col-fixed');
+            classNames.add('col-fixed');
         }
 
         return <div
-            className={classNames.join(' ')}
+            className={classNames.toString()}
             id={id}
             style={style as any}
         >

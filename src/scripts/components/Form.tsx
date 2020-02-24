@@ -7,6 +7,7 @@ export interface IFormProps extends React.HTMLProps<HTMLFormElement> {
     screenSize?: FormSize;
     lockable?: boolean;
     locked?: boolean;
+    nonForm?: boolean;
     onEnter?: (event: KeyboardEvent) => any;
     onEscape?: (event: KeyboardEvent) => any;
 }
@@ -30,6 +31,7 @@ export default class Form extends React.Component<IFormProps, any> {
             screenSize,
             lockable,
             locked,
+            nonForm,
             onEnter,
             onEscape,
             ...props
@@ -59,13 +61,24 @@ export default class Form extends React.Component<IFormProps, any> {
         }
 
         let onKeyDown = (onEnter || onEscape) ? this.onKeyDown.bind(this) : undefined;
-        return (
-            <form className={classNames.join(' ')} onKeyDown={onKeyDown} {...props}>
-                {lockable ?
-                    <div className="form-lock-screen"></div> :
-                    null}
-                {this.props.children}
-            </form>
-        );
+        if (nonForm) {
+            return (
+                <div id={id} className={classNames.join(' ')} onKeyDown={onKeyDown} {...props as any}>
+                    {lockable ?
+                        <div className="form-lock-screen"></div> :
+                        null}
+                    {this.props.children}
+                </div>
+            );
+        } else {
+            return (
+                <form id={id} className={classNames.join(' ')} onKeyDown={onKeyDown} {...props}>
+                    {lockable ?
+                        <div className="form-lock-screen"></div> :
+                        null}
+                    {this.props.children}
+                </form>
+            );
+        }
     }
 }

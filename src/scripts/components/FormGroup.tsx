@@ -1,15 +1,16 @@
 import * as React from 'react';
 
 import ClassNames from '../util/ClassNames';
+import { AlignType } from '../util/Align';
 
-import { FormTextTheme } from './FormText';
-import { FormText } from '../modules/ArtistryReact';
+import FormText, { FormTextTheme } from './FormText';
 
 export interface IFormGroupProps {
     className?: string;
     id?: string;
     label?: any;
     text?: any;
+    textAlign?: AlignType;
     theme?: FormTextTheme;
     nonLabel?: boolean;
     inline?: boolean;
@@ -59,6 +60,7 @@ export default class FormGroup extends React.Component<IFormGroupProps, any> {
                 {this.props.text ?
                     <FormText
                         theme={this.props.theme}
+                        align={this.props.textAlign}
                     >
                         {this.props.text}
                     </FormText> :
