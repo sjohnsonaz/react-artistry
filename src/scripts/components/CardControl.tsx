@@ -1,11 +1,14 @@
 import * as React from 'react';
 
+import ClassNames from '../util/ClassNames';
+
 export interface ICardControlProps {
     id?: string;
     className?: string;
     title?: string;
     label?: boolean;
     width?: number | string;
+    stacked?: boolean;
 }
 
 export default class CardControl extends React.Component<ICardControlProps, any> {
@@ -15,11 +18,12 @@ export default class CardControl extends React.Component<ICardControlProps, any>
             className,
             title,
             label,
-            width
+            width,
+            stacked
         } = this.props;
 
-        let classNames = className ? [className] : [];
-        classNames.push('card-control');
+        let classNames = new ClassNames(className, 'card-control');
+        classNames.addTest('card-control-stacked', stacked);
 
         if (width && typeof width === 'number') {
             width += 'px' as any;
@@ -34,7 +38,7 @@ export default class CardControl extends React.Component<ICardControlProps, any>
         if (label) {
             return (
                 <label
-                    className={classNames.join(' ')}
+                    className={classNames.toString()}
                     id={id}
                     style={{ '--card-control-min-width': width } as any}
                 >
@@ -44,7 +48,7 @@ export default class CardControl extends React.Component<ICardControlProps, any>
         } else {
             return (
                 <div
-                    className={classNames.join(' ')}
+                    className={classNames.toString()}
                     id={id}
                     style={{ '--card-control-min-width': width } as any}
                 >
