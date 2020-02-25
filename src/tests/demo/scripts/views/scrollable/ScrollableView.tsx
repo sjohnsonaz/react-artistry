@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Scrollable } from '../../../../../scripts/modules/ArtistryReact';
+import { Scrollable, Section, CardContainer, Card } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface IScrollableViewProps {
 
@@ -16,13 +16,18 @@ export default class ScrollableView extends React.Component<IScrollableViewProps
             values.push(index);
         }
         return (
-            <div>
-                <Scrollable type="y" height="100px" bumper={10} onBottomEnter={this.bottom}>
-                    <ul>
-                        {values.map((value, index) => <li key={index}>{value}</li>)}
-                    </ul>
+            <Section header="Scrollable" headerSpace>
+                <Scrollable type="y" height="200px" bumper={10} onBottomEnter={this.bottom}>
+                    <CardContainer space>
+                        {values.map((value, index) => <Card key={index}
+                            header="Card"
+                            space
+                        >
+                            {value}
+                        </Card>)}
+                    </CardContainer>
                 </Scrollable>
-            </div>
+            </Section>
         );
     }
 }
