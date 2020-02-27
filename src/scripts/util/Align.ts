@@ -1,4 +1,4 @@
-import { ClassNames } from "../modules/ArtistryReact";
+import ClassNames from "./ClassNames";
 
 export type AlignType = 'start' | 'end' | 'left' | 'right' | 'center' | 'justify' | 'initial' | 'inherit';
 
