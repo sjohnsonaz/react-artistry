@@ -5,6 +5,7 @@ export { default as NotificationUtil, INotification, NotificationType } from '..
 export { default as Portal } from '../util/Portal';
 export { alignClass, AlignType } from '../util/Align';
 export { default as ActionBar, IActionBarProps } from '../components/ActionBar';
+export { default as ActionBarBreadcrumb, IActionBarBreadcrumbProps } from '../components/ActionBarBreadcrumb';
 export { default as AmountInput, IAmountInputProps, IAmountInputState } from '../components/AmountInput';
 export { default as Breadcrumbs, IBreadcrumbs } from '../components/Breadcrumbs';
 export { default as Button, IButtonProps } from '../components/Button';

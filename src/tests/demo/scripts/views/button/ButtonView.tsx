@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, ButtonBar, ButtonGroup, Section } from '../../../../../scripts/modules/ArtistryReact';
+import { Button, ButtonBar, ButtonGroup, Section, ActionBarBreadcrumb } from '../../../../../scripts/modules/ArtistryReact';
 
 export interface IButtonViewProps {
 
@@ -112,6 +112,20 @@ export default class ButtonView extends React.Component<IButtonViewProps, IButto
                     onPopoverClose={this.closePopover}
                     onClick={this.openPopover}
                 >Popover Menu</Button>
+
+                <div className="explode-width">
+                    <ActionBarBreadcrumb>
+                        <Button display="underline">Home</Button>
+                        <Button display="underline">Home</Button>
+                        <Button display="underline">Home</Button>
+                        <Button display="underline">Home</Button>
+                        <Button display="underline">Home</Button>
+                        <Button display="underline">Home</Button>
+                        <Button display="underline">Home</Button>
+                        <Button display="underline">Home</Button>
+                        <Button display="underline">Home</Button>
+                    </ActionBarBreadcrumb>
+                </div>
             </Section>
         );
     }

@@ -10,7 +10,7 @@ export interface IButtonProps extends React.HTMLProps<HTMLButtonElement> {
     type?: 'button' | 'submit' | 'reset';
     theme?: 'default' | 'primary' | 'danger';
     displaySize?: 'default' | 'small' | 'large';
-    display?: 'default' | 'textonly' | 'outline';
+    display?: 'default' | 'textonly' | 'outline' | 'underline';
     fill?: boolean;
     tooltip?: string;
     tooltipDirection?: 'top' | 'right' | 'bottom' | 'left';
@@ -169,6 +169,9 @@ export default class Button extends React.Component<IButtonProps, any> {
                 break;
             case 'outline':
                 classNames.push('button-outline');
+                break;
+            case 'underline':
+                classNames.push('button-underline');
                 break;
         }
 
