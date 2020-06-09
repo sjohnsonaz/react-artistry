@@ -3,7 +3,8 @@ import * as React from 'react';
 export interface IFileUploadProps {
     id?: string;
     className?: string;
-    onUpload: (files: FileList) => any;
+    onSelect: (files: FileList) => Promise<any>;
+    value?: string;
     text?: string;
 }
 
@@ -23,7 +24,7 @@ export default class FileUpload extends React.Component<IFileUploadProps, IFileU
         this.setState({
             uploading: true
         }, async () => {
-            await this.props.onUpload(files);
+            await this.props.onSelect(files);
             this.setState({
                 uploading: false
             });
@@ -38,7 +39,7 @@ export default class FileUpload extends React.Component<IFileUploadProps, IFileU
         event.stopPropagation();
     }
 
-    upload = () => {
+    select = () => {
         let fileInput = this.fileInput.current;
         let files = fileInput.files;
         if (files && files.length) {
@@ -76,7 +77,8 @@ export default class FileUpload extends React.Component<IFileUploadProps, IFileU
         let {
             id,
             className,
-            text
+            text,
+            value
         } = this.props;
 
         let classNames = className ? [className] : [];
@@ -97,7 +99,8 @@ export default class FileUpload extends React.Component<IFileUploadProps, IFileU
             >
                 <input
                     type="file"
-                    onChange={this.upload}
+                    onChange={this.select}
+                    value={value}
                     onClick={this.clickStop}
                     multiple
                     ref={this.fileInput}

@@ -7,10 +7,11 @@ export interface ITableViewProps {
 }
 
 export default class TableView extends React.Component<ITableViewProps, any> {
-    upload = async (files: FileList) => {
+    select = async (files: FileList) => {
         console.log('files:', files);
         return undefined;
     }
+
     render() {
         return (
             <Section
@@ -18,7 +19,7 @@ export default class TableView extends React.Component<ITableViewProps, any> {
                 headerSpace
                 space
             >
-                <FileUpload onUpload={this.upload} />
+                <FileUpload onSelect={this.select} />
             </Section>
         );
     }
