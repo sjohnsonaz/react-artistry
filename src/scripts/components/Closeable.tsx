@@ -9,10 +9,10 @@ export interface ICloseableProps {
 }
 
 export interface ICloseableState {
-    closed: boolean;
-    running: boolean;
-    animating: boolean;
-    height: string;
+    closed?: boolean;
+    running?: boolean;
+    animating?: boolean;
+    height?: string;
 }
 
 export default class Closeable extends React.Component<ICloseableProps, ICloseableState> {

@@ -18,7 +18,7 @@ export function waitAnimation(time?: number) {
     });
 }
 
-export function setState<T>(state: T, thisArg: React.Component): Promise<void> {
+export function setState<T>(state: T, thisArg: React.Component<any, T>): Promise<void> {
     return new Promise((resolve) => {
         thisArg.setState(state, () => {
             resolve();

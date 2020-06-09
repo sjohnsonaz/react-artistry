@@ -17,12 +17,11 @@ export interface ICarouselProps {
 }
 
 export interface ICarouselState {
-    height: string;
-    activeIndex: number;
-    previousActiveIndex: number;
-    running: boolean;
-    animating: boolean;
-    selected: boolean;
+    height?: string;
+    activeIndex?: number;
+    previousActiveIndex?: number;
+    animating?: boolean;
+    selected?: boolean;
 }
 
 export default class Carousel extends React.Component<ICarouselProps, ICarouselState> {
@@ -31,10 +30,10 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
         height: undefined,
         activeIndex: this.props.activeIndex,
         previousActiveIndex: this.props.activeIndex,
-        running: false,
         animating: false,
         selected: true
     };
+    running: boolean = false;
     runCount: number = 0;
     transitionCount: number = 0;
 
@@ -43,33 +42,13 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
             this.transitionCount++;
             this.transitionCount %= 2;
             if (!this.transitionCount) {
-                let running = this.state.running;
-                if (!running) {
+                if (!this.running) {
                     this.setState({
                         animating: false,
                         height: undefined,
                         previousActiveIndex: this.state.activeIndex
                     });
                 }
-            }
-        }
-    }
-
-    async startRun() {
-        await setState({ running: true }, this);
-    }
-
-    async stopRun() {
-        if (this.state.running) {
-            if (this.props.staticHeight) {
-                await setState({
-                    running: false,
-                    animating: false,
-                    height: undefined,
-                    previousActiveIndex: this.state.activeIndex
-                }, this);
-            } else {
-                await setState({ running: false }, this);
             }
         }
     }
@@ -105,11 +84,7 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
             let runCount = this.runCount;
 
             // Start run
-            await setState({ runCount: runCount }, this);
-            await this.startRun();
-            if (runCount !== this.runCount) {
-                return;
-            }
+            this.running = true;
 
             let node: HTMLDivElement;
             if (!this.props.staticHeight) {
@@ -164,7 +139,16 @@ export default class Carousel extends React.Component<ICarouselProps, ICarouselS
             }
 
             // Stop run
-            await this.stopRun();
+            if (this.running) {
+                if (this.props.staticHeight) {
+                    await setState({
+                        animating: false,
+                        height: undefined,
+                        previousActiveIndex: this.state.activeIndex
+                    }, this);
+                }
+                this.running = false;
+            }
         }
     }
 
