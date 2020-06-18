@@ -1,8 +1,9 @@
 var webpack = require('webpack');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
-    mode:'production',
+    mode: 'production',
     entry: {
         'ArtistryReact': './src/scripts/modules/ArtistryReact.ts'
     },
@@ -12,7 +13,12 @@ module.exports = {
         library: '[name]'
     },
     resolve: {
-        extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+        extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
+        plugins: [
+            new TsconfigPathsPlugin({
+                configFile: './tsconfig.json'
+            })
+        ]
     },
     module: {
         rules: [{
