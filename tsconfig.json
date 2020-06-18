@@ -16,6 +16,12 @@
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": true,
     "outDir": "dist",
+    "baseUrl": "./src",
+    "paths": {
+      "@artistry-react": [
+        "scripts/modules/ArtistryReact"
+      ]
+    },
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,

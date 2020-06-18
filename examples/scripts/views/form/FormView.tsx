@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ActionBar, AmountInput, Button, Divider, Form, FormGroup, Input, FormText, Section, TimePicker } from '../../../../src/scripts/modules/ArtistryReact';
+import { ActionBar, AmountInput, Button, Divider, Form, FormGroup, Input, FormText, Section, TimePicker } from '@artistry-react';
 import TimeInput from '../../../../src/scripts/components/TimeInput';
 
 export interface IFormViewProps {

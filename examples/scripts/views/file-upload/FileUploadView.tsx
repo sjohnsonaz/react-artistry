@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { FileUpload, Section } from '../../../../src/scripts/modules/ArtistryReact';
+import { FileUpload, Section } from '@artistry-react';
 
 export interface ITableViewProps {
 

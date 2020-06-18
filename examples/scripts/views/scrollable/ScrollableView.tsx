@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Scrollable, Section, CardContainer, Card } from '../../../../src/scripts/modules/ArtistryReact';
+import { Scrollable, Section, CardContainer, Card } from '@artistry-react';
 
 export interface IScrollableViewProps {
 

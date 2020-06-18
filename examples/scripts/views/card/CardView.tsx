@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Card, CardCarousel, CardContainer, CardControl, CardSection, Cell, Closeable, Fillable, Grid, Row, Section } from '../../../../src/scripts/modules/ArtistryReact';
+import { Button, Card, CardCarousel, CardContainer, CardControl, CardSection, Cell, Closeable, Fillable, Grid, Row, Section } from '@artistry-react';
 
 import VerticalCard from './VerticalCard';
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { DatePicker, FormGroup, Section } from '../../../../src/scripts/modules/ArtistryReact';
+import { DatePicker, FormGroup, Section } from '@artistry-react';
 
 export interface ICalendarViewProps {
 

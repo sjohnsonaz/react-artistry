@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, ButtonBar, Modal, Section } from '../../../../src/scripts/modules/ArtistryReact';
+import { Button, ButtonBar, Modal, Section } from '@artistry-react';
 
 export interface IModalViewProps {
 

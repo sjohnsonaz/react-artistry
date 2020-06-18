@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Table, Section } from '../../../../src/scripts/modules/ArtistryReact';
+import { Table, Section } from '@artistry-react';
 
 export interface ITableViewProps {
 

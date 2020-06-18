@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ProgressBar, Section } from '../../../../src/scripts/modules/ArtistryReact';
+import { ProgressBar, Section } from '@artistry-react';
 
 export interface IProgressBarViewProps {
 

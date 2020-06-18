@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Section } from '../../../../src/scripts/modules/ArtistryReact';
+import { Button, Section } from '@artistry-react';
 
 export interface ISectionViewProps {
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Cell, Grid, Icon, List, Search, Section, Row } from '../../../../src/scripts/modules/ArtistryReact';
+import { Cell, Grid, Icon, List, Search, Section, Row } from '@artistry-react';
 import { wait } from '../../../../src/scripts/util/PromiseUtil';
 
 export interface IListViewProps {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { MenuBar, MenuBarLink, UserThumbnail, Spacer } from '../../../../src/scripts/modules/ArtistryReact';
+import { MenuBar, MenuBarLink, UserThumbnail, Spacer } from '@artistry-react';
 
 export interface IMenuBarViewProps {
 

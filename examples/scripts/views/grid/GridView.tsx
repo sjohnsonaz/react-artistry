@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Cell, Grid, Row, Section } from '../../../../src/scripts/modules/ArtistryReact';
+import { Cell, Grid, Row, Section } from '@artistry-react';
 
 export interface IGridViewProps {
 
