@@ -5,8 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     mode: 'development',
     entry: {
-        'main': './src/tests/demo/scripts/main.ts',
-        'styles': './src/tests/demo/styles/style.styl'
+        'main': './examples/scripts/main.ts',
+        'styles': './examples/styles/style.styl'
     },
     output: {
         filename: '[name]-[hash:6].js',
@@ -44,7 +44,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: 'src/tests/demo/html/index.html'
+            template: 'examples/html/index.html'
         }),
     ],
     devServer: {
