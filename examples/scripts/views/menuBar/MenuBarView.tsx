@@ -49,6 +49,7 @@ export default class MenuBarView extends React.Component<IMenuBarViewProps, IMen
                             popover={"Logout"}
                             popoverDirection="bottom"
                             popoverAlign="right"
+                            popoverSpace
                         />
                     }
                 />
@@ -64,6 +65,7 @@ export default class MenuBarView extends React.Component<IMenuBarViewProps, IMen
                             popoverDirection="bottom"
                             popoverAlign="right"
                             popoverMenu
+                            popoverSpace
                             popoverOpen={this.state.userMenuOpen}
                             menuBarTop
                             onPopoverClose={this.closeUserMenu}
