@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Section, Toggle } from '@artistry-react';
+import { Section, Toggle } from 'modules/ArtistryReact';
 
 export interface IToggleViewProps {
 

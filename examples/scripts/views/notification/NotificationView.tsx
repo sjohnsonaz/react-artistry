@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, NotificationContainer, NotificationType, Section, Notification, INotificationProps, ActionBar } from '@artistry-react';
+import { Button, NotificationContainer, NotificationType, Section, Notification, INotificationProps, ActionBar } from 'modules/ArtistryReact';
 
 export interface INotificationViewProps {
 

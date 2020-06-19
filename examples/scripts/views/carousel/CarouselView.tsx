@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Carousel, Section, ActionBar, Divider } from '@artistry-react';
+import { Button, Carousel, Section, ActionBar, Divider } from 'modules/ArtistryReact';
 
 export interface ICarouselViewProps {
 

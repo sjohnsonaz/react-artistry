@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Code, Section } from '@artistry-react';
+import { Code, Section } from 'modules/ArtistryReact';
 
 export interface ICodeViewProps {
 

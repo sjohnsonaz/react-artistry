@@ -3,7 +3,7 @@ declare var window: any;
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 
-import { Container, BodyScroll, DepthStack, Portal } from '@artistry-react';
+import { Container, BodyScroll, DepthStack, Portal } from 'modules/ArtistryReact';
 
 import ButtonView from './views/button/ButtonView';
 import RangeView from './views/range/RangeView';

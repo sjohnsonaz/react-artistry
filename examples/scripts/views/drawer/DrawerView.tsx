@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ActionBar, Button, Drawer, Divider, Form, FormGroup, Section, } from '@artistry-react';
+import { ActionBar, Button, Drawer, Divider, Form, FormGroup, Section, } from 'modules/ArtistryReact';
 
 export interface IDrawerViewProps {
 

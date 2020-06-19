@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Card, Cell, Closeable, Fillable, Grid, Row, Section } from '@artistry-react';
+import { Button, Card, Cell, Closeable, Fillable, Grid, Row, Section } from 'modules/ArtistryReact';
 
 import ImageGenerator from '../../util/ImageGenerator';
 

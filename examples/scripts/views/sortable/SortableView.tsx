@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import Draggable from '../../../../src/scripts/components/Draggable';
-import Sortable from '../../../../src/scripts/components/Sortable';
+import Draggable from '../../../../src/components/Draggable';
+import Sortable from '../../../../src/components/Sortable';
 
 export interface ISortableViewProps {
 

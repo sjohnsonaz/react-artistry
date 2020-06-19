@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, ButtonBar, ButtonGroup, Section, ActionBarBreadcrumb, ActionBar, Scrollable, Divider } from '@artistry-react';
+import { Button, ButtonBar, ButtonGroup, Section, ActionBarBreadcrumb, ActionBar, Scrollable, Divider } from 'modules/ArtistryReact';
 
 export interface IButtonViewProps {
 

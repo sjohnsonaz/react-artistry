@@ -30,10 +30,9 @@
       "es2017"
     ]
   },
-  "exclude": [
-    "react-artistry-*",
-    "dist",
-    "node_modules"
+  "include": [
+    "./src",
+    "./examples"
   ],
   "compileOnSave": true,
   "buildOnSave": false
