@@ -1,11 +1,6 @@
 import React from 'react';
 import { block, addContext, px, STICKY, merge } from '@artistry/abstract';
-
-import { ShadowDepth } from '../../../src/mixins/Shadow';
-import { FlexContainer } from '../../../src/mixins/Flexbox';
-import { Paper } from '../../../src/mixins/Paper';
-
-import { Position } from '../../../src/mixins/Position';
+import { Paper, ShadowDepth, FlexContainer, Position } from 'artistry';
 
 let classes = addContext(() => {
     const mainBar = block('main-bar', merge(

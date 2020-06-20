@@ -25,10 +25,12 @@
   },
   "peerDependencies": {
     "artistry": "^0.9.8",
+    "@artistry/abstract": "https://github.com/sjohnsonaz/artistry-abstract",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
   "devDependencies": {
+    "@artistry/abstract": "https://github.com/sjohnsonaz/artistry-abstract",
     "@artistry/icons": "0.0.2",
     "@fortawesome/free-solid-svg-icons": "5.11.2",
     "@types/chai": "4.2.11",

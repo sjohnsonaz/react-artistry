@@ -1,9 +1,6 @@
 import React from 'react';
 import { block, addContext, px, rgba, content, COLUMN, merge } from '@artistry/abstract';
-
-import { ShadowDepth } from '../../../src/mixins/Shadow';
-import { FlexContainer, FlexElement } from '../../../src/mixins/Flexbox';
-import { Paper } from '../../../src/mixins/Paper';
+import { FlexContainer, FlexElement } from 'artistry';
 
 import MainBar from './MainBar';
 
@@ -33,7 +30,7 @@ export interface IPageProps {
     footer?: any;
 }
 
-export default function Page({ children, id, title, header, footer }: IPageProps) {
+export function Page({ children, id, title, header, footer }: IPageProps) {
     return (
         <div id={id} className={classes.page}>
             <MainBar title={title}>
@@ -49,3 +46,5 @@ export default function Page({ children, id, title, header, footer }: IPageProps
         </div>
     );
 }
+
+export default Page;

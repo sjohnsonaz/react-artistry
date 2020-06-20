@@ -1,8 +1,6 @@
 import React from 'react';
 
-import Page from '../components/Page';
-import Area from '../components/Area';
-import Button from '../components/Button';
+import { Page, Area, Button } from '@abstract';
 
 export interface IHomeProps {
     id?: string;

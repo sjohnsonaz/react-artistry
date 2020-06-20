@@ -1,6 +1,6 @@
 import React from 'react';
 import { addContext, block, merge } from '@artistry/abstract';
-import { Paper } from '../../../src/mixins/Paper';
+import { Paper } from 'artistry';
 
 const classes = addContext(() => {
     const button = block('button', merge(

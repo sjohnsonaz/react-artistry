@@ -20,7 +20,10 @@
     "baseUrl": "./src",
     "paths": {
       "@artistry-react": [
-        "scripts/modules/ArtistryReact"
+        "modules/ArtistryReact"
+      ],
+      "@abstract": [
+        "index"
       ]
     },
     "sourceMap": true,

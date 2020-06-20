@@ -1,8 +1,6 @@
 import React from 'react';
 import { block, addContext, px, rgb, merge } from '@artistry/abstract';
-import { Paper } from '../../../src/mixins/Paper';
-import { ShadowDepth } from '../../../src/mixins/Shadow';
-import { Scroll, ScrollAttribute, ScrollType } from '../../../src/mixins/Scroll';
+import { Paper, ShadowDepth, Scroll, ScrollAttribute, ScrollType } from 'artistry';
 
 let classes = addContext(() => {
     let area = block('modal', merge(
@@ -27,7 +25,7 @@ export interface IAreaProps {
     children?: any;
 }
 
-const Area: React.FC<IAreaProps> = ({ children }) => {
+export const Area: React.FC<IAreaProps> = ({ children }) => {
     return (
         <div className={classes.area}>{children}</div>
     );
