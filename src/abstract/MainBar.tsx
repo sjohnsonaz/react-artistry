@@ -1,10 +1,10 @@
 import React from 'react';
-import { block, addContext, px, STICKY, merge, ROW_REVERSE } from '@artistry/abstract';
+import { block, addContext, STICKY, ROW_REVERSE } from '@artistry/abstract';
 import { Paper, ShadowDepth, FlexContainer, Position } from 'artistry';
 import ClassNames from 'util/ClassNames';
 
 let classes = addContext(() => {
-    const mainBar = block('main-bar', merge(
+    const mainBar = block('main-bar',
         Paper({
             borderRadius: 0,
             borderWidth: 0
@@ -16,7 +16,7 @@ let classes = addContext(() => {
             top: 0,
             bottom: 0
         })
-    ));
+    );
     const mainBar_right = mainBar.mod('right', FlexContainer({
         direction: ROW_REVERSE
     }));

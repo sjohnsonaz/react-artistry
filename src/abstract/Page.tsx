@@ -1,21 +1,21 @@
 import React from 'react';
-import { block, addContext, px, rgba, content, COLUMN, merge } from '@artistry/abstract';
+import { block, addContext, COLUMN } from '@artistry/abstract';
 import { FlexContainer, FlexElement } from 'artistry';
 
 import MainBar from './MainBar';
 
 let classes = addContext(() => {
-    const page = block('page', merge(
+    const page = block('page',
         FlexContainer({
             direction: COLUMN
         }), {
         height: '100vh'
-    }));
-    const body = page.element('body', merge(
+    });
+    const body = page.element('body',
         FlexElement({
             grow: 1
         })
-    ));
+    );
     return {
         page,
         body

@@ -1,12 +1,12 @@
 import React from 'react';
-import { block, addContext, merge } from '@artistry/abstract';
+import { block, addContext } from '@artistry/abstract';
 import { Paper } from 'artistry';
 
 let classes = addContext(() => {
-    const ActionBar = block('action-bar', merge(
+    const ActionBar = block('action-bar',
         Paper({
         }), {
-    }));
+    });
     return {
         ActionBar
     };

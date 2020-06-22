@@ -1,14 +1,14 @@
 import React from 'react';
-import { addContext, block, merge, Settings } from '@artistry/abstract';
+import { addContext, block, Settings } from '@artistry/abstract';
 import { Paper, IDefaultSettings } from 'artistry';
 
 const classes = addContext(() => {
     let base = Settings.get<IDefaultSettings>();
-    const button = block('button', merge(
+    const button = block('button',
         Paper({
             color: base.colors.primary
         })
-    ));
+    );
 
     return {
         button

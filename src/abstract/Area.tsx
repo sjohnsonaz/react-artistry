@@ -1,10 +1,10 @@
 import React from 'react';
-import { block, addContext, px, merge } from '@artistry/abstract';
+import { block, addContext } from '@artistry/abstract';
 import { Paper, ShadowDepth, Scroll, ScrollAttribute, ScrollType, getSettings } from 'artistry';
 
 let classes = addContext(() => {
     let base = getSettings();
-    let area = block('modal', merge(
+    let area = block('modal',
         Paper({
             borderWidth: 0,
             margin: base.space(1)
@@ -13,7 +13,7 @@ let classes = addContext(() => {
             scrollType: 'Y'
         }),
         ShadowDepth(1),
-    ));
+    );
     ScrollAttribute(area, 'scroll', ScrollType.YAlways);
     return {
         area
