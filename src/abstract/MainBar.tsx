@@ -6,8 +6,7 @@ import ClassNames from 'util/ClassNames';
 let classes = addContext(() => {
     const mainBar = block('main-bar',
         Paper({
-            borderRadius: 0,
-            borderWidth: 0
+            borderRadius: 0
         }),
         ShadowDepth(2),
         FlexContainer(),
@@ -17,9 +16,11 @@ let classes = addContext(() => {
             bottom: 0
         })
     );
-    const mainBar_right = mainBar.mod('right', FlexContainer({
-        direction: ROW_REVERSE
-    }));
+    const mainBar_right = mainBar.mod('right',
+        FlexContainer({
+            direction: ROW_REVERSE
+        })
+    );
     const title = mainBar.element('title', {
         margin: 0
     });

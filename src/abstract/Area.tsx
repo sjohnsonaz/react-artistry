@@ -6,7 +6,6 @@ let classes = addContext(() => {
     let base = getSettings();
     let area = block('modal',
         Paper({
-            borderWidth: 0,
             margin: base.space(1)
         }),
         Scroll({
