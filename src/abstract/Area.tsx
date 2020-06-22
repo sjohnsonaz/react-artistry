@@ -5,7 +5,6 @@ import { Paper, ShadowDepth, Scroll, ScrollAttribute, ScrollType } from 'artistr
 let classes = addContext(() => {
     let area = block('modal', merge(
         Paper({
-            backgroundColor: rgb(255, 255, 255),
             borderWidth: 0,
             margin: px(8)
         }),

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { initSheet } from '@artistry/abstract';
 
+import './BaseSettings';
 import './BaseStyles';
 import Home from './views/Home';
 
