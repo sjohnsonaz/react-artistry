@@ -40,7 +40,7 @@ export function Page({ children, id, title, header, footer }: IPageProps) {
                 {children}
             </div>
             {footer &&
-                <MainBar>
+                <MainBar direction="reverse">
                     {footer}
                 </MainBar>}
         </div>
