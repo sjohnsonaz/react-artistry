@@ -1,12 +1,13 @@
 import React from 'react';
 import { block, addContext, px, merge } from '@artistry/abstract';
-import { Paper, ShadowDepth, Scroll, ScrollAttribute, ScrollType } from 'artistry';
+import { Paper, ShadowDepth, Scroll, ScrollAttribute, ScrollType, getSettings } from 'artistry';
 
 let classes = addContext(() => {
+    let base = getSettings();
     let area = block('modal', merge(
         Paper({
             borderWidth: 0,
-            margin: px(8)
+            margin: base.space(1)
         }),
         Scroll({
             scrollType: 'Y'
