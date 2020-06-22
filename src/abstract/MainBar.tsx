@@ -42,7 +42,7 @@ export default function MainBar({ children, id, className, title, direction }: I
     let classNames = new ClassNames(className, classes.mainBar);
     switch (direction) {
         case 'reverse':
-            classNames.add(classes.mainBar + '--right');
+            classNames.add(classes.mainBar_right);
             break;
         case 'forward':
         default:
