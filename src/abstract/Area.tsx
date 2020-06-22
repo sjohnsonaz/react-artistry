@@ -1,5 +1,5 @@
 import React from 'react';
-import { block, addContext, px, rgb, merge } from '@artistry/abstract';
+import { block, addContext, px, merge } from '@artistry/abstract';
 import { Paper, ShadowDepth, Scroll, ScrollAttribute, ScrollType } from 'artistry';
 
 let classes = addContext(() => {
