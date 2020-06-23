@@ -1,5 +1,5 @@
 import React from 'react';
-import { block, addContext, STICKY, ROW_REVERSE } from '@artistry/abstract';
+import { block, addContext, STICKY, FLEX_END } from '@artistry/abstract';
 import { Paper, ShadowDepth, FlexContainer, Position } from 'artistry';
 import ClassNames from 'util/ClassNames';
 
@@ -18,7 +18,7 @@ let classes = addContext(() => {
     );
     const mainBar_right = mainBar.mod('right',
         FlexContainer({
-            direction: ROW_REVERSE
+            justify: FLEX_END
         })
     );
     const title = mainBar.element('title', {
