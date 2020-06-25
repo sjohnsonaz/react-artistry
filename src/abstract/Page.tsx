@@ -1,6 +1,6 @@
 import React from 'react';
 import { block, addContext, COLUMN } from '@artistry/abstract';
-import { FlexContainer, FlexElement } from 'artistry';
+import { FlexContainer, FlexItem } from 'artistry';
 
 import MainBar from './MainBar';
 
@@ -12,7 +12,7 @@ let classes = addContext(() => {
         height: '100vh'
     });
     const body = page.element('body',
-        FlexElement({
+        FlexItem({
             grow: 1
         })
     );

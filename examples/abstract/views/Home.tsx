@@ -16,7 +16,11 @@ export default function Home({ id }: IHomeProps) {
         >
             <Area>
                 Paper
-                <ActionBar />
+                <ActionBar direction="forward">
+                    <Button>OK</Button>
+                    <Button>OK</Button>
+                    <Button>OK</Button>
+                </ActionBar>
             </Area>
         </Page>
     );
