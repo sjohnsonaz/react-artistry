@@ -1,5 +1,5 @@
 import React from 'react';
-import { block, addContext, FLEX_START, FLEX_END, CENTER, SPACE_BETWEEN, SPACE_AROUND, SPACE_EVENLY } from '@artistry/abstract';
+import { block, addContext, FLEX_START, FLEX_END, CENTER, SPACE_BETWEEN, SPACE_AROUND, SPACE_EVENLY, ROW, ROW_REVERSE } from '@artistry/abstract';
 import { Attr, Box, FlexContainer, Rule } from 'artistry';
 import { data } from '../util';
 
@@ -22,7 +22,7 @@ let classes = addContext(() => {
             margin: [1, 0.5]
         }),
         FlexContainer({
-            justify: 'flex-end'
+            justify: FLEX_END
         }),
         Rule('& > *',
             Box({
@@ -31,10 +31,10 @@ let classes = addContext(() => {
         ),
         Attr(DIRECTION, {
             [DIRECTION_FORWARD]: FlexContainer({
-                direction: 'row'
+                direction: ROW
             }),
             [DIRECTION_REVERSE]: FlexContainer({
-                direction: 'row-reverse'
+                direction: ROW_REVERSE
             })
         }),
         Attr(JUSTIFY, {
