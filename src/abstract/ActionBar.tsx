@@ -3,9 +3,9 @@ import { block, addContext, FLEX_START, FLEX_END, CENTER, SPACE_BETWEEN, SPACE_A
 import { Attr, Box, FlexContainer, Rule } from 'artistry';
 import { data } from '../util';
 
+const DIRECTION = 'direction';
+const JUSTIFY = 'justify';
 let classes = addContext(() => {
-    const DIRECTION = 'direction';
-    const JUSTIFY = 'justify';
     const ActionBar = block('action-bar',
         Box({
             padding: 0,
@@ -49,9 +49,7 @@ let classes = addContext(() => {
         })
     );
     return {
-        ActionBar,
-        DIRECTION,
-        JUSTIFY
+        ActionBar
     };
 });
 
@@ -71,8 +69,8 @@ export const ActionBar: React.FC<IActionBarProps> = ({
         <div
             className={classes.ActionBar}
             {...{
-                [data(classes.DIRECTION)]: direction,
-                [data(classes.JUSTIFY)]: justify,
+                [data(DIRECTION)]: direction,
+                [data(JUSTIFY)]: justify,
             }}>
             {children}
         </div>
