@@ -1,6 +1,6 @@
 import React from 'react';
-import { block, addContext, FLEX_START, FLEX_END, CENTER, SPACE_BETWEEN, SPACE_AROUND, SPACE_EVENLY, ROW, ROW_REVERSE } from '@artistry/abstract';
-import { Attr, Box, FlexContainer, Rule } from 'artistry';
+import { block, addContext, FLEX_START, FLEX_END, CENTER, SPACE_BETWEEN, SPACE_AROUND, SPACE_EVENLY, ROW, ROW_REVERSE, FlexContainer, Selector, Attribute } from '@artistry/abstract';
+import { Box } from 'artistry';
 import { data } from '../util';
 
 const DIRECTION = 'direction';
@@ -24,12 +24,12 @@ let classes = addContext(() => {
         FlexContainer({
             justify: FLEX_END
         }),
-        Rule('& > *',
+        Selector('& > *',
             Box({
                 margin: [0, 0.5]
             })
         ),
-        Attr(DIRECTION, {
+        Attribute(DIRECTION, {
             [DIRECTION_FORWARD]: FlexContainer({
                 direction: ROW
             }),
@@ -37,7 +37,7 @@ let classes = addContext(() => {
                 direction: ROW_REVERSE
             })
         }),
-        Attr(JUSTIFY, {
+        Attribute(JUSTIFY, {
             [JUSTIFY_START]: FlexContainer({
                 justify: FLEX_START
             }),

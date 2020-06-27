@@ -1,6 +1,6 @@
 import React from 'react';
-import { block, addContext, STICKY, FLEX_END } from '@artistry/abstract';
-import { Paper, ShadowDepth, FlexContainer, Position } from 'artistry';
+import { block, addContext, STICKY, FLEX_END, FlexContainer, Position } from '@artistry/abstract';
+import { Paper, ShadowDepth } from 'artistry';
 import ClassNames from 'util/ClassNames';
 
 let classes = addContext(() => {
@@ -16,7 +16,7 @@ let classes = addContext(() => {
             bottom: 0
         })
     );
-    const mainBar_right = mainBar.mod('right',
+    const mainBar_right = mainBar.modifier('right',
         FlexContainer({
             justify: FLEX_END
         })

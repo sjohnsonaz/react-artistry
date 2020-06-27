@@ -1,14 +1,14 @@
 import React from 'react';
-import { block, addContext, AUTO, percent, only, MediaType, minWidth, calc, value, Block, px } from '@artistry/abstract';
+import { block, addContext, AUTO, percent, only, MediaType, minWidth, calc, value, Block, px, Length, Media } from '@artistry/abstract';
 import { Box, getSettings } from 'artistry';
 import ClassNames from 'util/ClassNames';
 
-function containerSize<T extends ReturnType<typeof getSettings>['sizes'], U extends keyof T>(block: Block, ...sizes: T[U][]) {
-    sizes.forEach(size => {
-        block.media(only(MediaType.Screen, minWidth(size as any)), {
+function createSizes(...sizes: Length[]) {
+    return sizes.map(size =>
+        Media(only(MediaType.Screen, minWidth(size as any)), {
             width: calc(`${size} - ${value('scrollbar-width', px(0))}`)
-        });
-    });
+        })
+    );
 }
 
 enum ContainerSize {
@@ -34,19 +34,24 @@ const classes = addContext(() => {
     const base = getSettings();
     const { xSmall, small, medium, large, xLarge } = base.sizes;
 
-    const ContainerAll = Container.extend(ContainerSize.all);
-    const ContainerXSmall = Container.extend(ContainerSize.xs);
-    const ContainerSmall = Container.extend(ContainerSize.sm);
-    const ContainerMedium = Container.extend(ContainerSize.md);
-    const ContainerLarge = Container.extend(ContainerSize.lg);
-    const ContainerXLarge = Container.extend(ContainerSize.xl);
-
-    containerSize(ContainerAll, xSmall, small, medium, large, xLarge);
-    containerSize(ContainerXSmall, xSmall);
-    containerSize(ContainerSmall, small);
-    containerSize(ContainerMedium, medium);
-    containerSize(ContainerLarge, large);
-    containerSize(ContainerXLarge, xLarge);
+    const ContainerAll = Container.extend(ContainerSize.all,
+        ...createSizes(xSmall, small, medium, large, xLarge)
+    );
+    const ContainerXSmall = Container.extend(ContainerSize.xs,
+        ...createSizes(xSmall)
+    );
+    const ContainerSmall = Container.extend(ContainerSize.sm,
+        ...createSizes(small)
+    );
+    const ContainerMedium = Container.extend(ContainerSize.md,
+        ...createSizes(medium)
+    );
+    const ContainerLarge = Container.extend(ContainerSize.lg,
+        ...createSizes(large)
+    );
+    const ContainerXLarge = Container.extend(ContainerSize.xl,
+        ...createSizes(xLarge)
+    );
 
     return {
         Container,

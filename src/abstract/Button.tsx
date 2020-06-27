@@ -1,6 +1,6 @@
 import React from 'react';
-import { addContext, block, Settings, NOWRAP } from '@artistry/abstract';
-import { Paper, IDefaultSettings, Wrap } from 'artistry';
+import { addContext, block, Settings, NOWRAP, brightness, PseudoClass, contrast, filter, ColorPair, rgba, Wrap, PClass, Attribute } from '@artistry/abstract';
+import { Paper, IDefaultSettings, ShadowDepth } from 'artistry';
 
 const classes = addContext(() => {
     let base = Settings.get<IDefaultSettings>();
@@ -10,6 +10,26 @@ const classes = addContext(() => {
         }),
         Wrap({
             whiteSpace: NOWRAP
+        }),
+        ShadowDepth(1),
+        {
+            cursor: 'pointer',
+            outline: 'none'
+        },
+        PClass(PseudoClass.HOVER,
+            ShadowDepth(1), {
+            filter: filter(contrast(0.5), brightness(1.5))
+        }),
+        PClass(PseudoClass.ACTIVE, {
+            filter: brightness(3.5) + ''
+        }),
+        PClass(PseudoClass.FOCUS, {
+
+        }),
+        Attribute('display', {
+            textonly: Paper({
+                color: new ColorPair(rgba(0, 0, 0, 0))
+            })
         })
     );
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import { block, addContext, COLUMN } from '@artistry/abstract';
-import { FlexContainer, FlexItem } from 'artistry';
+import { block, addContext, COLUMN, FlexContainer, FlexItem } from '@artistry/abstract';
 
 import MainBar from './MainBar';
 
