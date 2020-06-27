@@ -1,5 +1,5 @@
 import React from 'react';
-import { addContext, block, NOWRAP, brightness, PseudoClass, contrast, filter, ColorPair, rgba, Wrap, PClass, Attribute, Variables, value } from '@artistry/abstract';
+import { addContext, block, NOWRAP, brightness, PseudoClass, contrast, filter, ColorPair, rgba, Wrap, PClass, Attribute, Variables, value, Interactions, NONE } from '@artistry/abstract';
 import { Paper, ShadowDepth, getSettings } from 'artistry';
 
 const classes = addContext(() => {
@@ -21,10 +21,10 @@ const classes = addContext(() => {
             whiteSpace: NOWRAP
         }),
         ShadowDepth(1),
-        {
+        Interactions({
             cursor: 'pointer',
-            outline: 'none'
-        },
+            outline: NONE
+        }),
         // These are order-dependent
         PClass(PseudoClass.FOCUS, {
             filter: value(FOCUS_FILTER)
