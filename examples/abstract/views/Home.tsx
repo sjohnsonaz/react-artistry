@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Page, Area, Button, ActionBar, Container } from '@abstract';
+import { Page, Area, Button, ActionBar, Container, Card } from '@abstract';
 
 export interface IHomeProps {
     id?: string;
@@ -17,11 +17,15 @@ export default function Home({ id }: IHomeProps) {
             <Container screenSize="md">
                 <Area>
                     Paper
-                    <ActionBar direction="forward">
-                        <Button>OK</Button>
-                        <Button>OK</Button>
-                        <Button>OK</Button>
-                    </ActionBar>
+                    <Card footer={
+                        <ActionBar direction="forward">
+                            <Button>OK</Button>
+                            <Button>OK</Button>
+                            <Button>OK</Button>
+                        </ActionBar>
+                    }>
+                        Card
+                    </Card>
                 </Area>
             </Container>
         </Page>

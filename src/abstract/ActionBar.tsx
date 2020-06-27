@@ -18,8 +18,8 @@ const JUSTIFY_SPACE_EVENLY = 'space-evenly';
 let classes = addContext(() => {
     const ActionBar = block('action-bar',
         Box({
-            padding: 0,
-            margin: [1, 0.5]
+            margin: 0,
+            padding: [1, 0.5]
         }),
         FlexContainer({
             justify: FLEX_END
