@@ -1,10 +1,19 @@
 import React from 'react';
-import { addContext, block, Settings, NOWRAP, brightness, PseudoClass, contrast, filter, ColorPair, rgba, Wrap, PClass, Attribute } from '@artistry/abstract';
-import { Paper, IDefaultSettings, ShadowDepth } from 'artistry';
+import { addContext, block, NOWRAP, brightness, PseudoClass, contrast, filter, ColorPair, rgba, Wrap, PClass, Attribute, Variables, value } from '@artistry/abstract';
+import { Paper, ShadowDepth, getSettings } from 'artistry';
 
 const classes = addContext(() => {
-    let base = Settings.get<IDefaultSettings>();
+    const ACTIVE_FILTER = 'active-filter';
+    const HOVER_FILTER = 'hover-filter';
+    const FOCUS_FILTER = 'focus-filter';
+
+    let base = getSettings();
     const button = block('button',
+        Variables({
+            [HOVER_FILTER]: filter(contrast(0.5), brightness(2.5)),
+            [ACTIVE_FILTER]: filter(contrast(0.5), brightness(2)),
+            [FOCUS_FILTER]: filter(contrast(0.5), brightness(1.5)),
+        }),
         Paper({
             color: base.colors.primary
         }),
@@ -16,15 +25,16 @@ const classes = addContext(() => {
             cursor: 'pointer',
             outline: 'none'
         },
+        // These are order-dependent
+        PClass(PseudoClass.FOCUS, {
+            filter: value(FOCUS_FILTER)
+        }),
         PClass(PseudoClass.HOVER,
             ShadowDepth(1), {
-            filter: filter(contrast(0.5), brightness(1.5))
+            filter: value(HOVER_FILTER)
         }),
         PClass(PseudoClass.ACTIVE, {
-            filter: brightness(3.5) + ''
-        }),
-        PClass(PseudoClass.FOCUS, {
-
+            filter: value(ACTIVE_FILTER)
         }),
         Attribute('display', {
             textonly: Paper({
