@@ -1,16 +1,16 @@
-import { VariableProperties, Length, Media, MediaType, only, minWidth, FlexContainer, ROW, ROW_REVERSE, COLUMN, merge } from "@artistry/abstract"
+import { Length, Media, MediaType, only, minWidth, FlexContainer, ROW, ROW_REVERSE, COLUMN } from "@artistry/abstract"
 
 export interface IRowMixinProps {
-    minWidth: Length;
+    minWidth?: Length;
     reverse?: boolean;
 }
 
-export const RowMixin = ({
+export function RowMixin({
     minWidth: _minWidth,
     reverse
-}: IRowMixinProps): VariableProperties => {
+}: IRowMixinProps = {}) {
     if (_minWidth) {
-        return merge(
+        return [
             FlexContainer({
                 direction: COLUMN
             }),
@@ -19,7 +19,7 @@ export const RowMixin = ({
                     direction: reverse ? ROW_REVERSE : ROW
                 })
             )
-        );
+        ];
     } else {
         return FlexContainer({
             direction: reverse ? ROW_REVERSE : ROW
