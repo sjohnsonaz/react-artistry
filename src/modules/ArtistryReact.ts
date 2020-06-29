@@ -33,7 +33,7 @@ export { default as Drawer, IDrawerProps } from '../components/Drawer';
 export { default as EventContainer, IEventContainer } from '../components/EventContainer';
 export { default as FileUpload, IFileUploadProps } from '../components/FileUpload';
 export { default as Fillable, IFillableProps, IFillableState } from '../components/Fillable';
-export { default as Form, IFormProps, FormSize } from '../components/Form';
+export { default as Form, IFormProps, FormSize } from '../abstract/form/Form';
 export { default as FormGroup, IFormGroupProps } from '../components/FormGroup';
 export { default as FormRow, IFormRowProps } from '../components/FormRow';
 export { default as FormText, IFormTextProps } from '../components/FormText';

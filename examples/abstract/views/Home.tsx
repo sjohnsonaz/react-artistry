@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Page, Area, Button, ActionBar, Container, Card } from '@abstract';
+import { Form } from '@artistry-react';
 
 export interface IHomeProps {
     id?: string;
@@ -17,6 +18,7 @@ export default function Home({ id }: IHomeProps) {
             <Container screenSize="md">
                 <Area>
                     Paper
+                    <Form lockable locked screenSize="medium"></Form>
                     <Card footer={
                         <ActionBar direction="forward">
                             <Button>OK</Button>
