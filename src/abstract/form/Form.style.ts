@@ -1,4 +1,4 @@
-import { addContext, block, rgba, Variables, Length, MediaContext, MediaType, query, px, value } from "@artistry/abstract";
+import { addContext, block, rgba, Variables, Length, MediaContext, MediaType, query, px, value, Update, Media } from "@artistry/abstract";
 import { getSettings } from "artistry";
 import { UnitNum } from "@artistry/abstract/dist/unit/Unit";
 
@@ -10,11 +10,13 @@ export const FormStyle = addContext(() => {
     const FORM_SPACING = 'form-spacing';
     const FORM_TITLE_SPAN = 'form-title-span';
 
-    const Form = block('form', Variables({
-        [FORM_COLUMNS]: 12,
-        [FORM_TITLE]: 3,
-        [FORM_SPACING]: base.space(1)
-    }));
+    const Form = block('form',
+        Variables({
+            [FORM_COLUMNS]: 12,
+            [FORM_TITLE]: 3,
+            [FORM_SPACING]: base.space(1)
+        })
+    );
     const Form__Row = Form.element('row',
         Variables({
             [FORM_TITLE_SPAN]: 6
@@ -31,16 +33,16 @@ export const FormStyle = addContext(() => {
     const Form__Control = Form.element('control');
     const Form__Text = Form.element('text');
 
-    const Form$$XS = Form.modifierContext('xs', formStacked);
+    const Form$$XS = Form.modifier('xs', ...formStacked());
     const Form$$SM = Form.modifier('sm', formSize(base.sizes.small));
     const Form$$MD = Form.modifier('md', formSize(base.sizes.medium));
     const Form$$LG = Form.modifier('lg', formSize(base.sizes.large));
     const Form$$XL = Form.modifier('xl', formSize(base.sizes.xLarge));
-    const Form$$Lock = Form.modifierContext('lock', () => {
-        Form.update({
+    const Form$$Lock = Form.modifier('lock',
+        Update({
             position: 'relative'
-        });
-        Form__LockScreen.update({
+        }),
+        Update(Form__LockScreen, {
             display: 'block',
             position: 'absolute',
             top: 0,
@@ -51,36 +53,38 @@ export const FormStyle = addContext(() => {
             zIndex: 100,
             verticalAlign: 'middle',
             textAlign: 'center'
-        });
-    });
+        })
+    );
 
     function formSize(maxWidth: Length) {
         let _maxWidth = maxWidth as UnitNum<Length>;
-        return MediaContext(query(MediaType.Screen, `(max-width: ${px(_maxWidth - 1)})`),
-            formStacked
+        return Media(query(MediaType.Screen, `(max-width: ${px(_maxWidth - 1)})`),
+            ...formStacked()
         );
     }
 
     function formStacked() {
-        Form__Group.update({
-            gridTemplateColumns: '1fr',
-            alignItems: 'start'
-        });
-        Form__Text.update({
-            paddingInlineStart: 0
-        });
-        Form__Title.update({
-            textAlign: 'start',
-            margin: base.space(0.5, 0)
-        });
-        Form__Control.update({
-            gridRow: 'auto',
-            gridColumn: 1
-        });
-        Form__Text.update({
-            gridRow: 'auto',
-            gridColumn: 1
-        });
+        return [
+            Update(Form__Group, {
+                gridTemplateColumns: '1fr',
+                alignItems: 'start'
+            }),
+            Update(Form__Text, {
+                paddingInlineStart: 0
+            }),
+            Update(Form__Title, {
+                textAlign: 'start',
+                margin: base.space(0.5, 0)
+            }),
+            Update(Form__Control, {
+                gridRow: 'auto',
+                gridColumn: 1
+            }),
+            Update(Form__Text, {
+                gridRow: 'auto',
+                gridColumn: 1
+            })
+        ];
     }
 
     return {
