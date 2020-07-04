@@ -22,7 +22,7 @@ export { default as CardSection, ICardSectionProps } from '../components/CardSec
 export { default as CardRow, ICardRowProps } from '../components/CardRow';
 export { default as CardTitle, ICardTitleProps } from '../components/CardTitle';
 export { default as Carousel, ICarouselProps } from '../components/Carousel';
-export { default as Cell, ICellProps } from '../components/Cell';
+export { default as Cell, ICellProps } from '../abstract/grid/Cell';
 export { default as Closeable, ICloseableProps, ICloseableState } from '../components/Closeable'
 export { default as Code, ICodeProps } from '../components/Code';
 export { default as Container, IContainerProps, ContainerSize } from '../components/Container';
@@ -34,10 +34,10 @@ export { default as EventContainer, IEventContainer } from '../components/EventC
 export { default as FileUpload, IFileUploadProps } from '../components/FileUpload';
 export { default as Fillable, IFillableProps, IFillableState } from '../components/Fillable';
 export { default as Form, IFormProps, FormSize } from '../abstract/form/Form';
-export { default as FormGroup, IFormGroupProps } from '../components/FormGroup';
-export { default as FormRow, IFormRowProps } from '../components/FormRow';
-export { default as FormText, IFormTextProps } from '../components/FormText';
-export { default as Grid, IGridProps, GridSize, IGridExternalProps, gridConfig } from '../components/Grid';
+export { default as FormGroup, IFormGroupProps } from '../abstract/form/FormGroup';
+export { default as FormRow, IFormRowProps } from '../abstract/form/FormRow';
+export { default as FormText, IFormTextProps } from '../abstract/form/FormText';
+export { default as Grid, IGridProps, GridSize, IGridExternalProps, gridConfig } from '../abstract/grid/Grid';
 export { default as Icon, IIconProps } from '../components/Icon';
 export { default as Input, IInputProps } from '../components/Input';
 export { default as List, IListProps } from '../components/List';
@@ -52,7 +52,7 @@ export { default as Pager, IPagerProps } from '../components/Pager';
 export { default as Popover, IPopoverProps } from '../components/Popover';
 export { default as ProgressBar, IProgressBarProps } from '../components/ProgressBar';
 export { default as Range, IRangeProps } from '../components/Range';
-export { default as Row, IRowProps } from '../components/Row';
+export { default as Row, IRowProps } from '../abstract/grid/Row';
 export { default as Scrollable, IScrollableProps, ScrollableType } from '../components/Scrollable';
 export { default as Search, ISearchProps } from '../components/Search';
 export { default as Section, ISectionProps } from '../components/Section';

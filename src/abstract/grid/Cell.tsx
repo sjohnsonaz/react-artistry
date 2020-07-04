@@ -1,7 +1,8 @@
 import * as React from 'react';
 
-import { alignClass, AlignType } from '../util/Align';
-import ClassNames from '../util/ClassNames';
+import { alignClass, AlignType } from '../../util/Align';
+import ClassNames from '../../util/ClassNames';
+import { GridStyle } from './Grid.style';
 
 export interface ICellProps {
     className?: string;
@@ -25,7 +26,7 @@ export default class Cell extends React.Component<ICellProps, any> {
             leftMargin
         } = this.props;
 
-        let classNames = new ClassNames(className);
+        let classNames = new ClassNames(GridStyle.Grid__Cell, className);
         if (columns) {
             classNames.add('col-' + columns);
         } else {

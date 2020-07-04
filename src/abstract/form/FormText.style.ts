@@ -4,26 +4,9 @@ import { UnitNum } from "@artistry/abstract/dist/unit/Unit";
 
 import { FORM_SPACING, FORM_TITLE_WIDTH } from './Form.variables';
 
-export const FormStyle = addContext(() => {
+export const FormTextStyle = addContext(() => {
     const base = getSettings();
 
-    const Form = block('form');
-    const Form__Row = Form.element('row', {
-        display: 'grid',
-        gridAutoFlow: 'column',
-        gridAutoColumns: '1fr',
-        gap: value(FORM_SPACING),
-        margin: value(FORM_SPACING)
-    });
-    const Form__LockScreen = Form.element('lock-screen');
-    const Form__Group = Form.element('group',
-        Box({
-            margin: 1,
-            width: px(680)
-        })
-    );
-    const Form__Title = Form.element('title');
-    const Form__Control = Form.element('control');
     const Form__Text = Form.element('text',
         Box({
             margin: 1,

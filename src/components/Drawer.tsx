@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { IGridExternalProps, gridConfig } from './Grid';
+import { IGridExternalProps, gridConfig } from '../abstract/grid/Grid';
 import { IScrollableExternalProps } from './Scrollable';
 import BodyScroll from '../util/BodyScroll';
 import { waitAnimation } from '../util/PromiseUtil';
 import Portal from '../util/Portal';
 import DepthStack from '../util/DepthStack';
+import ClassNames from 'util/ClassNames';
 
 export interface IDrawerProps extends IGridExternalProps, IScrollableExternalProps {
     className?: string;
@@ -134,38 +135,37 @@ export default class Drawer extends React.Component<IDrawerProps, IDrawerState> 
             space
         } = this.props;
 
-        let classNames = className ? [className] : [];
-        classNames.push('drawer');
+        let classNames = new ClassNames('drawer', className);
 
         direction = direction || 'bottom';
-        classNames.push('drawer-' + direction);
+        classNames.add('drawer-' + direction);
 
         if (this.state.open) {
-            classNames.push('drawer-open');
+            classNames.add('drawer-open');
         }
 
         if (full) {
-            classNames.push('drawer-full');
+            classNames.add('drawer-full');
         }
 
         if (background) {
-            classNames.push('drawer-background');
+            classNames.add('drawer-background');
         }
 
         if (space) {
-            classNames.push('drawer-space');
+            classNames.add('drawer-space');
         }
 
-        let innerClassNames = ['drawer-content'];
+        let innerClassNames = new ClassNames('drawer-content');
         if (this.props.grid) {
             gridConfig(innerClassNames, this.props);
         }
 
         return ReactDOM.createPortal((
-            <div className={classNames.join(' ')} id={id} onTransitionEnd={this.transitionEnd}>
+            <div className={classNames.toString()} id={id} onTransitionEnd={this.transitionEnd}>
                 <div className="drawer-background" onScroll={this.onScroll}>
                     <div className="drawer-scroller">
-                        <div className={innerClassNames.join(' ')} onClick={this.preventClick}>
+                        <div className={innerClassNames.toString()} onClick={this.preventClick}>
                             {this.props.children}
                         </div>
                     </div>

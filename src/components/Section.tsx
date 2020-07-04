@@ -1,8 +1,9 @@
 import * as React from 'react';
 
 import Button from './Button';
-import { IGridExternalProps, gridConfig } from './Grid';
+import { IGridExternalProps, gridConfig } from '../abstract/grid/Grid';
 import { setState } from '../util/PromiseUtil';
+import ClassNames from 'util/ClassNames';
 
 export interface ISectionProps extends React.HTMLProps<HTMLElement>, IGridExternalProps {
     header: any;
@@ -160,32 +161,31 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
             gridSpace,
             ...props
         } = this.props;
-        let classNames = className ? [className] : [];
-        classNames.push('section');
+        let classNames = new ClassNames('section', className);
 
         if (this.state.closed) {
-            classNames.push('section-closed');
+            classNames.add('section-closed');
         }
 
         if (this.state.running) {
-            classNames.push('section-run');
+            classNames.add('section-run');
         }
 
-        let innerClassNames = ['section-content'];
+        let innerClassNames = new ClassNames('section-content');
         if (lockable) {
-            innerClassNames.push('lock-contents');
+            innerClassNames.add('lock-contents');
         }
 
         if (locked) {
-            innerClassNames.push('locked');
+            innerClassNames.add('locked');
         }
 
         if (space) {
-            innerClassNames.push('section-content-space');
+            innerClassNames.add('section-content-space');
         }
 
         if (relative) {
-            innerClassNames.push('section-content-relative');
+            innerClassNames.add('section-content-relative');
         }
 
         if (grid) {
@@ -194,7 +194,7 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
 
         return (
             <section
-                className={classNames.join(' ')}
+                className={classNames.toString()}
                 id={id}
                 {...props}
                 style={{ height: this.state.height }}
@@ -210,7 +210,7 @@ export default class Section extends React.Component<ISectionProps, ISectionStat
                         <Button className="section-toggle" onClick={this.close}>-</Button>
                         : undefined}
                 </header>
-                <div className={innerClassNames.join(' ')} ref={this.content}>{this.props.children}</div>
+                <div className={innerClassNames.toString()} ref={this.content}>{this.props.children}</div>
                 {footer ?
                     <footer
                         className={footerSpace ? 'section-title' : undefined}

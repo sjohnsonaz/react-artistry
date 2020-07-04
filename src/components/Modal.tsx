@@ -2,12 +2,13 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import Button from './Button';
-import { IGridExternalProps, gridConfig } from './Grid';
+import { IGridExternalProps, gridConfig } from '../abstract/grid/Grid';
 import { IScrollableExternalProps } from './Scrollable';
 import BodyScroll from '../util/BodyScroll';
 import { waitAnimation } from '../util/PromiseUtil';
 import Portal from '../util/Portal';
 import DepthStack from '../util/DepthStack';
+import ClassNames from 'util/ClassNames';
 
 export type ModalSize = 'none' | 'all' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large';
 
@@ -162,18 +163,17 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             footer
         } = this.props;
 
-        let classNames = this.props.className ? [this.props.className] : [];
-        classNames.push('modal');
+        let classNames = new ClassNames('modal', this.props.className);
         if (this.state.open) {
-            classNames.push('modal-open');
+            classNames.add('modal-open');
         }
 
         if (background) {
-            classNames.push('modal-background');
+            classNames.add('modal-background');
         }
 
         if (animation) {
-            classNames.push('modal-animate-' + animation.trim());
+            classNames.add('modal-animate-' + animation.trim());
         }
 
         if (screenSize) {
@@ -182,39 +182,39 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
             sizes.forEach(size => {
                 switch (size) {
                     case 'all':
-                        classNames.push('modal-all');
+                        classNames.add('modal-all');
                         break;
                     case 'x-small':
-                        classNames.push('modal-xs');
+                        classNames.add('modal-xs');
                         break;
                     case 'small':
-                        classNames.push('modal-sm');
+                        classNames.add('modal-sm');
                         break;
                     case 'medium':
-                        classNames.push('modal-md');
+                        classNames.add('modal-md');
                         break;
                     case 'large':
-                        classNames.push('modal-lg');
+                        classNames.add('modal-lg');
                         break;
                     case 'x-large':
-                        classNames.push('modal-xl');
+                        classNames.add('modal-xl');
                         break;
                 }
             });
         }
 
-        let modalContentClassNames = [];
+        let modalContentClassNames = new ClassNames();
         if (this.props.lockable) {
-            modalContentClassNames.push('lock-contents');
+            modalContentClassNames.add('lock-contents');
             if (this.props.locked) {
-                modalContentClassNames.push('locked');
+                modalContentClassNames.add('locked');
             }
         }
         if (this.props.space) {
             if (title || footer) {
-                modalContentClassNames.push('modal-space');
+                modalContentClassNames.add('modal-space');
             } else {
-                modalContentClassNames.push('modal-space');
+                modalContentClassNames.add('modal-space');
             }
         }
 
@@ -246,7 +246,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
 
         return ReactDOM.createPortal((
             <div
-                className={classNames.join(' ')}
+                className={classNames.toString()}
                 id={this.props.id}
                 onTransitionEnd={this.transitionEnd}
                 onScroll={this.onScroll}
@@ -256,7 +256,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                         <div className="modal-content" onClick={this.preventClick}>
                             {headerSection}
                             <div
-                                className={'modal-body ' + modalContentClassNames.join(' ')}
+                                className={'modal-body ' + modalContentClassNames.toString()}
                                 onScroll={this.onScroll}
                             >
                                 {this.props.children}
@@ -267,7 +267,7 @@ export default class Modal extends React.Component<IModalProps, IModalState> {
                                 </div>
                                 : undefined}
                         </div> :
-                        <div className={'modal-content ' + modalContentClassNames.join(' ')} onClick={this.preventClick}>
+                        <div className={'modal-content ' + modalContentClassNames.toString()} onClick={this.preventClick}>
                             {this.props.children}
                         </div>
                     }

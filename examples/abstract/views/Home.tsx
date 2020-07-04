@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Page, Area, Button, ActionBar, Container, Card } from '@abstract';
-import { Form } from '@artistry-react';
+import { Form, FormText, FormGroup, Row, Grid, Cell } from '@artistry-react';
 
 export interface IHomeProps {
     id?: string;
@@ -18,7 +18,18 @@ export default function Home({ id }: IHomeProps) {
             <Container screenSize="md">
                 <Area>
                     Paper
-                    <Form lockable locked screenSize="medium"></Form>
+                    <Form screenSize="medium">
+                        <FormText>Test</FormText>
+                        <FormGroup label="Form Group"></FormGroup>
+                    </Form>
+                    <Grid>
+                        <Row>
+                            <Cell>Cell</Cell>
+                            <Cell>Cell</Cell>
+                            <Cell>Cell</Cell>
+                            <Cell>Cell</Cell>
+                        </Row>
+                    </Grid>
                     <Card footer={
                         <ActionBar direction="forward">
                             <Button>OK</Button>

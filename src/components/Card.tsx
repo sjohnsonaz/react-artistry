@@ -1,8 +1,9 @@
 ﻿import * as React from 'react';
 
 import Closeable from './Closeable';
-import { IGridExternalProps, gridConfig } from './Grid';
+import { IGridExternalProps, gridConfig } from '../abstract/grid/Grid';
 import { IDisableable, disabledClass } from '../abilities/Disabled';
+import ClassNames from 'util/ClassNames';
 
 export type CardType = 'default' | 'success' | 'info' | 'warning' | 'danger';
 
@@ -65,37 +66,36 @@ export default class Card extends React.Component<ICardProps, any> {
             clickable,
             disabled
         } = this.props;
-        let classNames = className ? [className] : [];
-        classNames.push('card');
+        let classNames = new ClassNames('card', className);
 
-        let innerClassNames = ['card-content'];
+        let innerClassNames = new ClassNames('card-content');
         if (space) {
-            innerClassNames.push('card-content-space');
+            innerClassNames.add('card-content-space');
         }
         if (fill) {
-            classNames.push('fill');
+            classNames.add('fill');
         }
         if (type) {
-            classNames.push('card-type-' + type);
+            classNames.add('card-type-' + type);
         }
         if (handle) {
-            classNames.push('card-handle-' + handle);
+            classNames.add('card-handle-' + handle);
         }
         if (square) {
-            classNames.push('card-square');
+            classNames.add('card-square');
         }
         if (grid) {
             gridConfig(innerClassNames, this.props);
         }
         if (clickable) {
-            classNames.push('clickable');
+            classNames.add('clickable');
         }
         disabledClass(disabled, classNames);
 
         return (
-            <div className={classNames.join(' ')} id={id} onClick={this.onClick}>
+            <div className={classNames.toString()} id={id} onClick={this.onClick}>
                 {header ? <header>{header}</header> : null}
-                <div className={innerClassNames.join(' ')}>
+                <div className={innerClassNames.toString()}>
                     {this.props.children}
                 </div>
                 {nav ? <nav className='card-nav'>{nav}</nav> : null}

@@ -1,6 +1,8 @@
 import * as React from 'react';
 
-import ClassNames from '../util/ClassNames';
+import ClassNames from '../../util/ClassNames';
+
+import { FormStyle } from './Form.style';
 
 export type FormRowSize = 'none' | 'small' | 'medium' | 'large' | 'x-large' | 'stacked';
 
@@ -18,8 +20,7 @@ export default class FormRow extends React.Component<IFormRowProps, any>{
             screenSize
         } = this.props;
 
-        let classNames = new ClassNames(className);
-        classNames.add('form-text');
+        let classNames = new ClassNames(FormStyle.Form__Text, className);
 
         switch (screenSize) {
             case 'small':

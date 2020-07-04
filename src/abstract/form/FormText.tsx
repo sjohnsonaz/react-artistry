@@ -1,7 +1,8 @@
 import * as React from 'react';
 
-import ClassNames from '../util/ClassNames';
-import { AlignType, alignClass } from '../util/Align';
+import ClassNames from '../../util/ClassNames';
+import { AlignType, alignClass } from '../../util/Align';
+import { FormStyle } from './Form.style';
 
 export type FormTextTheme = 'default' | 'success' | 'info' | 'warning' | 'danger';
 
@@ -23,8 +24,7 @@ export default class FormText extends React.Component<IFormTextProps, any>{
             align
         } = this.props;
 
-        let classNames = new ClassNames(className);
-        classNames.add('form-text');
+        let classNames = new ClassNames(FormStyle.Form__Text, className);
 
         if (fill) {
             classNames.add('fill');
