@@ -25,7 +25,7 @@ export default function Home({ id }: IHomeProps) {
                     <Grid>
                         <Row>
                             <Cell>Cell</Cell>
-                            <Cell>Cell</Cell>
+                            <Cell span={2}>Cell</Cell>
                             <Cell>Cell</Cell>
                             <Cell>Cell</Cell>
                         </Row>

@@ -23,19 +23,44 @@ export const GridStyle = addContext(() => {
             span: 1
         })
     );
-    const Grid__Cell$$1 = Grid__Cell.modifier('1',
-        Variables({
+    Grid__Cell.attributes('span', {
+        1: Variables({
             [GRID_SPAN]: 1
         }),
-        {
-            width: percent(100),
-            marginInlineStart: 0
-        },
-        Media(only(MediaType.Screen, minWidth(grid_columns)), {
-            width: calc(`${percent(100)} * ${value(GRID_SPAN)} / ${value(GRID_COLUMNS)}`),
-            marginInlineStart: calc(`${percent(100)} * ${value(GRID_OFFSET)} / ${value(GRID_COLUMNS)}`)
-        })
-    );
+        2: Variables({
+            [GRID_SPAN]: 2
+        }),
+        3: Variables({
+            [GRID_SPAN]: 3
+        }),
+        4: Variables({
+            [GRID_SPAN]: 4
+        }),
+        5: Variables({
+            [GRID_SPAN]: 5
+        }),
+        6: Variables({
+            [GRID_SPAN]: 6
+        }),
+        7: Variables({
+            [GRID_SPAN]: 7
+        }),
+        8: Variables({
+            [GRID_SPAN]: 8
+        }),
+        9: Variables({
+            [GRID_SPAN]: 9
+        }),
+        10: Variables({
+            [GRID_SPAN]: 10
+        }),
+        11: Variables({
+            [GRID_SPAN]: 11
+        }),
+        12: Variables({
+            [GRID_SPAN]: 12
+        }),
+    });
 
     return {
         Grid,
