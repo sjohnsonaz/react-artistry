@@ -1,21 +1,19 @@
-import React from 'react';
 import { block, addContext, FLEX_START, FLEX_END, CENTER, SPACE_BETWEEN, SPACE_AROUND, SPACE_EVENLY, ROW, ROW_REVERSE, FlexContainer, Selector, Attribute } from '@artistry/abstract';
 import { Box } from 'artistry';
-import { data } from '../util';
 
-const DIRECTION = 'direction';
-const DIRECTION_FORWARD = 'forward';
-const DIRECTION_REVERSE = 'reverse';
+export const DIRECTION = 'direction';
+export const DIRECTION_FORWARD = 'forward';
+export const DIRECTION_REVERSE = 'reverse';
 
-const JUSTIFY = 'justify';
-const JUSTIFY_START = 'start';
-const JUSTIFY_END = 'end';
-const JUSTIFY_CENTER = 'center';
-const JUSTIFY_SPACE_BETWEEN = 'space-between';
-const JUSTIFY_SPACE_AROUND = 'space-around';
-const JUSTIFY_SPACE_EVENLY = 'space-evenly';
+export const JUSTIFY = 'justify';
+export const JUSTIFY_START = 'start';
+export const JUSTIFY_END = 'end';
+export const JUSTIFY_CENTER = 'center';
+export const JUSTIFY_SPACE_BETWEEN = 'space-between';
+export const JUSTIFY_SPACE_AROUND = 'space-around';
+export const JUSTIFY_SPACE_EVENLY = 'space-evenly';
 
-let classes = addContext(() => {
+export const ActionBarStyle = addContext(() => {
     const ActionBar = block('action-bar',
         Box({
             margin: 0,
@@ -63,37 +61,13 @@ let classes = addContext(() => {
     };
 });
 
-type Direction =
+export type Direction =
     typeof DIRECTION_FORWARD |
     typeof DIRECTION_REVERSE;
-type Justify =
+export type Justify =
     typeof JUSTIFY_START |
     typeof JUSTIFY_END |
     typeof JUSTIFY_CENTER |
     typeof JUSTIFY_SPACE_BETWEEN |
     typeof JUSTIFY_SPACE_AROUND |
     typeof JUSTIFY_SPACE_EVENLY;
-
-export interface IActionBarProps {
-    children?: any;
-    direction?: Direction;
-    justify?: Justify;
-}
-
-export const ActionBar: React.FC<IActionBarProps> = ({
-    children,
-    direction,
-    justify
-}) => {
-
-    return (
-        <div
-            className={classes.ActionBar}
-            {...{
-                [data(DIRECTION)]: direction,
-                [data(JUSTIFY)]: justify,
-            }}>
-            {children}
-        </div>
-    );
-};

@@ -11,9 +11,12 @@ export interface IHomeProps {
 export default function Home({ id }: IHomeProps) {
     return (
         <Page title="Test"
-            footer={<>
-                <Button>OK</Button>
-            </>}
+            footer={<Container screenSize="md">
+                <ActionBar className="explode">
+                    <Button>OK</Button>
+                    <Button>OK</Button>
+                </ActionBar>
+            </Container>}
         >
             <Container screenSize="md">
                 <Area>
@@ -25,7 +28,7 @@ export default function Home({ id }: IHomeProps) {
                     <Grid>
                         <Row>
                             <Cell>Cell</Cell>
-                            <Cell span={2}>Cell</Cell>
+                            <Cell columns={2}>Cell</Cell>
                             <Cell>Cell</Cell>
                             <Cell>Cell</Cell>
                         </Row>

@@ -1,5 +1,5 @@
 export * from './Area';
-export * from './ActionBar';
+export * from './action-bar';
 export * from './Button';
 export * from './Card';
 export * from './Container';

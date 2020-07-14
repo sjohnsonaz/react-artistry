@@ -12,7 +12,6 @@ export interface ICellProps {
     align?: AlignType;
     width?: number | string;
     leftMargin?: number | string;
-    span?: number;
 }
 
 export default class Cell extends React.Component<ICellProps, any> {
@@ -25,15 +24,9 @@ export default class Cell extends React.Component<ICellProps, any> {
             align,
             width,
             leftMargin,
-            span
         } = this.props;
 
         let classNames = new ClassNames(GridStyle.Grid__Cell, className);
-        if (columns) {
-            classNames.add('col-' + columns);
-        } else {
-            classNames.add('col');
-        }
         if (offset) {
             classNames.add('offset-' + offset);
         }
@@ -64,7 +57,7 @@ export default class Cell extends React.Component<ICellProps, any> {
         return <div
             className={classNames.toString()}
             id={id}
-            data-span={span}
+            data-span={columns}
             style={style as any}
         >
             {this.props.children}
