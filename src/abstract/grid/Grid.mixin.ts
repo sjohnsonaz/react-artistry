@@ -1,4 +1,4 @@
-import { VariableProperties, Variables, Media, only, MediaType, minWidth, px, GRID, value } from "@artistry/abstract"
+import { VariableProperties, Variables, Media, only, MediaType, minWidth, px, value, GridContainer, GridItem } from "@artistry/abstract"
 
 export interface IGridMixinProps {
     columns?: number;
@@ -30,13 +30,14 @@ export const GridRowMixin = ({
 
 }: IGridRowMixinProps): VariableProperties[] => {
     return [
-        {
-            display: GRID,
-            gridTemplateColumns: '1fr'
-        },
-        Media(only(MediaType.Screen, minWidth(px(500))), {
-            gridTemplateColumns: `repeat(${value(GRID_COLUMNS)}, 1fr)`
-        })
+        GridContainer({
+            templateColumns: '1fr'
+        }),
+        Media(only(MediaType.Screen, minWidth(px(500))),
+            GridContainer({
+                templateColumns: `repeat(${value(GRID_COLUMNS)}, 1fr)`
+            }),
+        )
     ];
 }
 
@@ -49,8 +50,8 @@ export const GridColumnMixin = ({
     span = 12,
     offset
 }: IGridColumnMixinProps): VariableProperties => {
-    return {
-        gridColumnStart: typeof offset === 'number' ? offset + 1 : undefined,
-        gridColumnEnd: `span ${value(GRID_SPAN)}`,
-    }
+    return GridItem({
+        columnStart: typeof offset === 'number' ? offset + 1 : undefined,
+        columnEnd: `span ${value(GRID_SPAN)}`,
+    })
 }
