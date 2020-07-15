@@ -1,5 +1,7 @@
 import * as React from 'react';
 import MaskedInput from './MaskedInput';
+import ClassNames from 'util/ClassNames';
+import { InputStyle } from 'abstract';
 
 export interface IInputProps extends React.HTMLProps<HTMLInputElement> {
     fill?: boolean;
@@ -18,20 +20,19 @@ export default class Input extends React.Component<IInputProps, any> {
             ...props
         } = this.props;
 
-        let classNames = this.props.className ? [this.props.className] : [];
-        classNames.push('input');
+        let classNames = new ClassNames(InputStyle.Input, className);
 
         if (fill) {
-            classNames.push('fill-width');
+            classNames.add('fill-width');
         }
 
         let _displaySize: string;
         switch (displaySize) {
             case 'small':
-                _displaySize='input-small';
+                _displaySize = 'input-small';
                 break;
             case 'large':
-                _displaySize='input-large';
+                _displaySize = 'input-large';
                 break;
         }
 
@@ -39,7 +40,7 @@ export default class Input extends React.Component<IInputProps, any> {
             return (
                 <MaskedInput
                     id={id}
-                    className={classNames.join(' ')}
+                    className={classNames.toString()}
                     data-size={_displaySize}
                     mask={mask}
                     {...props as any}
@@ -49,7 +50,7 @@ export default class Input extends React.Component<IInputProps, any> {
             return (
                 <input
                     id={id}
-                    className={classNames.join(' ')}
+                    className={classNames.toString()}
                     data-size={_displaySize}
                     {...props}
                 />

@@ -5,5 +5,6 @@ export * from './Card';
 export * from './Container';
 export * from './form';
 export * from './grid';
+export * from './input';
 export * from './MainBar';
 export * from './Page';
