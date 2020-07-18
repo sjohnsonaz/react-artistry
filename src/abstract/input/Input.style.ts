@@ -13,24 +13,24 @@ export const InputStyle = addContext(() => {
         // Flexbox fix
         minWidth: 0
     });
-    Input.pseudoclass('focus',
+    Input.pseudoClass('focus',
         ShadowDepth(2), {
         outline: 'none',
         //borderColor: $input-focus-border-color;
         //box-shadow: $box-shadow-height-1;
     });
-    Input.pseudoclass('required', {
+    Input.pseudoClass('required', {
         //border-color: $input-required-border-color;
     });
-    Input.pseudoclass('invalid', {
+    Input.pseudoClass('invalid', {
         //background-color: $input-danger-background-color;
         //color: $input-danger-color;
     });
-    Input.pseudoclass('read-only', {
+    Input.pseudoClass('read-only', {
         //filter: var(--input-locked);
         cursor: 'default'
     });
-    Input.pseudoclass('disabled', {
+    Input.pseudoClass('disabled', {
         //filter: var(--input-locked);
         cursor: 'default'
     });
