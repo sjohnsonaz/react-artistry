@@ -9,6 +9,7 @@ settings.setData({
         // background: new ColorPair(hex('#eee')),
         primary: new ColorPair(hex('#309')),
         background: new ColorPair(hex('#222')),
-        surface: new ColorPair(hex('#333'))
+        surface: new ColorPair(hex('#333')),
+        border: new ColorPair(hex('#707070'))
     }
 });

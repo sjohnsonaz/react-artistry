@@ -1,14 +1,14 @@
-import * as React from 'react';
+import React from 'react';
+
+import ClassNames from 'util/ClassNames';
+import { DividerStyle } from 'abstract/divider/Divider.style';
 
 export interface IDividerProps {
-    className?: string;
     id?: string;
+    className?: string;
 }
 
-export default class Divider extends React.Component<IDividerProps, any>{
-    render() {
-        let classNames = this.props.className ? [this.props.className] : [];
-        classNames.push('divider');
-        return <div className={classNames.join(' ')} id={this.props.id}>{this.props.children}</div>
-    }
+export const Divider: React.FC<IDividerProps> = ({ id, className } = {}) => {
+    const classNames = new ClassNames(DividerStyle.Divider, className);
+    return <div className={classNames.toString()} id={id}></div>
 }

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Page, Area, Button, ActionBar, Container, Card } from '@abstract';
 import { Form, FormText, FormGroup, Row, Grid, Cell, Input } from '@artistry-react';
+import { Divider } from 'components/Divider';
 
 export interface IHomeProps {
     id?: string;
@@ -36,11 +37,14 @@ export default function Home({ id }: IHomeProps) {
                         </Row>
                     </Grid>
                     <Card footer={
-                        <ActionBar direction="forward">
-                            <Button>OK</Button>
-                            <Button>OK</Button>
-                            <Button>OK</Button>
-                        </ActionBar>
+                        <>
+                            <Divider />
+                            <ActionBar direction="forward">
+                                <Button>OK</Button>
+                                <Button>OK</Button>
+                                <Button>OK</Button>
+                            </ActionBar>
+                        </>
                     }>
                         Card
                     </Card>
